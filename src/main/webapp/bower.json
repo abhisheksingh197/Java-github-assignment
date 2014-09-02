@@ -1,0 +1,9 @@
+{
+  "name": "project-glass",
+  "version": "1.0",
+  "dependencies": {
+  	"angular": "1.2.22",
+  	"polymer": "Polymer/polymer#~0.3.5",
+  	"polymer": "Polymer/paper-elements#~0.3.5"
+  }
+}
