@@ -63,15 +63,13 @@ public class TinEyeServiceImpl implements TinEyeService {
 		int imgIterator = 0;
 		for (ArtWork artwork : arts) {
 			List<Image> artworkImageList = artwork.getImages();
-			for (Image image : artworkImageList) {
-				params.add("urls[" + imgIterator + "]", image.getImgSrc());
-				params.add("filepaths[" + imgIterator + "]", String.valueOf(image.getId()));
-				String metadata = "{\"artworkId\":"
-					+ "{\"action\": \"return\", \"type\": \"uint\", \"\":\"" 
-					+ artwork.getId() + "\"}}";
-				params.add("metadata[" + imgIterator + "]", metadata);
-				break;
-			}
+			Image image = artworkImageList.get(0);
+			params.add("urls[" + imgIterator + "]", image.getImgSrc());
+			params.add("filepaths[" + imgIterator + "]", String.valueOf(image.getId()));
+			String metadata = "{\"artworkId\":"
+				+ "{\"action\": \"return\", \"type\": \"uint\", \"\":\"" 
+				+ artwork.getId() + "\"}}";
+			params.add("metadata[" + imgIterator + "]", metadata);
 			imgIterator++;
 		}
 		return params;

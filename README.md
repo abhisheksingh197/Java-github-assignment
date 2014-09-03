@@ -54,6 +54,7 @@ This template is based out of Spring Boot. Spring Boot provides a default spring
 12. Checkstyle
 13. Findbugs
 14. Code Coverage
+14.1 run mvn package, inside directory target/site/jacoco, view index.html
 15. Dependency Injection & Configuration
 16. Environment Specific Property Files
 17. Logging

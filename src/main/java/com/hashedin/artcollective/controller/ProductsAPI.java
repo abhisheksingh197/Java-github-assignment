@@ -74,7 +74,7 @@ public class ProductsAPI {
 	}
 
 	// Wrap Artwork objects into a Map Helper Function
-	static Map<String, ArtWork> wrapResponse(List<ArtWork> artworks) {
+	private static Map<String, ArtWork> wrapResponse(List<ArtWork> artworks) {
 		Map<String, ArtWork> map = new HashMap<String, ArtWork>();
 		for (ArtWork art : artworks) {
 			map.put(art.getTitle(), art);

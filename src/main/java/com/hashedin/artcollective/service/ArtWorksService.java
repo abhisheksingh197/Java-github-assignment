@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ import com.hashedin.artcollective.repository.ImageRepository;
 
 @Service
 public class ArtWorksService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(TinEyeService.class);
 	
 	private static final int TITLE_SIZE = 3;
 
@@ -53,14 +57,15 @@ public class ArtWorksService {
 		
 		List<ArtWork> arts = getArtWorksModifiedSince(lastRunTime);
 		saveArtToInternalDatabase(arts);
-		//saveArtToTinEye(arts);
+		saveArtToTinEye(arts);
 	}
 	
-	// Fetches Artworks from Shopify and saves as a saves a secondary to tineye
+	// Fetches Artworks from Shopify and saves as a saves a secondary to tineye.
 	private void saveArtToTinEye(List<ArtWork> arts) {
 			tineye.uploadArts(arts);
 	}
 
+	// Saves the list of arts into the internal Database.
 	private void saveArtToInternalDatabase(List<ArtWork> arts) {
 		artRepository.save(arts);
 	}
@@ -73,7 +78,9 @@ public class ArtWorksService {
 			List<Collection> collections = shopify.getCollectionsForProduct(p.getId());
 			List<MetaField> metafields = shopify.getMetaFieldsForProduct(p.getId());
 			ArtWork art = createArtWork(p, collections, metafields);
-			arts.add(art);
+			if (art != null) {
+				arts.add(art);
+			}
 		}
 		return arts;
 	}
@@ -133,7 +140,7 @@ public class ArtWorksService {
 			case "is_original_available":
 				artwork.setIsOriginalAvailable(Boolean.valueOf(metafield.getValue()));
 				break;
-			case "is_frame-available":
+			case "is_frame_available":
 				artwork.setIsFrameAvailable(Boolean.valueOf(metafield.getValue()));
 				break;
 			case "is_canvas_available":
@@ -144,12 +151,18 @@ public class ArtWorksService {
 				break;
 			case "orientation":
 				artwork.setOrientation(metafield.getValue());
+				break;
 			default:
 				break;
 			}
 		}
 		
-		// Saving Images into Repository
+		// Saving Images into Repository.
+		if (p.getImages().size() == 0) {
+			LOGGER.info("No Image,Rejecting Product " + String.valueOf(p.getId()));
+			//TODO Rejecting Artwork since no image must send an email with product id. 
+			return null;
+		}
 		imageRepository.save(p.getImages());
 		
 		// Setting attribute values to artwork object and saving them.

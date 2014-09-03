@@ -30,7 +30,7 @@ public class ShopifyServiceTest extends BaseUnitTest {
 	public void testFetchProducts() {
 		
 		MockRestServiceServer mockShopifyServer = MockRestServiceServer.createServer(rest);
-		mockShopifyServer.expect(requestTo(shopifyBaseUrl + "products.json"))
+		mockShopifyServer.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks"))
 			.andExpect(method(HttpMethod.GET))
 			.andRespond(withJson("single_product.json"));
 		
@@ -45,5 +45,40 @@ public class ShopifyServiceTest extends BaseUnitTest {
 		
 		mockShopifyServer.verify();
 	}
+	
+	@Test
+	public void testFetchCollections() {
+		
+		MockRestServiceServer mockShopifyServer = MockRestServiceServer.createServer(rest);
+		mockShopifyServer
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections.json?product_id=343096747"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("collections_343096747.json"));
+		
+		List<Collection> collections = service.getCollectionsForProduct(343096747L);
+		assertEquals(collections.size(), 4);
+		Collection collection = collections.get(0);
+		assertEquals(collection.getTitle(), "subject_geometric");
+		mockShopifyServer.verify();
+	}
+	
+	@Test
+	public void testFetchMetafields() {
+		
+		MockRestServiceServer mockShopifyServer = MockRestServiceServer.createServer(rest);
+		mockShopifyServer
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/343096747/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("metafields_343096747.json"));
+		
+		List<MetaField> metafields = service.getMetaFieldsForProduct(343096747L);
+		assertEquals(metafields.size(), 2);
+		MetaField metafield = metafields.get(0);
+		assertEquals(metafield.getKey(), "is_canvas_available");
+		mockShopifyServer.verify();
+	}
+	
 	
 }

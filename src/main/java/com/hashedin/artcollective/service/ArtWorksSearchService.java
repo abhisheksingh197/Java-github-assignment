@@ -37,11 +37,6 @@ public class ArtWorksSearchService {
 	@Autowired
 	private TinEyeService tinEyeService;
 		
-	public ArtWork findArtWorkByArtWorkId(long id) {
-		ArtWork artWork = artWorkRepository.findOne(id);
-		return artWork;
-	}
-	
 	public List<ArtWork> findArtworksByArtist(String firstName) {
 		List<ArtWork> artWorkList = artWorkRepository.findByArtist(firstName);
 		return artWorkList;
