@@ -1,0 +1,10 @@
+target
+bin
+.settings
+.classpath
+.project
+*.log
+.checkstyle
+.springBeans
+src/main/resources/git.properties
+
