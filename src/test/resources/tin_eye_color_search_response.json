@@ -1,0 +1,15 @@
+{
+    "count": "1",
+    "status": "ok",
+    "error": [],
+    "method": "color_search",
+    "result": [
+        {
+            "score": "12.70",
+            "metadata": {
+                "artworkId": "360505841"
+            },
+            "filepath": "1016530341"
+        }
+    ]
+}
