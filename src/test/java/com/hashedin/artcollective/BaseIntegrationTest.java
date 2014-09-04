@@ -1,5 +1,7 @@
 package com.hashedin.artcollective;
 
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,16 +12,20 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.client.response.DefaultResponseCreator;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -51,6 +57,12 @@ public class BaseIntegrationTest {
 		return String.format("%s:%d%s", baseURI, port, relativeUrl);
 	}
 	
+	@Autowired
+	private ResourceLoader loader;
+	
+	public DefaultResponseCreator withJson(String jsonFile) {
+		return withSuccess(loader.getResource(jsonFile), MediaType.APPLICATION_JSON);
+	}
 	protected String login(String username, String password) {
 		
 		RestTemplate rest = new RestTemplate();

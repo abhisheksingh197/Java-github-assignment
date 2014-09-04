@@ -18,8 +18,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.ArtWork;
+import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
+import com.hashedin.artcollective.repository.PriceBucketRepository;
 
 public class ArtWorksServiceTest extends BaseUnitTest {
 
@@ -49,8 +51,11 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	private ArtWorkRepository artRepository;
 	
 	@Autowired
+	private PriceBucketRepository priceBucketRepository;
+	
+	@Autowired
 	private ArtWorksSearchService searchService;
-
+	
 	@Before
 	public void setup() {
 		if(isInitialized) {
@@ -174,6 +179,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<String> collectionList = new ArrayList<>();
 		collectionList.add("independence");
 		String artist = "Bhar";
+		String priceBucketRange = "low";
 		int pageNo = 0;
 		Pageable page = new PageRequest(pageNo, 2);
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
@@ -181,6 +187,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				styleList,
 				collectionList,
 				artist,
+				priceBucketRange,
 				page);
 		assertEquals(artWorkList.size(), 1);
 	}
@@ -191,6 +198,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<String> styleList = null;
 		List<String> collectionList = null;
 		String artist = "Bhar";
+		String priceBucketRange = "low";
 		int pageNo = 0;
 		Pageable page = new PageRequest(pageNo, 4);
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
@@ -198,8 +206,9 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				styleList,
 				collectionList,
 				artist,
+				priceBucketRange,
 				page);
-		assertEquals(artWorkList.size(), 4);
+		assertEquals(artWorkList.get(0).getPriceBuckets().size(), 2);
 	}
 	
 	@Test
@@ -233,15 +242,15 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		assertEquals(artWorkList.size(), 1);
 	}
 	
+	@Test
+	public void testForPriceBucket() {
+		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
+		ArtWork artwork = artList.get(1);
+		assertEquals(artwork.getPriceBuckets().size(), 1);
+		List<PriceBucket> priceBucket = (List<PriceBucket>) priceBucketRepository.findAll();
+		assertEquals(priceBucket.size(), 5);
+	}
 	
-//	@Test
-//	public void testThatImagesAreGettingSaved() {
-//		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
-//		ArtWork artwork = artList.get(0);
-//		List<Image> images = artwork.getImages();
-//		assertEquals(images.size(), 2);
-//	}
-	
-	
+
 
 }

@@ -46,6 +46,7 @@ public class ProductsAPI {
 			@RequestParam(value = "styles", required = false) String[] styles,
 			@RequestParam(value = "collections", required = false) String[] collections,
 			@RequestParam(value = "artist", required = false) String artist,
+			@RequestParam(value = "priceBucketRange", required = false) String priceBucketRange,
 			Pageable page) {
 		List<String> subjectList = new ArrayList<>();
 		List<String> styleList = new ArrayList<>();
@@ -61,6 +62,7 @@ public class ProductsAPI {
 				styleList,
 				collectionList,
 				artist,
+				priceBucketRange,
 				page);
 		return wrapResponse(artworks);
 	}

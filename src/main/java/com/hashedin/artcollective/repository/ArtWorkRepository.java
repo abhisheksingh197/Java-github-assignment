@@ -19,14 +19,17 @@ JpaSpecificationExecutor<ArtWork> {
 	@Query("SELECT art FROM ArtWork art INNER JOIN art.subjects subject "
 			+ "INNER JOIN art.styles style "
 			+ "INNER JOIN art.collections collection "
+			+ "INNER JOIN art.priceBuckets priceBucket "
 			+ " WHERE (((subject.title) in (:subjectList)) "
 			+ "AND ((style.title) in (:styleList))"
 			+ "AND ((collection.title) in (:collectionList))"
 			+ "AND (LOWER(art.artist.lastName) = LOWER(:lastName))"
+			+ "AND ((priceBucket.title) = (:priceBucketRange))"
 			+ ")")
 	public List<ArtWork> findByCriteria(@Param("subjectList") List<String> subjectList,
 			@Param("styleList") List<String> styleList,
 			@Param("collectionList") List<String> collectionList,
 			@Param("lastName") String lastName,
+			@Param("priceBucketRange") String priceBucketRange,
 			Pageable pageable);
 }

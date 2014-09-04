@@ -47,6 +47,7 @@ public class ArtWorksSearchService {
 			List<String> styleList,
 			List<String> collectionList,
 			String artist,
+			String priceBucketRange,
 			Pageable page) {
 		List<ArtSubject> artSubjectList = (List<ArtSubject>) artSubjectRepository.findAll();
 		List<String> defaultSubjectList = new ArrayList<>();
@@ -77,6 +78,7 @@ public class ArtWorksSearchService {
 				styleList,
 				collectionList,
 				artist,
+				priceBucketRange,
 				page);
 		return artWorkList;
 	}

@@ -5,10 +5,12 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
 
 @Entity
 public class ArtWork {
@@ -26,6 +28,15 @@ public class ArtWork {
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<ArtCollection> collections;
 	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<PriceBucket> priceBuckets;
+	
+	public List<PriceBucket> getPriceBuckets() {
+		return priceBuckets;
+	}
+	public void setPriceBuckets(List<PriceBucket> priceBuckets) {
+		this.priceBuckets = priceBuckets;
+	}
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Image> images;
 	

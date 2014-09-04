@@ -10,7 +10,7 @@ public class Variant {
 	private String createdAt;
 	private String fulfillmentService;
 	private int grams;
-	private String id;
+	private Long id;
 	private String inventoryManagement;
 	private String inventoryPolicy;
 	private String option1;
@@ -56,11 +56,11 @@ public class Variant {
 	public void setGrams(int grams) {
 		this.grams = grams;
 	}
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 	public void setId(String id) {
-		this.id = id;
+		this.id = Long.parseLong(id);
 	}
 	public String getInventoryManagement() {
 		return inventoryManagement;
