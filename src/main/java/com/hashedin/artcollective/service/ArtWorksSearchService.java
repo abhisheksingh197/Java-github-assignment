@@ -15,6 +15,7 @@ import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtistRepository;
+import com.hashedin.artcollective.repository.PriceBucketRepository;
 
 @Service
 public class ArtWorksSearchService {
@@ -35,6 +36,9 @@ public class ArtWorksSearchService {
 	private ArtCollectionsRepository artCollectionsRepository;
 	
 	@Autowired
+	private PriceBucketRepository priceBucketRespository;
+	
+	@Autowired
 	private TinEyeService tinEyeService;
 		
 	public List<ArtWork> findArtworksByArtist(String firstName) {
@@ -49,29 +53,36 @@ public class ArtWorksSearchService {
 			String artist,
 			String priceBucketRange,
 			Pageable page) {
-		List<ArtSubject> artSubjectList = (List<ArtSubject>) artSubjectRepository.findAll();
-		List<String> defaultSubjectList = new ArrayList<>();
-		for (ArtSubject artSubject : artSubjectList) {
-			defaultSubjectList.add(artSubject.getTitle());
-		}
+		
 		if (subjectList == null) {
+			List<ArtSubject> artSubjectList = (List<ArtSubject>) artSubjectRepository.findAll();
+			List<String> defaultSubjectList = new ArrayList<>();
+			for (ArtSubject artSubject : artSubjectList) {
+				defaultSubjectList.add(artSubject.getTitle());
+			}
 			subjectList = defaultSubjectList;
 		}
-		List<ArtStyle> artStyleList = (List<ArtStyle>) artStyleRepository.findAll();
-		List<String> defaultStyleList = new ArrayList<>();
-		for (ArtStyle artStyle : artStyleList) {
-			defaultStyleList.add(artStyle.getTitle());
-		}
+		
 		if (styleList == null) {
+			List<ArtStyle> artStyleList = (List<ArtStyle>) artStyleRepository.findAll();
+			List<String> defaultStyleList = new ArrayList<>();
+			for (ArtStyle artStyle : artStyleList) {
+				defaultStyleList.add(artStyle.getTitle());
+			}
 			styleList = defaultStyleList;
 		}
-		List<ArtCollection> artCollectionsList = (List<ArtCollection>) artCollectionsRepository.findAll();
-		List<String> defaultCollectionsList = new ArrayList<>();
-		for (ArtCollection artCollection : artCollectionsList) {
-			defaultCollectionsList.add(artCollection.getTitle());
-		}
+		
 		if (collectionList == null) {
+			List<ArtCollection> artCollectionsList = (List<ArtCollection>) 
+					artCollectionsRepository.findAll();
+			List<String> defaultCollectionsList = new ArrayList<>();
+			for (ArtCollection artCollection : artCollectionsList) {
+				defaultCollectionsList.add(artCollection.getTitle());
+			}
 			collectionList = defaultCollectionsList;
+		}
+		if (priceBucketRange == null) {
+			priceBucketRange = "low";
 		}
 		List<ArtWork> artWorkList = artWorkRepository.findByCriteria(
 				subjectList,

@@ -6,6 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import com.hashedin.artcollective.integration.AuthorizationTests;
 import com.hashedin.artcollective.service.ArtWorksServiceTest;
+import com.hashedin.artcollective.service.PriceBucketServiceTest;
 import com.hashedin.artcollective.service.ShopifyServiceTest;
 import com.hashedin.artcollective.service.TinEyeServiceImpTest;
 
@@ -14,7 +15,8 @@ import com.hashedin.artcollective.service.TinEyeServiceImpTest;
 	ArtWorksServiceTest.class,
 	ShopifyServiceTest.class,
 	TinEyeServiceImpTest.class,
-	AuthorizationTests.class
+	AuthorizationTests.class,
+	PriceBucketServiceTest.class
 })
 public class UnitTests {
 

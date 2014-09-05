@@ -56,6 +56,9 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	@Autowired
 	private ArtWorksSearchService searchService;
 	
+	@Autowired
+	private PriceBucketService priceBucketService;
+	
 	@Before
 	public void setup() {
 		if(isInitialized) {
@@ -141,6 +144,12 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.expect(requestTo(tinEyeBaseUrl + "add"))
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("tineye_add_response.json"));
+		
+		
+		PriceBucket priceBucketObj1 = new PriceBucket("low",2500,5000);
+		priceBucketService.addPriceBucket(priceBucketObj1);
+		PriceBucket priceBucketObj2 = new PriceBucket("medium",5001,7500);
+		priceBucketService.addPriceBucket(priceBucketObj2);
 
 
 		service.synchronize();
@@ -198,7 +207,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<String> styleList = null;
 		List<String> collectionList = null;
 		String artist = "Bhar";
-		String priceBucketRange = "low";
+		String priceBucketRange = null;
 		int pageNo = 0;
 		Pageable page = new PageRequest(pageNo, 4);
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
@@ -248,7 +257,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		ArtWork artwork = artList.get(1);
 		assertEquals(artwork.getPriceBuckets().size(), 1);
 		List<PriceBucket> priceBucket = (List<PriceBucket>) priceBucketRepository.findAll();
-		assertEquals(priceBucket.size(), 5);
+		assertEquals(priceBucket.size(), 2);
 	}
 	
 

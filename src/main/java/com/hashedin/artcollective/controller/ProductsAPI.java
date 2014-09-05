@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hashedin.artcollective.entity.ArtWork;
+import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
+import com.hashedin.artcollective.service.PriceBucketService;
 import com.hashedin.artcollective.service.TinEyeService;
 
 @RestController
@@ -30,7 +32,22 @@ public class ProductsAPI {
 	@Autowired
 	private ArtWorksSearchService artworksSearchService;
 	
+	@Autowired
+	private PriceBucketService priceBucketService;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TinEyeService.class);
+	
+	//Add Price Range Bucket
+	@RequestMapping(value = "/manage/priceRange/add", method = RequestMethod.GET)
+	public void addPriceBucket(
+			@RequestParam(value = "title", required = true) String title,
+			@RequestParam(value = "lowerRange", required = true) double lowerRange,
+			@RequestParam(value = "upperRange", required = true) double upperRange) {
+		PriceBucket priceBucket = new PriceBucket(title, lowerRange, upperRange);
+		priceBucketService.addPriceBucket(priceBucket);
+		LOGGER.info("Price Bucket Successfully Added");
+	
+	}
 	
 	// Synchronize data from Shopify into internal Database and Tin Eye
 	@RequestMapping(value = "/manage/shopify/synchronize", method = RequestMethod.GET)
