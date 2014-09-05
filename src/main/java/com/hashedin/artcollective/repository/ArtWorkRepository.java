@@ -23,13 +23,15 @@ JpaSpecificationExecutor<ArtWork> {
 			+ " WHERE (((subject.title) in (:subjectList)) "
 			+ "AND ((style.title) in (:styleList))"
 			+ "AND ((collection.title) in (:collectionList))"
-			+ "AND (LOWER(art.artist.lastName) = LOWER(:lastName))"
-			+ "AND ((priceBucket.title) = (:priceBucketRange))"
+			+ "AND ((priceBucket.title) in (:priceBucketRangeList))"
+			+ "AND (str(art.medium) LIKE:medium)"
+			+ "AND (str(art.orientation) LIKE:orientation)"
 			+ ")")
 	public List<ArtWork> findByCriteria(@Param("subjectList") List<String> subjectList,
 			@Param("styleList") List<String> styleList,
 			@Param("collectionList") List<String> collectionList,
-			@Param("lastName") String lastName,
-			@Param("priceBucketRange") String priceBucketRange,
+			@Param("priceBucketRangeList") List<String> priceBucketRangeList, 
+			@Param("medium") String medium, 
+			@Param("orientation") String orientation, 
 			Pageable pageable);
 }

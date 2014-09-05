@@ -30,7 +30,6 @@ public class PriceBucketService {
 		for (Variant variant : variants) {
 			PriceBucket priceBucket = findPriceBucketForVariant(variant, priceBucketsFromRepo);
 			if (priceBucket != null) {
-				priceBucketsFromRepo.remove(priceBucket);
 				hashSet.add(priceBucket);
 			}
 		}

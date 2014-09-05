@@ -20,7 +20,7 @@
             "namespace": "c_f",
             "owner_id": 503096747,
             "updated_at": "2014-08-21T07:02:25-04:00",
-            "value": "Paper",
+            "value": "paper",
             "value_type": "string",
             "owner_resource": "product"
         },
@@ -32,7 +32,7 @@
             "namespace": "c_f",
             "owner_id": 503096747,
             "updated_at": "2014-08-21T07:02:25-04:00",
-            "value": "Landscape",
+            "value": "landscape",
             "value_type": "string",
             "owner_resource": "product"
         }

@@ -10,6 +10,7 @@ import com.hashedin.artcollective.entity.ArtCollection;
 import com.hashedin.artcollective.entity.ArtStyle;
 import com.hashedin.artcollective.entity.ArtSubject;
 import com.hashedin.artcollective.entity.ArtWork;
+import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.repository.ArtCollectionsRepository;
 import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
@@ -50,8 +51,9 @@ public class ArtWorksSearchService {
 			List<String> subjectList, 
 			List<String> styleList,
 			List<String> collectionList,
-			String artist,
-			String priceBucketRange,
+			List<String> priceBucketRangeList,
+			String medium, 
+			String orientation, 
 			Pageable page) {
 		
 		if (subjectList == null) {
@@ -81,15 +83,24 @@ public class ArtWorksSearchService {
 			}
 			collectionList = defaultCollectionsList;
 		}
-		if (priceBucketRange == null) {
-			priceBucketRange = "low";
+		if (priceBucketRangeList == null) {
+			List<PriceBucket> priceBucketsList = (List<PriceBucket>) 
+					priceBucketRespository.findAll();
+			List<String> defaultPriceBucketList = new ArrayList<>();
+			for (PriceBucket priceBucket : priceBucketsList) {
+				defaultPriceBucketList.add(priceBucket.getTitle());
+			}
+			priceBucketRangeList = defaultPriceBucketList;
 		}
+		medium = medium == null ? "%%" :  "%" + medium + "%";
+		orientation = orientation == null ? "%%" : "%" + orientation + "%";
 		List<ArtWork> artWorkList = artWorkRepository.findByCriteria(
 				subjectList,
 				styleList,
 				collectionList,
-				artist,
-				priceBucketRange,
+				priceBucketRangeList,
+				medium, 
+				orientation, 
 				page);
 		return artWorkList;
 	}

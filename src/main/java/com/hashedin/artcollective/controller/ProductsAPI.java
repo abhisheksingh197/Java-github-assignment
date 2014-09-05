@@ -62,24 +62,29 @@ public class ProductsAPI {
 			@RequestParam(value = "subjects", required = false) String[] subjects,
 			@RequestParam(value = "styles", required = false) String[] styles,
 			@RequestParam(value = "collections", required = false) String[] collections,
-			@RequestParam(value = "artist", required = false) String artist,
-			@RequestParam(value = "priceBucketRange", required = false) String priceBucketRange,
+			@RequestParam(value = "priceBucketRange", required = false) String[] priceBucketRange,
+			@RequestParam(value = "medium", required = false) String medium,
+			@RequestParam(value = "orientation", required = false) String orientation,
 			Pageable page) {
 		List<String> subjectList = new ArrayList<>();
 		List<String> styleList = new ArrayList<>();
 		List<String> collectionList = new ArrayList<>();
-		subjectList.add("");
+		List<String> priceBucketRangeList = new ArrayList<>();
+ 		subjectList.add("");
 		styleList.add("");
 		collectionList.add("");
+		priceBucketRangeList.add("");
 		subjectList = subjects != null ? Arrays.asList(subjects) : null;
 		styleList = styles != null ? Arrays.asList(styles) : null;
 		collectionList = collections != null ? Arrays.asList(collections) : null;
+		priceBucketRangeList = priceBucketRange != null ? Arrays.asList(priceBucketRange) : null;
 		List<ArtWork> artworks = artworksSearchService.findArtworksByCriteria(
 				subjectList, 
 				styleList,
 				collectionList,
-				artist,
-				priceBucketRange,
+				priceBucketRangeList,
+				medium, 
+				orientation, 
 				page);
 		return wrapResponse(artworks);
 	}

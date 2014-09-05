@@ -186,17 +186,20 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<String> styleList = new ArrayList<>();
 		styleList.add("nature");
 		List<String> collectionList = new ArrayList<>();
-		collectionList.add("independence");
-		String artist = "Bhar";
-		String priceBucketRange = "low";
+		collectionList.add("diwali");
+		List<String> priceBucketRangeList = new ArrayList<>();
+		priceBucketRangeList.add("low");
+		String medium = "paper";
+		String orientation = "landscape";
 		int pageNo = 0;
 		Pageable page = new PageRequest(pageNo, 2);
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
 				collectionList,
-				artist,
-				priceBucketRange,
+				priceBucketRangeList,
+				medium, 
+				orientation, 
 				page);
 		assertEquals(artWorkList.size(), 1);
 	}
@@ -206,16 +209,18 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<String> subjectList = null;
 		List<String> styleList = null;
 		List<String> collectionList = null;
-		String artist = "Bhar";
-		String priceBucketRange = null;
+		List<String> priceBucketRange = null;
+		String medium = null;
+		String orientation = null;
 		int pageNo = 0;
 		Pageable page = new PageRequest(pageNo, 4);
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
 				collectionList,
-				artist,
 				priceBucketRange,
+				medium, 
+				orientation,
 				page);
 		assertEquals(artWorkList.get(0).getPriceBuckets().size(), 2);
 	}

@@ -63,6 +63,8 @@ public class ArtWork {
 		this.isLimitedEdition = false;
 		this.isFrameAvailable = false;
 		this.isCertified = false;
+		this.medium = "";
+		this.orientation = "";
 	}
 	public Long getId() {
 		return id;
