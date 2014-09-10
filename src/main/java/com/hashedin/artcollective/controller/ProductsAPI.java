@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hashedin.artcollective.entity.ArtStyle;
+import com.hashedin.artcollective.entity.ArtSubject;
 import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.PriceBucket;
+import com.hashedin.artcollective.repository.ArtStyleRepository;
+import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
 import com.hashedin.artcollective.service.PriceBucketService;
@@ -34,6 +38,12 @@ public class ProductsAPI {
 	
 	@Autowired
 	private PriceBucketService priceBucketService;
+	
+	@Autowired
+	private ArtSubjectRepository artSubjectRepository;
+	
+	@Autowired
+	private ArtStyleRepository artStyleRepository;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TinEyeService.class);
 	
@@ -58,7 +68,7 @@ public class ProductsAPI {
 	
 	// Search Artworks based on criteria
 	@RequestMapping(value = "/api/artworks/search", method = RequestMethod.GET)
-	public Map<String, ArtWork> getAllArtworksByCriteria(
+	public Map<String, Object> getAllArtworksByCriteria(
 			@RequestParam(value = "subjects", required = false) String[] subjects,
 			@RequestParam(value = "styles", required = false) String[] styles,
 			@RequestParam(value = "collections", required = false) String[] collections,
@@ -91,17 +101,34 @@ public class ProductsAPI {
 	
 	// Search Tin Eye based on color Criteria
 	@RequestMapping(value = "/api/artworks/search/color", method = RequestMethod.GET)
-	public Map<String, ArtWork> getAllArtworksByColor(@RequestParam(value = "colors") 
+	public Map<String, Object> getAllArtworksByColor(@RequestParam(value = "colors") 
 		String[] colors, @RequestParam(value = "weights", required = false) int[] weights) {
 		List<ArtWork> artworks = artworksSearchService.findArtworksByColor(colors, weights);
 		return wrapResponse(artworks);
 	}
+	
+	// Search For Subjects and Styles
+	@RequestMapping(value = "/api/collections", method = RequestMethod.GET)
+	public Map<String, Object> getAllSubjects() {
+		List<ArtSubject> subjects = (List<ArtSubject>) artSubjectRepository.findAll();
+		List<ArtStyle> styles = (List<ArtStyle>) artStyleRepository.findAll();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("subjects", subjects);
+		map.put("styles", styles);
+		return map;
+	}
 
 	// Wrap Artwork objects into a Map Helper Function
-	private static Map<String, ArtWork> wrapResponse(List<ArtWork> artworks) {
-		Map<String, ArtWork> map = new HashMap<String, ArtWork>();
+	private static Map<String, Object> wrapResponse(List<ArtWork> artworks) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> artworkMap = new HashMap<String, Object>();
 		for (ArtWork art : artworks) {
-			map.put(art.getTitle(), art);
+			artworkMap = new HashMap<String, Object>();
+			artworkMap.put("images", art.getImages());
+			artworkMap.put("priceBuckets", art.getPriceBuckets());
+			artworkMap.put("details", art);
+			artworkMap.put("artist", art.getArtist());
+			map.put(art.getTitle(), artworkMap);
 		}
 		return map;
 	}

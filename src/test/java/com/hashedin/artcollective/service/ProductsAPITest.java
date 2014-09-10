@@ -53,7 +53,7 @@ public class ProductsAPITest extends BaseIntegrationTest {
 
 		String[] colors = { "DF4F23", "255,112,0" };
 		int[] weights = { 1, 1 };
-		Map<String, ArtWork> artMap = productsAPI.getAllArtworksByColor(colors,
+		Map<String, Object> artMap = productsAPI.getAllArtworksByColor(colors,
 				weights);
 		assertEquals(artMap.size(), 1);
 	}

@@ -21,6 +21,7 @@ public class PriceBucketService {
 	public void addPriceBucket(PriceBucket priceBucket) {
 		priceBucketRepository.save(priceBucket);
 	}
+
 	
 	public List<PriceBucket> getPriceBuckets(Product p) {
 		List<PriceBucket> priceBucketsForProduct = new ArrayList<>();
@@ -28,6 +29,7 @@ public class PriceBucketService {
 		List<Variant> variants = p.getVariants();
 		HashSet<PriceBucket> hashSet = new HashSet<>();
 		for (Variant variant : variants) {
+			
 			PriceBucket priceBucket = findPriceBucketForVariant(variant, priceBucketsFromRepo);
 			if (priceBucket != null) {
 				hashSet.add(priceBucket);
@@ -37,6 +39,8 @@ public class PriceBucketService {
 		return priceBucketsForProduct;
 	}
 	
+
+
 	// Iterate through Price Bucket objects to see if the variant belongs to any and return the same.
 	private PriceBucket findPriceBucketForVariant(Variant variant, 
 			List<PriceBucket> priceBucketsFromRepo) {

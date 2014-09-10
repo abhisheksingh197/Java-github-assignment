@@ -18,7 +18,14 @@ public class ArtWork {
 	@Id
 	private Long id;
 	private Long skuId;
+	private String handle;
 	
+	public String getHandle() {
+		return handle;
+	}
+	public void setHandle(String handle) {
+		this.handle = handle;
+	}
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<ArtStyle> styles;
 	
@@ -56,6 +63,41 @@ public class ArtWork {
 	private Boolean isLimitedEdition;
 	private Boolean isFrameAvailable;
 	private Boolean isCertified;
+	private String minSize;
+	private String maxSize;
+	public String getMinSize() {
+		return minSize;
+	}
+	public void setMinSize(String minSize) {
+		this.minSize = minSize;
+	}
+	public String getMaxSize() {
+		return maxSize;
+	}
+	public void setMaxSize(String maxSize) {
+		this.maxSize = maxSize;
+	}
+	public double getMinPrice() {
+		return minPrice;
+	}
+	public void setMinPrice(double minPrice) {
+		this.minPrice = minPrice;
+	}
+	public double getMaxPrice() {
+		return maxPrice;
+	}
+	public void setMaxPrice(double maxPrice) {
+		this.maxPrice = maxPrice;
+	}
+	public int getVariantCount() {
+		return variantCount;
+	}
+	public void setVariantCount(int variantCount) {
+		this.variantCount = variantCount;
+	}
+	private double minPrice;
+	private double maxPrice;
+	private int variantCount;
 	
 	public ArtWork() {
 		this.isCanvasAvailable = false;

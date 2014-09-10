@@ -3,7 +3,7 @@ package com.hashedin.artcollective.service;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Variant {
+public class Variant implements Comparable<Variant> {
 
 	private String barcode;
 	private String compareAtPrice;
@@ -152,6 +152,12 @@ public class Variant {
 	public void setOldInventoryQuantity(int oldInventoryQuantity) {
 		this.oldInventoryQuantity = oldInventoryQuantity;
 	}
+	
+	public int compareTo(Variant v) {
+        Double value = (this.price - v.price);
+        return value.intValue();
+    }
+
 	
 	
 }

@@ -1,14 +1,12 @@
 package com.hashedin.artcollective.service;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.hashedin.artcollective.entity.ArtCollection;
 import com.hashedin.artcollective.entity.ArtStyle;
 import com.hashedin.artcollective.entity.ArtSubject;
@@ -20,6 +18,7 @@ import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.ImageRepository;
+import com.hashedin.artcollective.repository.PriceBucketRepository;
 
 @Service
 public class ArtWorksService {
@@ -54,6 +53,9 @@ public class ArtWorksService {
 	
 	@Autowired
 	private PriceBucketService priceBucketService;
+	
+	@Autowired
+	private PriceBucketRepository priceBucketRepository;
 	
 	public void synchronize() {
 		DateTime lastRunTime = getLastRunTime();
@@ -167,7 +169,12 @@ public class ArtWorksService {
 			return null;
 		}
 		
+		Variant cheapest = Collections.min(p.getVariants());
+		Variant costliest = Collections.max(p.getVariants());
+		
 		imageRepository.save(p.getImages());
+		
+		
 		
 		// Setting attribute values to artwork object and saving them.
 		artwork.setTitle(p.getTitle());
@@ -178,10 +185,15 @@ public class ArtWorksService {
 		artwork.setCollection(artCollections);
 		artwork.setStyle(style);
 		artwork.setImages(p.getImages());
+		artwork.setHandle(p.getHandle());
 		artwork.setPriceBuckets(priceBucketService.getPriceBuckets(p));
+		artwork.setMinPrice(cheapest.getPrice());
+		artwork.setMaxPrice(costliest.getPrice());
+		artwork.setMinSize(cheapest.getOption1());
+		artwork.setMaxSize(costliest.getOption1());
+		artwork.setVariantCount(p.getVariants().size());
 		return artwork;
 	}
-	
 	
 
 	private DateTime getLastRunTime() {

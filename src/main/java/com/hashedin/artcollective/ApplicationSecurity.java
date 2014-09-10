@@ -13,6 +13,7 @@ class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 			.antMatchers("/secure/artist").hasAuthority("PERM_READ_ARTIST_DASHBOARD")
 			.antMatchers("/assets/**").permitAll()
 			.antMatchers("/manage/**").hasRole("SUPERADMIN")
+			.antMatchers("/api/**").permitAll()
 			.anyRequest().fullyAuthenticated();
 		
 		http
