@@ -121,9 +121,8 @@ public class ProductsAPI {
 	// Wrap Artwork objects into a Map Helper Function
 	private static Map<String, Object> wrapResponse(List<ArtWork> artworks) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		Map<String, Object> artworkMap = new HashMap<String, Object>();
 		for (ArtWork art : artworks) {
-			artworkMap = new HashMap<String, Object>();
+			Map<String, Object> artworkMap = new HashMap<String, Object>();
 			artworkMap.put("images", art.getImages());
 			artworkMap.put("priceBuckets", art.getPriceBuckets());
 			artworkMap.put("details", art);

@@ -153,11 +153,21 @@ public class Variant implements Comparable<Variant> {
 		this.oldInventoryQuantity = oldInventoryQuantity;
 	}
 	
+	@Override
 	public int compareTo(Variant v) {
-        Double value = (this.price - v.price);
-        return value.intValue();
+		return Double.valueOf(this.price - v.price).intValue();
     }
-
+	
+	@Override 
+	public boolean equals(Object obj) { 
+		if (this == obj) { return true; }
+		return true;
+	}
+	
+	@Override 
+	public int hashCode() {
+		return 1; 
+	}
 	
 	
 }
