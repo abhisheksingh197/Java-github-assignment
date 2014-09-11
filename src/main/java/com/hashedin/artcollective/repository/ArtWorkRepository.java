@@ -20,12 +20,12 @@ JpaSpecificationExecutor<ArtWork> {
 			+ "INNER JOIN art.styles style "
 			+ "INNER JOIN art.collections collection "
 			+ "INNER JOIN art.priceBuckets priceBucket "
-			+ " WHERE (((subject.title) in (:subjectList)) "
-			+ "AND ((style.title) in (:styleList))"
-			+ "AND ((collection.title) in (:collectionList))"
-			+ "AND ((priceBucket.title) in (:priceBucketRangeList))"
-			+ "AND (str(art.medium) LIKE:medium)"
-			+ "AND (str(art.orientation) LIKE:orientation)"
+			+ " WHERE (((:subjectList) is NULL OR (subject.title) in (:subjectList)) "
+			+ "AND ((:styleList) is NULL OR (style.title) in (:styleList))"
+			+ "AND ((:collectionList) is NULL OR (collection.title) in (:collectionList))"
+			+ "AND ((:priceBucketRangeList) is NULL OR (priceBucket.title) in (:priceBucketRangeList))"
+			+ "AND (:medium is NULL OR art.medium = :medium)"
+			+ "AND (:orientation is NULL OR art.orientation = :orientation)"
 			+ ")")
 	public List<ArtWork> findByCriteria(@Param("subjectList") List<String> subjectList,
 			@Param("styleList") List<String> styleList,

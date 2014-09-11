@@ -4,6 +4,8 @@
           "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
+
+    <module name="SuppressionCommentFilter"/>
     <!--
         If you set the basedir property below, then all reported file
         names will be relative to the specified directory. See
@@ -55,6 +57,8 @@
     <!-- </module> -->
 
     <module name="TreeWalker">
+    
+        <module name="FileContentsHolder"/>
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
@@ -129,7 +133,9 @@
         <module name="EmptyBlock"/>
         <module name="LeftCurly"/>
         <module name="NeedBraces"/>
-        <module name="RightCurly"/>
+        <module name="RightCurly">
+            <property name="option" value="alone"/>
+        </module>
 
 
         <!-- Checks for common coding problems               -->
