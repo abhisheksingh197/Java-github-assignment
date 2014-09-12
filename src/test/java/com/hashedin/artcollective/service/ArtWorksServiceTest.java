@@ -18,8 +18,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.ArtWork;
+import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
+import com.hashedin.artcollective.repository.PriceBucketRepository;
 
 public class ArtWorksServiceTest extends BaseUnitTest {
 
@@ -49,8 +51,14 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	private ArtWorkRepository artRepository;
 	
 	@Autowired
+	private PriceBucketRepository priceBucketRepository;
+	
+	@Autowired
 	private ArtWorksSearchService searchService;
-
+	
+	@Autowired
+	private PriceBucketService priceBucketService;
+	
 	@Before
 	public void setup() {
 		if(isInitialized) {
@@ -136,6 +144,12 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.expect(requestTo(tinEyeBaseUrl + "add"))
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("tineye_add_response.json"));
+		
+		
+		PriceBucket priceBucketObj1 = new PriceBucket("low",2500,5000);
+		priceBucketService.addPriceBucket(priceBucketObj1);
+		PriceBucket priceBucketObj2 = new PriceBucket("medium",5001,7500);
+		priceBucketService.addPriceBucket(priceBucketObj2);
 
 
 		service.synchronize();
@@ -172,15 +186,20 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<String> styleList = new ArrayList<>();
 		styleList.add("nature");
 		List<String> collectionList = new ArrayList<>();
-		collectionList.add("independence");
-		String artist = "Bhar";
+		collectionList.add("diwali");
+		List<String> priceBucketRangeList = new ArrayList<>();
+		priceBucketRangeList.add("low");
+		String medium = "paper";
+		String orientation = "landscape";
 		int pageNo = 0;
 		Pageable page = new PageRequest(pageNo, 2);
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
 				collectionList,
-				artist,
+				priceBucketRangeList,
+				medium, 
+				orientation, 
 				page);
 		assertEquals(artWorkList.size(), 1);
 	}
@@ -190,16 +209,20 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<String> subjectList = null;
 		List<String> styleList = null;
 		List<String> collectionList = null;
-		String artist = "Bhar";
+		List<String> priceBucketRange = null;
+		String medium = null;
+		String orientation = null;
 		int pageNo = 0;
 		Pageable page = new PageRequest(pageNo, 4);
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
 				collectionList,
-				artist,
+				priceBucketRange,
+				medium, 
+				orientation,
 				page);
-		assertEquals(artWorkList.size(), 4);
+		assertEquals(artWorkList.get(0).getPriceBuckets().size(), 2);
 	}
 	
 	@Test
@@ -233,15 +256,15 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		assertEquals(artWorkList.size(), 1);
 	}
 	
+	@Test
+	public void testForPriceBucket() {
+		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
+		ArtWork artwork = artList.get(1);
+		assertEquals(artwork.getPriceBuckets().size(), 1);
+		List<PriceBucket> priceBucket = (List<PriceBucket>) priceBucketRepository.findAll();
+		assertEquals(priceBucket.size(), 2);
+	}
 	
-//	@Test
-//	public void testThatImagesAreGettingSaved() {
-//		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
-//		ArtWork artwork = artList.get(0);
-//		List<Image> images = artwork.getImages();
-//		assertEquals(images.size(), 2);
-//	}
-	
-	
+
 
 }

@@ -3,14 +3,14 @@ package com.hashedin.artcollective.service;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Variant {
+public class Variant implements Comparable<Variant> {
 
 	private String barcode;
 	private String compareAtPrice;
 	private String createdAt;
 	private String fulfillmentService;
 	private int grams;
-	private String id;
+	private Long id;
 	private String inventoryManagement;
 	private String inventoryPolicy;
 	private String option1;
@@ -56,11 +56,11 @@ public class Variant {
 	public void setGrams(int grams) {
 		this.grams = grams;
 	}
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 	public void setId(String id) {
-		this.id = id;
+		this.id = Long.parseLong(id);
 	}
 	public String getInventoryManagement() {
 		return inventoryManagement;
@@ -152,6 +152,38 @@ public class Variant {
 	public void setOldInventoryQuantity(int oldInventoryQuantity) {
 		this.oldInventoryQuantity = oldInventoryQuantity;
 	}
+	
+	@Override
+	public int compareTo(Variant v) {
+		return Double.valueOf(this.price - v.price).intValue();
+    }
+	
+	//CHECKSTYLE:OFF
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Variant other = (Variant) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+	//CHECKSTYLE:ON
+
 	
 	
 }

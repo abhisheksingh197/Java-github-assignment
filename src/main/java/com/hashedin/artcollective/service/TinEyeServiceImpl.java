@@ -87,7 +87,8 @@ public class TinEyeServiceImpl implements TinEyeService {
 				HttpMethod.POST, entity, String.class);
 		try {
 			searchResponseObj = objectMapper.readValue(postResponse.getBody(), SearchResponse.class);
-		} catch (IOException e1) {
+		} 
+		catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		List<ResponseResult> responseResult = searchResponseObj.getResult();

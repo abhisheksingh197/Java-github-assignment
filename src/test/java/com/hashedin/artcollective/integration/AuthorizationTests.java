@@ -46,4 +46,6 @@ public class AuthorizationTests extends BaseIntegrationTest {
 			.body(not(containsString("Access is denied")));
 		
 	}
+	
+	
 }
