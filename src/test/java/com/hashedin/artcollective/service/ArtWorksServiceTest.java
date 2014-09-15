@@ -118,6 +118,31 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 						+ "products/513096747/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_513096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections.json?product_id=523096747"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("collections_523096747.json"));
+
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/523096747/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("metafields_523096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections.json?product_id=533096747"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("collections_533096747.json"));
+
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/533096747/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("metafields_533096747.json"));
+		
 				
 		mockArtWorksService
 				.expect(requestTo(tinEyeBaseUrl + "add"))
@@ -160,9 +185,9 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	@Test
 	public void testThatArtWorksWereUpdated() {
 		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
-		ArtWork artwork = artList.get(1);
-		assertEquals(artwork.getTitle(), "Amit Bhar Second");
-		assertEquals(artList.size(),3);
+		ArtWork artwork = artList.get(0);
+		assertEquals(artwork.getTitle(), "India Gate");
+		assertEquals(artList.size(),1);
 	}
 	
 	@Test
@@ -176,7 +201,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	@Test
 	public void testForSearchByArtist() {
 		List<ArtWork> artWorkList = searchService.findArtworksByArtist("Amit");
-		assertEquals(artWorkList.size(), 3);
+		assertEquals(artWorkList.size(), 1);
 	}
 	
 	@Test
@@ -222,7 +247,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				medium, 
 				orientation,
 				page);
-		assertEquals(artWorkList.get(0).getPriceBuckets().size(), 2);
+		assertEquals(artWorkList.get(0).getPriceBuckets().size(), 1);
 	}
 	
 	@Test
@@ -259,11 +284,13 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	@Test
 	public void testForPriceBucket() {
 		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
-		ArtWork artwork = artList.get(1);
+		ArtWork artwork = artList.get(0);
 		assertEquals(artwork.getPriceBuckets().size(), 1);
 		List<PriceBucket> priceBucket = (List<PriceBucket>) priceBucketRepository.findAll();
 		assertEquals(priceBucket.size(), 2);
 	}
+	
+	
 	
 
 

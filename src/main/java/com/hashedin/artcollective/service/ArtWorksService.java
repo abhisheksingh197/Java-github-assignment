@@ -23,7 +23,7 @@ import com.hashedin.artcollective.repository.PriceBucketRepository;
 @Service
 public class ArtWorksService {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(TinEyeService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArtWorksService.class);
 	
 	private static final int TITLE_SIZE = 3;
 	
@@ -128,6 +128,8 @@ public class ArtWorksService {
 				artCollectionsRepository.save(artCollection);
 				break;
 			default:
+				LOGGER.info("Invalid Collection Type: Collection type not recognised" 
+						+ collection.getTitle());
 				break;
 			}
 		}
@@ -164,15 +166,23 @@ public class ArtWorksService {
 		
 		// Saving Images into Repository.
 		if (p.getImages().size() == 0) {
-			LOGGER.info("No Image,Rejecting Product " + String.valueOf(p.getId()));
+			LOGGER.info("No Image: An Artwork should have atleast one image "
+					+ "Rejecting Product " + p.getTitle());
 			//TODO Rejecting Artwork since no image must send an email with product id. 
 			return null;
 		}
+		imageRepository.save(p.getImages());
 		
+		// Fetching Cheapest and Costliest Variant
+		if (p.getVariants().size() == 0) {
+			LOGGER.info("No Variants: An Artwork should have atleast one variant "
+					+ "Rejecting Product: " + p.getTitle());
+			//TODO Rejecting Artwork since no image must send an email with product id. 
+			return null;
+		}
 		Variant cheapest = Collections.min(p.getVariants());
 		Variant costliest = Collections.max(p.getVariants());
 		
-		imageRepository.save(p.getImages());
 		
 		
 		
@@ -192,9 +202,49 @@ public class ArtWorksService {
 		artwork.setMinSize(cheapest.getOption1());
 		artwork.setMaxSize(costliest.getOption1());
 		artwork.setVariantCount(p.getVariants().size());
-		return artwork;
+		if (artWorkValidator(artwork)) {
+			return artwork;
+		}
+		return null;
 	}
 	
+
+	private boolean artWorkValidator(ArtWork artwork) {
+		boolean isValid = true;
+		if (artwork.getSubject().size() == 0) {
+			LOGGER.info("Missing Subject List: The Artwork " + artwork.getTitle() 
+					+ "must belong to atelast one subject");
+			isValid = false;
+		}
+		if (artwork.getCollection().size() == 0) {
+			LOGGER.info("Missing Collections List: The Artwork " + artwork.getTitle() 
+					+ "must belong to atelast one Collection");
+			isValid = false;
+		}
+		if (artwork.getStyle().size() == 0) {
+			LOGGER.info("Missing Style List: The Artwork " + artwork.getTitle() 
+					+ "must belong to atelast one style");
+			isValid = false;
+		}
+		if (artwork.getArtist() == null) {
+			LOGGER.info("Missing Artist: The Artwork " + artwork.getTitle() 
+					+ "must have an artist");
+			isValid = false;
+		}
+		if (artwork.getMedium().equalsIgnoreCase("")) {
+			LOGGER.info("Missing Medium: The Artwork " + artwork.getTitle() 
+					+ "must belong to a medium");
+			isValid = false;
+		}
+		if (artwork.getOrientation().equalsIgnoreCase("")) {
+			LOGGER.info("Missing Orientation: The Artwork " + artwork.getTitle() 
+					+ "must belong to an orientation");
+			isValid = false;
+		}
+		
+		return isValid;
+		
+	}
 
 	private DateTime getLastRunTime() {
 		return null;

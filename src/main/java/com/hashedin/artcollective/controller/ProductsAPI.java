@@ -55,7 +55,7 @@ public class ProductsAPI {
 			@RequestParam(value = "upperRange", required = true) double upperRange) {
 		PriceBucket priceBucket = new PriceBucket(title, lowerRange, upperRange);
 		priceBucketService.addPriceBucket(priceBucket);
-		LOGGER.info("Price Bucket Successfully Added");
+		LOGGER.info("Price Bucket: " + priceBucket.getTitle() + " Successfully Added");
 	
 	}
 	
