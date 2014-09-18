@@ -42,7 +42,7 @@ public class Main extends WebMvcConfigurerAdapter {
  	@Value("${shopify.apipassword}")
  	private String shopifyApiPassword;
  
- 	@Value("${shopfiy.authurl}")
+ 	@Value("${shopify.authurl}")
  	private String shopifyAuthUrl;
  
 	@Value("${tinEye.apikey}")
