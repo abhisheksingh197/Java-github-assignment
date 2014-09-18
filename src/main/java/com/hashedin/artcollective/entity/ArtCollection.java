@@ -8,6 +8,7 @@ public class ArtCollection {
 	@Id
 	private Long id;
 	private String title;
+	
 	public Long getId() {
 		return id;
 	}

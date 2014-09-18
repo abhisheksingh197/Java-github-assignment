@@ -25,7 +25,6 @@ import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
 import com.hashedin.artcollective.service.PriceBucketService;
-import com.hashedin.artcollective.service.TinEyeService;
 
 @RestController
 public class ProductsAPI {
@@ -45,7 +44,7 @@ public class ProductsAPI {
 	@Autowired
 	private ArtStyleRepository artStyleRepository;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(TinEyeService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
 	//Add Price Range Bucket
 	@RequestMapping(value = "/manage/priceRange/add", method = RequestMethod.GET)
@@ -71,27 +70,27 @@ public class ProductsAPI {
 	public Map<String, Object> getAllArtworksByCriteria(
 			@RequestParam(value = "subjects", required = false) String[] subjects,
 			@RequestParam(value = "styles", required = false) String[] styles,
-			@RequestParam(value = "collections", required = false) String[] collections,
+			@RequestParam(value = "colors", required = false) String[] colors,
 			@RequestParam(value = "priceBucketRange", required = false) String[] priceBucketRange,
 			@RequestParam(value = "medium", required = false) String medium,
 			@RequestParam(value = "orientation", required = false) String orientation,
 			Pageable page) {
 		List<String> subjectList = new ArrayList<>();
 		List<String> styleList = new ArrayList<>();
-		List<String> collectionList = new ArrayList<>();
+		List<String> colorsList = new ArrayList<>();
 		List<String> priceBucketRangeList = new ArrayList<>();
  		subjectList.add("");
 		styleList.add("");
-		collectionList.add("");
+		colorsList.add("");
 		priceBucketRangeList.add("");
 		subjectList = subjects != null ? Arrays.asList(subjects) : null;
 		styleList = styles != null ? Arrays.asList(styles) : null;
-		collectionList = collections != null ? Arrays.asList(collections) : null;
+		colors = colors != null ? colors : null;
 		priceBucketRangeList = priceBucketRange != null ? Arrays.asList(priceBucketRange) : null;
 		List<ArtWork> artworks = artworksSearchService.findArtworksByCriteria(
 				subjectList, 
 				styleList,
-				collectionList,
+				colors,
 				priceBucketRangeList,
 				medium, 
 				orientation, 

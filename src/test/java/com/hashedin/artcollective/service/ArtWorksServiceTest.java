@@ -23,6 +23,8 @@ import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 
+
+
 public class ArtWorksServiceTest extends BaseUnitTest {
 
 	// Comment saveToTinEye Method in ArtworksService before running Test Cases.
@@ -149,6 +151,11 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("tineye_add_response.json"));
 		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=frames"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("frames.json"));
+		
+		
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artworksupdate.json"));
@@ -169,6 +176,10 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.expect(requestTo(tinEyeBaseUrl + "add"))
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("tineye_add_response.json"));
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=frames"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("frames.json"));
 		
 		
 		PriceBucket priceBucketObj1 = new PriceBucket("low",2500,5000);
@@ -206,12 +217,19 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	
 	@Test
 	public void testForSearchByCriteria() {
+		MockRestServiceServer mockTinEyeService = MockRestServiceServer
+				.createServer(rest);
+		mockTinEyeService
+		.expect(requestTo(tinEyeBaseUrl + "color_search/"))
+		.andExpect(method(HttpMethod.POST))
+		.andRespond(withJson("tin_eye_color_search_response.json"));
+		
 		List<String> subjectList = new ArrayList<>();
 		subjectList.add("geometric");
 		List<String> styleList = new ArrayList<>();
 		styleList.add("nature");
-		List<String> collectionList = new ArrayList<>();
-		collectionList.add("diwali");
+		String[] colorsList = new String[2];
+		colorsList[0] = "FDFGH4";
 		List<String> priceBucketRangeList = new ArrayList<>();
 		priceBucketRangeList.add("low");
 		String medium = "paper";
@@ -221,7 +239,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
-				collectionList,
+				colorsList,
 				priceBucketRangeList,
 				medium, 
 				orientation, 
@@ -231,23 +249,30 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	
 	@Test
 	public void testForSearchByNullCriteria() {
+		MockRestServiceServer mockTinEyeService = MockRestServiceServer
+				.createServer(rest);
+		mockTinEyeService
+		.expect(requestTo(tinEyeBaseUrl + "color_search/"))
+		.andExpect(method(HttpMethod.POST))
+		.andRespond(withJson("tin_eye_color_search_response.json"));
+		
 		List<String> subjectList = null;
 		List<String> styleList = null;
-		List<String> collectionList = null;
-		List<String> priceBucketRange = null;
+		String[] colorsList = null;
+		List<String> priceBucketRangeList = null;
 		String medium = null;
 		String orientation = null;
 		int pageNo = 0;
-		Pageable page = new PageRequest(pageNo, 4);
+		Pageable page = new PageRequest(pageNo, 2);
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
-				collectionList,
-				priceBucketRange,
+				colorsList,
+				priceBucketRangeList,
 				medium, 
-				orientation,
+				orientation, 
 				page);
-		assertEquals(artWorkList.get(0).getPriceBuckets().size(), 1);
+		assertEquals(artWorkList.size(), 1);
 	}
 	
 	@Test
@@ -289,8 +314,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<PriceBucket> priceBucket = (List<PriceBucket>) priceBucketRepository.findAll();
 		assertEquals(priceBucket.size(), 2);
 	}
-	
-	
+
 	
 
 

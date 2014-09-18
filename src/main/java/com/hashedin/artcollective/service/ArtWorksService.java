@@ -62,6 +62,19 @@ public class ArtWorksService {
 		List<ArtWork> arts = getArtWorksModifiedSince(lastRunTime);
 		saveArtToInternalDatabase(arts);
 		saveArtToTinEye(arts);
+		verifyFrames(lastRunTime);
+		
+	}
+	
+	//Fetches frames from shopify and verifies whether they have Mount and Frame Thickness
+	private void verifyFrames(DateTime lastRunTime) {
+		List<Product> products = shopify.getFrameProductsSinceLastModified(lastRunTime);
+		for (Product product : products) {
+			if (!productHasFrameableValues(product)) {
+				LOGGER.info("No Frame or Mount Thicness: A frame Must have supportable Frame "
+						+ "and Mount thickness Rejecting Product " + product.getTitle());
+			}
+		}
 	}
 	
 	// Fetches Artworks from Shopify and saves as a saves a secondary to tineye.
@@ -77,7 +90,7 @@ public class ArtWorksService {
 	List<ArtWork> getArtWorksModifiedSince(DateTime lastRunTime) {
 		List<ArtWork> arts = new ArrayList<>();
 		// Fetches Artworks from Shopify and then updates them into internal DB.
-		List<Product> products = shopify.getProductsSinceLastModified(lastRunTime);
+		List<Product> products = shopify.getArtWorkProductsSinceLastModified(lastRunTime);
 		for (Product p : products) {
 			List<Collection> collections = shopify.getCollectionsForProduct(p.getId());
 			List<MetaField> metafields = shopify.getMetaFieldsForProduct(p.getId());
@@ -163,6 +176,16 @@ public class ArtWorksService {
 			}
 		}
 		
+		//If artwork is framable check if it has a mount thickness and a frame thickness
+		if (artwork.isFrameAvailable()) {
+			if (!productHasFrameableValues(p)) {
+				LOGGER.info("No Frame or Mount Thicness: A framable Artwork should have Frame "
+						+ "and Mount thickness Rejecting Product " + p.getTitle());
+				//TODO Rejecting Artwork since no image must send an email with product id. 
+				return null;
+			}
+		}
+		
 		
 		// Saving Images into Repository.
 		if (p.getImages().size() == 0) {
@@ -209,36 +232,48 @@ public class ArtWorksService {
 	}
 	
 
+	private boolean productHasFrameableValues(Product p) {
+		List<Variant> variants = p.getVariants();
+		for (Variant variant : variants) {
+			if (variant.getOption2() == null || variant.getOption3() == null 
+					|| variant.getOption2().equalsIgnoreCase("") 
+					|| variant.getOption3().equalsIgnoreCase("")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private boolean artWorkValidator(ArtWork artwork) {
 		boolean isValid = true;
 		if (artwork.getSubject().size() == 0) {
 			LOGGER.info("Missing Subject List: The Artwork " + artwork.getTitle() 
-					+ "must belong to atelast one subject");
+					+ " must belong to at the least one subject");
 			isValid = false;
 		}
 		if (artwork.getCollection().size() == 0) {
 			LOGGER.info("Missing Collections List: The Artwork " + artwork.getTitle() 
-					+ "must belong to atelast one Collection");
+					+ " must belong to at the least one Collection");
 			isValid = false;
 		}
 		if (artwork.getStyle().size() == 0) {
 			LOGGER.info("Missing Style List: The Artwork " + artwork.getTitle() 
-					+ "must belong to atelast one style");
+					+ " must belong to at the least one style");
 			isValid = false;
 		}
 		if (artwork.getArtist() == null) {
 			LOGGER.info("Missing Artist: The Artwork " + artwork.getTitle() 
-					+ "must have an artist");
+					+ " must have an artist");
 			isValid = false;
 		}
 		if (artwork.getMedium().equalsIgnoreCase("")) {
 			LOGGER.info("Missing Medium: The Artwork " + artwork.getTitle() 
-					+ "must belong to a medium");
+					+ " must belong to a medium");
 			isValid = false;
 		}
 		if (artwork.getOrientation().equalsIgnoreCase("")) {
 			LOGGER.info("Missing Orientation: The Artwork " + artwork.getTitle() 
-					+ "must belong to an orientation");
+					+ " must belong to an orientation");
 			isValid = false;
 		}
 		

@@ -70,7 +70,7 @@ public class PriceBucketServiceTest extends BaseUnitTest{
 				.andRespond(withJson("artworksupdate.json"));
 		
 		DateTime lastModified = new DateTime();
-		List<Product> p = shopifyService.getProductsSinceLastModified(lastModified);
+		List<Product> p = shopifyService.getArtWorkProductsSinceLastModified(lastModified);
 		
 		List<PriceBucket> priceBuckets = priceBucketService.getPriceBuckets(p.get(0));
 		

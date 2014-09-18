@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ShopifyService {
 
-	public List<Product> getProductsSinceLastModified(DateTime lastModified);
+	public List<Product> getArtWorkProductsSinceLastModified(DateTime lastModified);
 	
 	public List<Collection> getCollectionsForProduct(long productId);
 	
 	public List<MetaField> getMetaFieldsForProduct(long productId);
+
+	public List<Product> getFrameProductsSinceLastModified(DateTime lastRunTime);
 }
