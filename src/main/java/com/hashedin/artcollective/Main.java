@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 
 
@@ -35,34 +36,53 @@ public class Main extends WebMvcConfigurerAdapter {
 	}
 	
 	//TODO - Remove hard-coded credentials
-	@Bean
-	public RestTemplate getRestTemplate() {
-		BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-				"6a0973890681db359599327965fd6ebf", 
-				"470d46d724c8c722be5d09273c3bdadf");
-		
-		AuthScope shopifyScope = new AuthScope("art-vista.myshopify.com", -1);
-		credentialsProvider.setCredentials(shopifyScope, credentials);
-		
-		
-		AuthScope tinEyeScope = new AuthScope("multicolorengine.tineye.com", -1);
-		UsernamePasswordCredentials tinEyeCredentials = new UsernamePasswordCredentials(
-				"artvista", 
-				"VSWFuVMW");
-		
-		credentialsProvider.setCredentials(tinEyeScope, tinEyeCredentials);
-		
-		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-		HttpClient httpClient = HttpClientBuilder
-								.create()
-								.setDefaultCredentialsProvider(credentialsProvider)
-								.build();
-		factory.setHttpClient(httpClient);
-		
-		RestTemplate template = new RestTemplate(factory);
-		return template;
-	}
+	@Value("${shopify.apikey}")
+ 	private String shopifyApiKey;
+ 
+ 	@Value("${shopify.apipassword}")
+ 	private String shopifyApiPassword;
+ 
+ 	@Value("${shopfiy.authurl}")
+ 	private String shopifyAuthUrl;
+ 
+	@Value("${tinEye.apikey}")
+ 	private String tinEyeApiKey;
+ 
+ 	@Value("${tinEye.apipassword}")
+ 	private String tinEyeApiPassword;
+ 
+ 	@Value("${tinEye.authurl}")
+ 	private String tinEyeAuthUrl;
+ 
+ 	//TODO - Remove hard-coded credentials
+ 	@Bean
+	 public RestTemplate getRestTemplate() {
+	  BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+	  UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+	    shopifyApiKey, 
+	    shopifyApiPassword);
+	  
+	  AuthScope shopifyScope = new AuthScope(shopifyAuthUrl, -1);
+	  credentialsProvider.setCredentials(shopifyScope, credentials);
+	  
+	  
+	  AuthScope tinEyeScope = new AuthScope(tinEyeAuthUrl, -1);
+	  UsernamePasswordCredentials tinEyeCredentials = new UsernamePasswordCredentials(
+	    tinEyeApiKey, 
+	    tinEyeApiPassword);
+	  
+	  credentialsProvider.setCredentials(tinEyeScope, tinEyeCredentials);
+	  
+	  HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+	  HttpClient httpClient = HttpClientBuilder
+	        .create()
+	        .setDefaultCredentialsProvider(credentialsProvider)
+	        .build();
+	  factory.setHttpClient(httpClient);
+	  
+	  RestTemplate template = new RestTemplate(factory);
+	  return template;
+	 }
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
