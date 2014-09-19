@@ -35,15 +35,15 @@ public class Main extends WebMvcConfigurerAdapter {
 		LOGGER.info("Started Application Art Collective");
 	}
 	@Value("${shopify.apikey}")
-	private String shopifyApiKey;
-	
-	@Value("${shopify.apipassword}")
-	private String shopifyApiPassword;
-	
-	@Value("${shopfiy.authurl}")
-	private String shopifyAuthUrl;
-	
-	@Value("${tinEye.apikey}")
+ 	private String shopifyApiKey;
+ 
+ 	@Value("${shopify.apipassword}")
+ 	private String shopifyApiPassword;
+ 
+ 	@Value("${shopify.authurl}")
+ 	private String shopifyAuthUrl;
+
+ 	@Value("${tinEye.apikey}")
 	private String tinEyeApiKey;
 	
 	@Value("${tinEye.apipassword}")
