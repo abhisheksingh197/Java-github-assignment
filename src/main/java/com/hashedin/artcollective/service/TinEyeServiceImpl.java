@@ -2,7 +2,6 @@ package com.hashedin.artcollective.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -65,7 +64,8 @@ public class TinEyeServiceImpl implements TinEyeService {
 			List<Image> artworkImageList = artwork.getImages();
 			Image image = artworkImageList.get(0);
 			params.add("urls[" + imgIterator + "]", image.getImgSrc());
-			params.add("filepaths[" + imgIterator + "]", String.valueOf(image.getId()));
+			params.add("filepaths[" + imgIterator + "]", "artworks/" + String.valueOf(image.getId()) 
+					+ ".jpg");
 			String metadata = "{\"artworkId\":"
 				+ "{\"action\": \"return\", \"type\": \"uint\", \"\":\"" 
 				+ artwork.getId() + "\"}}";
@@ -92,13 +92,17 @@ public class TinEyeServiceImpl implements TinEyeService {
 			e1.printStackTrace();
 		}
 		List<ResponseResult> responseResult = searchResponseObj.getResult();
-		HashSet<ArtWork> hashSet = new HashSet<>();
 		for (ResponseResult result : responseResult) {
 			TinEyeMetadata metadata = result.getMetadata();
 			Long artworkId = metadata.getArtworkId();
-			hashSet.add(artworkRepository.findOne(artworkId));
+			if (artworkId != null) {
+				ArtWork tinEyeSearchArt = artworkRepository.findOne(artworkId);
+				if (tinEyeSearchArt != null) {
+					artWorks.add(artworkRepository.findOne(artworkId));
+				}
+			}
 		}
-		artWorks.addAll(hashSet);
+		
 		LOGGER.info("Search Based on Colors");
 		return artWorks;
 	}
@@ -112,6 +116,7 @@ public class TinEyeServiceImpl implements TinEyeService {
 			params.add("weights[1]", (criteria.getColor2Weight()) != 0 
 					? String.valueOf(criteria.getColor2Weight()) : "1");
 			params.add("return_metadata", "[\"artworkId\"]");
+			params.add("limit", "-1");
 		return params;
 	}
 	

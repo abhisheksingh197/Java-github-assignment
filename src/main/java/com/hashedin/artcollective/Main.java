@@ -5,6 +5,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,6 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 
 
@@ -34,8 +34,6 @@ public class Main extends WebMvcConfigurerAdapter {
 		SpringApplication.run(Main.class, args);
 		LOGGER.info("Started Application Art Collective");
 	}
-	
-	//TODO - Remove hard-coded credentials
 	@Value("${shopify.apikey}")
  	private String shopifyApiKey;
  
@@ -44,45 +42,44 @@ public class Main extends WebMvcConfigurerAdapter {
  
  	@Value("${shopify.authurl}")
  	private String shopifyAuthUrl;
- 
-	@Value("${tinEye.apikey}")
- 	private String tinEyeApiKey;
- 
- 	@Value("${tinEye.apipassword}")
- 	private String tinEyeApiPassword;
- 
- 	@Value("${tinEye.authurl}")
- 	private String tinEyeAuthUrl;
- 
- 	//TODO - Remove hard-coded credentials
- 	@Bean
-	 public RestTemplate getRestTemplate() {
-	  BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-	  UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-	    shopifyApiKey, 
-	    shopifyApiPassword);
-	  
-	  AuthScope shopifyScope = new AuthScope(shopifyAuthUrl, -1);
-	  credentialsProvider.setCredentials(shopifyScope, credentials);
-	  
-	  
-	  AuthScope tinEyeScope = new AuthScope(tinEyeAuthUrl, -1);
-	  UsernamePasswordCredentials tinEyeCredentials = new UsernamePasswordCredentials(
-	    tinEyeApiKey, 
-	    tinEyeApiPassword);
-	  
-	  credentialsProvider.setCredentials(tinEyeScope, tinEyeCredentials);
-	  
-	  HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-	  HttpClient httpClient = HttpClientBuilder
-	        .create()
-	        .setDefaultCredentialsProvider(credentialsProvider)
-	        .build();
-	  factory.setHttpClient(httpClient);
-	  
-	  RestTemplate template = new RestTemplate(factory);
-	  return template;
-	 }
+
+ 	@Value("${tinEye.apikey}")
+	private String tinEyeApiKey;
+	
+	@Value("${tinEye.apipassword}")
+	private String tinEyeApiPassword;
+	
+	@Value("${tinEye.authurl}")
+	private String tinEyeAuthUrl;
+	
+	@Bean
+	public RestTemplate getRestTemplate() {
+		BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+				shopifyApiKey, 
+				shopifyApiPassword);
+		
+		AuthScope shopifyScope = new AuthScope(shopifyAuthUrl, -1);
+		credentialsProvider.setCredentials(shopifyScope, credentials);
+		
+		
+		AuthScope tinEyeScope = new AuthScope(tinEyeAuthUrl, -1);
+		UsernamePasswordCredentials tinEyeCredentials = new UsernamePasswordCredentials(
+				tinEyeApiKey, 
+				tinEyeApiPassword);
+		
+		credentialsProvider.setCredentials(tinEyeScope, tinEyeCredentials);
+		
+		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+		HttpClient httpClient = HttpClientBuilder
+								.create()
+								.setDefaultCredentialsProvider(credentialsProvider)
+								.build();
+		factory.setHttpClient(httpClient);
+		
+		RestTemplate template = new RestTemplate(factory);
+		return template;
+	}
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {

@@ -22,7 +22,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 
 	@Override
-	public List<Product> getProductsSinceLastModified(DateTime lastModified) {
+	public List<Product> getArtWorkProductsSinceLastModified(DateTime lastModified) {
 		ShopifyProducts products = rest.getForObject(
 				baseUri + "products.json?product_type=artworks", ShopifyProducts.class);
 		return products.getProducts();
@@ -40,6 +40,13 @@ public class ShopifyServiceImpl implements ShopifyService {
 		ArtWorkMetafields metafields = rest.getForObject(
 				baseUri + "products/" + productId + "/metafields.json", ArtWorkMetafields.class);
 		return metafields.getMetafields();
+	}
+
+	@Override
+	public List<Product> getFrameProductsSinceLastModified(DateTime lastRunTime) {
+		ShopifyProducts products = rest.getForObject(
+				baseUri + "products.json?product_type=frames", ShopifyProducts.class);
+		return products.getProducts();
 	}
 
 }
