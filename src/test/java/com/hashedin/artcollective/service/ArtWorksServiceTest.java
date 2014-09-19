@@ -172,10 +172,6 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_343096747.json"));
 		
-		mockArtWorksService
-				.expect(requestTo(tinEyeBaseUrl + "add"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("tineye_add_response.json"));
 		
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=frames"))
 				.andExpect(method(HttpMethod.GET))
