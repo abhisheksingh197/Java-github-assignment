@@ -60,8 +60,10 @@ public class ArtWorksService {
 	public void synchronize() {
 		DateTime lastRunTime = getLastRunTime();
 		List<ArtWork> arts = getArtWorksModifiedSince(lastRunTime);
-		saveArtToInternalDatabase(arts);
-		saveArtToTinEye(arts);
+		if (arts.size() > 0) {
+			saveArtToInternalDatabase(arts);
+			saveArtToTinEye(arts);
+		}
 		verifyFrames(lastRunTime);
 		
 	}
@@ -71,8 +73,8 @@ public class ArtWorksService {
 		List<Product> products = shopify.getFrameProductsSinceLastModified(lastRunTime);
 		for (Product product : products) {
 			if (!productHasFrameableValues(product)) {
-				LOGGER.info("No Frame or Mount Thicness: A frame Must have supportable Frame "
-						+ "and Mount thickness Rejecting Product " + product.getTitle());
+				LOGGER.info("No Frame or Mount Thicness: Frame {} Must have supportable Frame "
+						+ "and Mount thickness Rejecting Product ", product.getTitle());
 			}
 		}
 	}
@@ -141,8 +143,8 @@ public class ArtWorksService {
 				artCollectionsRepository.save(artCollection);
 				break;
 			default:
-				LOGGER.info("Invalid Collection Type: Collection type not recognised" 
-						+ collection.getTitle());
+				LOGGER.info("Invalid Collection Type: Collection type {} not recognised", 
+						collection.getTitle());
 				break;
 			}
 		}
@@ -179,8 +181,8 @@ public class ArtWorksService {
 		//If artwork is framable check if it has a mount thickness and a frame thickness
 		if (artwork.isFrameAvailable()) {
 			if (!productHasFrameableValues(p)) {
-				LOGGER.info("No Frame or Mount Thicness: A framable Artwork should have Frame "
-						+ "and Mount thickness Rejecting Product " + p.getTitle());
+				LOGGER.info("Missing Frame or Mount Thicness: The Framable Artwork {} must "
+					+ "have a Mount Thickness and a Frame Thickness mentioned.", p.getTitle());
 				//TODO Rejecting Artwork since no image must send an email with product id. 
 				return null;
 			}
@@ -189,8 +191,8 @@ public class ArtWorksService {
 		
 		// Saving Images into Repository.
 		if (p.getImages().size() == 0) {
-			LOGGER.info("No Image: An Artwork should have atleast one image "
-					+ "Rejecting Product " + p.getTitle());
+			LOGGER.info("Missing Image: The Artwork {} must at the least have one Image", 
+					p.getTitle());
 			//TODO Rejecting Artwork since no image must send an email with product id. 
 			return null;
 		}
@@ -198,8 +200,8 @@ public class ArtWorksService {
 		
 		// Fetching Cheapest and Costliest Variant
 		if (p.getVariants().size() == 0) {
-			LOGGER.info("No Variants: An Artwork should have atleast one variant "
-					+ "Rejecting Product: " + p.getTitle());
+			LOGGER.info("Missing Variants: The Artwork {} must have at the least one variant", 
+					p.getTitle());
 			//TODO Rejecting Artwork since no image must send an email with product id. 
 			return null;
 		}
@@ -247,33 +249,33 @@ public class ArtWorksService {
 	private boolean artWorkValidator(ArtWork artwork) {
 		boolean isValid = true;
 		if (artwork.getSubject().size() == 0) {
-			LOGGER.info("Missing Subject List: The Artwork " + artwork.getTitle() 
-					+ " must belong to at the least one subject");
+			LOGGER.info("Missing Subject List: The Artwork {} must belong to at the least one subject", 
+					artwork.getTitle());
 			isValid = false;
 		}
 		if (artwork.getCollection().size() == 0) {
-			LOGGER.info("Missing Collections List: The Artwork " + artwork.getTitle() 
-					+ " must belong to at the least one Collection");
+			LOGGER.info("Missing Collections List: The Artwork {} must belong "
+					+ "to at the least one collection", artwork.getTitle());
 			isValid = false;
 		}
 		if (artwork.getStyle().size() == 0) {
-			LOGGER.info("Missing Style List: The Artwork " + artwork.getTitle() 
-					+ " must belong to at the least one style");
+			LOGGER.info("Missing Style List: The Artwork {} must belong to at the least one style", 
+					artwork.getTitle());
 			isValid = false;
 		}
 		if (artwork.getArtist() == null) {
-			LOGGER.info("Missing Artist: The Artwork " + artwork.getTitle() 
-					+ " must have an artist");
+			LOGGER.info("Missing Artist: TThe Artwork {} must have an artist", 
+					artwork.getTitle());
 			isValid = false;
 		}
 		if (artwork.getMedium().equalsIgnoreCase("")) {
-			LOGGER.info("Missing Medium: The Artwork " + artwork.getTitle() 
-					+ " must belong to a medium");
+			LOGGER.info("Missing Medium: The Artwork {} must belong to a medium", 
+					artwork.getTitle());
 			isValid = false;
 		}
 		if (artwork.getOrientation().equalsIgnoreCase("")) {
-			LOGGER.info("Missing Orientation: The Artwork " + artwork.getTitle() 
-					+ " must belong to an orientation");
+			LOGGER.info("Missing Orientation: The Artwork {} must belong to an orientation", 
+					artwork.getTitle());
 			isValid = false;
 		}
 		

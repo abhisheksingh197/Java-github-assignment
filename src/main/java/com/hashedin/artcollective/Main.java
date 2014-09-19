@@ -31,7 +31,6 @@ public class Main extends WebMvcConfigurerAdapter {
 	
 	public static void main(String args[]) {
 		//System.setProperty("spring.profiles.active", "prod");
-		System.setProperty("spring.profiles.active", "dev");
 		SpringApplication.run(Main.class, args);
 		LOGGER.info("Started Application Art Collective");
 	}
