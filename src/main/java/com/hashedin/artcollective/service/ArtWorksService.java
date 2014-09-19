@@ -167,10 +167,10 @@ public class ArtWorksService {
 			case "is_canvas_available":
 				artwork.setIsCanvasAvailable(Boolean.valueOf(metafield.getValue()));
 				break;
-			case "medium":
+			case "artwork_medium":
 				artwork.setMedium(metafield.getValue() == null ? "" : metafield.getValue());
 				break;
-			case "orientation":
+			case "artwork_orientation":
 				artwork.setOrientation(metafield.getValue() == null ? "" : metafield.getValue());
 				break;
 			default:
