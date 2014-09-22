@@ -15,15 +15,13 @@ public class FrameVariantService {
 	@Autowired
 	private FrameVariantRepository frameRepository;
 	
-	public List<Long> getFrames(Long frameLength, Long frameBreadth, Long mountThickness, Long frameThickness) {
+	public List<FrameVariant> getFrames(Double frameLength, Double frameBreadth, 
+			Double mountThickness, Double frameThickness) {
 		List<Long> frameIds = new ArrayList<>();
 		List<FrameVariant> frameVariants = frameRepository.findVariants(frameLength, 
 				frameBreadth, mountThickness, frameThickness);
-		for (FrameVariant frameVariant : frameVariants) {
-			frameIds.add(frameVariant.getId());
-		}
 		
-		return frameIds;
+		return frameVariants;
 	}
 
 }

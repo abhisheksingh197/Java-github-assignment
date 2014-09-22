@@ -91,6 +91,7 @@ public class TinEyeServiceImpl implements TinEyeService {
 		catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		LOGGER.info(postResponse.getBody());
 		List<ResponseResult> responseResult = searchResponseObj.getResult();
 		for (ResponseResult result : responseResult) {
 			TinEyeMetadata metadata = result.getMetadata();

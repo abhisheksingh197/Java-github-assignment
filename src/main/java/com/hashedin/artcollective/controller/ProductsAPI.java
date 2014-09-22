@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hashedin.artcollective.entity.ArtStyle;
 import com.hashedin.artcollective.entity.ArtSubject;
 import com.hashedin.artcollective.entity.ArtWork;
+import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
@@ -134,11 +135,11 @@ public class ProductsAPI {
 	}
 	
 	@RequestMapping(value = "/api/frames", method = RequestMethod.GET)
-	public List<Long> getFrames(
-			@RequestParam(value = "frameLength", required = true) Long frameLength,
-			@RequestParam(value = "frameBreadth", required = true) Long frameBreadth,
-			@RequestParam(value = "mountThickness", required = true) Long mountThickness,
-			@RequestParam(value = "frameThickness", required = true) Long frameThickness
+	public List<FrameVariant> getFrames(
+			@RequestParam(value = "frameLength", required = true) Double frameLength,
+			@RequestParam(value = "frameBreadth", required = true) Double frameBreadth,
+			@RequestParam(value = "mountThickness", required = true) Double mountThickness,
+			@RequestParam(value = "frameThickness", required = true) Double frameThickness
 			) {
 		
 		return frameVariantService.getFrames(frameLength, frameBreadth, mountThickness, frameThickness);

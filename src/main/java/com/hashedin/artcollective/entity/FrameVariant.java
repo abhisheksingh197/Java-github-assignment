@@ -10,10 +10,24 @@ public class FrameVariant {
 	private Long id;
 	private Long skuId;
 	private String handle;
-	private Long mountThickness;
-	private Long frameThickness;
-	private Long frameLength;
-	private Long frameBreadth;
+	private Double mountThickness;
+	private Double frameThickness;
+	private Double frameLength;
+	private Double frameBreadth;
+	private Double unitPrice;
+	public Double getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(Double unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+	public String getImgSrc() {
+		return imgSrc;
+	}
+	public void setImgSrc(String imgSrc) {
+		this.imgSrc = imgSrc;
+	}
+	private String imgSrc;
 	public Long getId() {
 		return id;
 	}
@@ -32,30 +46,31 @@ public class FrameVariant {
 	public void setHandle(String handle) {
 		this.handle = handle;
 	}
-	public Long getMountThickness() {
+	public Double getMountThickness() {
 		return mountThickness;
 	}
-	public void setMountThickness(Long mountThickness) {
+	public void setMountThickness(double mountThickness) {
 		this.mountThickness = mountThickness;
 	}
-	public Long getFrameThickness() {
+	public Double getFrameThickness() {
 		return frameThickness;
 	}
-	public void setFrameThickness(Long frameThickness) {
+	public void setFrameThickness(double frameThickness) {
 		this.frameThickness = frameThickness;
 	}
-	public Long getFrameLength() {
+	public Double getFrameLength() {
 		return frameLength;
 	}
-	public void setFrameLength(Long frameLength) {
-		this.frameLength = frameLength;
+	public void setFrameLength(double d) {
+		this.frameLength = d;
 	}
-	public Long getFrameBreadth() {
+	public Double getFrameBreadth() {
 		return frameBreadth;
 	}
-	public void setFrameBreadth(Long frameBreadth) {
+	public void setFrameBreadth(double frameBreadth) {
 		this.frameBreadth = frameBreadth;
 	}
+
 	
 	
 

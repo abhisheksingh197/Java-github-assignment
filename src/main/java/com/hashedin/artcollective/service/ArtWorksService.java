@@ -96,10 +96,14 @@ public class ArtWorksService {
 			else {
 				FrameVariant frameVariant = new FrameVariant();
 				frameVariant.setId(variant.getId());
-				frameVariant.setFrameLength(Long.parseLong(variant.getOption1().split("[Xx]")[0]));
-				frameVariant.setFrameBreadth(Long.parseLong(variant.getOption1().split("[Xx]")[1]));
-				frameVariant.setFrameThickness(Long.parseLong(variant.getOption3()));
-				frameVariant.setMountThickness(Long.parseLong(variant.getOption2()));
+				frameVariant.setFrameLength(Double.parseDouble((variant.getOption1()
+						.split("[Xx]")[0].split("\"")[0])));
+				frameVariant.setFrameBreadth(Double.parseDouble((variant.getOption1()
+						.split("[Xx]")[1].split("\"")[0])));
+				frameVariant.setMountThickness(Double.parseDouble((variant.getOption2())));
+				frameVariant.setFrameThickness(Double.parseDouble((variant.getOption3())));
+				frameVariant.setUnitPrice(variant.getPrice());
+				frameVariant.setImgSrc(product.getImage().getImgSrc());
 				frameVariants.add(frameVariant);
 			}
 			
@@ -267,12 +271,28 @@ public class ArtWorksService {
 	
 
 	private boolean variantHasFrameableValues(Variant variant) {
+		try {
 			if (variant.getOption2() == null || variant.getOption3() == null 
 					|| variant.getOption2().equalsIgnoreCase("") 
 					|| variant.getOption3().equalsIgnoreCase("")) {
 				return false;
 			}
+			else if ((Double.parseDouble((variant.getOption1().split("[Xx]")[0].split("\"")[0])) < 0)
+				|| (Double.parseDouble((variant.getOption1().split("[Xx]")[1].split("\"")[0])) < 0)
+				|| (Double.parseDouble((variant.getOption2())) < 0) 
+				|| (Double.parseDouble((variant.getOption3())) < 0)) {
+						return false;
+					}
 		return true;
+		}
+		catch (NumberFormatException e) {
+			return false;
+		}
+		catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+		
+			
 	}
 
 	private boolean artWorkValidator(ArtWork artwork) {

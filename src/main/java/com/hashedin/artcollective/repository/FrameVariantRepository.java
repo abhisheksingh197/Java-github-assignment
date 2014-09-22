@@ -19,8 +19,8 @@ JpaSpecificationExecutor<FrameVariant> {
 			+ "AND (frameVariant.mountThickness = :mountThickness)"
 			+ "AND (frameVariant.frameThickness = :frameThickness)"
 			+ ")")
-	public List<FrameVariant> findVariants(@Param("frameLength")Long frameLength, 
-			@Param("frameBreadth")Long frameBreadth,
-			@Param("mountThickness")Long mountThickness, 
-			@Param("frameThickness")Long frameThickness);
+	public List<FrameVariant> findVariants(@Param("frameLength")Double frameLength, 
+			@Param("frameBreadth")Double frameBreadth,
+			@Param("mountThickness")Double mountThickness, 
+			@Param("frameThickness")Double frameThickness);
 }

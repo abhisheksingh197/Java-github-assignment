@@ -15,6 +15,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
+import com.hashedin.artcollective.entity.FrameVariant;
 
 public class FrameVariantServiceTest extends BaseUnitTest {
 	
@@ -49,7 +50,7 @@ public class FrameVariantServiceTest extends BaseUnitTest {
 	
 	@Test
 	public void testForFramesSearch() {
-		List<Long> ids = frameVariantService.getFrames(12L, 16L, 3L, 4L);
+		List<FrameVariant> ids = frameVariantService.getFrames(12.0, 16.0, 3.0, 4.0);
 		assertEquals(ids.size(), 1);
 	}
 	

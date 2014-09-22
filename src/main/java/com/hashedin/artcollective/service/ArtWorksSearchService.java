@@ -56,7 +56,7 @@ public class ArtWorksSearchService {
 			Pageable page) {
 		
 		
-		List<String> idList = getIdListPostColorSearch(colorsList);
+		String idList = getIdListPostColorSearch(colorsList);
 		
 		//LOGGER.info(idList.toString());
 		List<ArtWork> artWorkList = artWorkRepository.findByCriteria(
@@ -70,8 +70,9 @@ public class ArtWorksSearchService {
 		return artWorkList;
 	}
 	
-	private List<String> getIdListPostColorSearch(String[] colorsList) {
+	private String getIdListPostColorSearch(String[] colorsList) {
 		int[] weights = null;
+		String nullidString = "-1";
 		// If color list in null, we are avoiding tinEye API Call.
 		if (colorsList != null) {
 			List<ArtWork> artworks = findArtworksByColor(colorsList, weights);
@@ -79,21 +80,23 @@ public class ArtWorksSearchService {
 			// adding a list of Ids which consist -1 so that SQL Query parses response 
 				// with no artwork from TinEye
 			nullId.add("-1");
-			return (artworks.size() == 0 ? nullId : getArtworkIds(artworks));
+			return (artworks.size() == 0 ? nullidString : getArtworkIds(artworks));
 		}
 		else {
 			return null;
 		}
 	}
 
-	public List<String> getArtworkIds(List<ArtWork> artworks) {
+	public String getArtworkIds(List<ArtWork> artworks) {
 		List<String> idList = new ArrayList<>();
 		HashSet<String> hashSet = new HashSet<>();
+		String stringIdList = "";
 		for (ArtWork art : artworks) {
-			hashSet.add(String.valueOf(art.getId()));
+			//hashSet.add(String.valueOf(art.getId()));
+			stringIdList = stringIdList + String.valueOf(art.getId()) + ",";
 		}
 		idList.addAll(hashSet);
-		return idList;
+		return stringIdList;
 	}
 	
 	public List<ArtWork> findArtworksByColor(String[] colors, int[] weights) {
