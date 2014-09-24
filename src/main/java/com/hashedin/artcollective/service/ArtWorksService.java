@@ -2,21 +2,25 @@ package com.hashedin.artcollective.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.hashedin.artcollective.entity.ArtCollection;
 import com.hashedin.artcollective.entity.ArtStyle;
 import com.hashedin.artcollective.entity.ArtSubject;
 import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.Artist;
+import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.repository.ArtCollectionsRepository;
 import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtistRepository;
+import com.hashedin.artcollective.repository.FrameVariantRepository;
 import com.hashedin.artcollective.repository.ImageRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 
@@ -57,6 +61,9 @@ public class ArtWorksService {
 	@Autowired
 	private PriceBucketRepository priceBucketRepository;
 	
+	@Autowired
+	private FrameVariantRepository frameRepository;
+	
 	public void synchronize() {
 		DateTime lastRunTime = getLastRunTime();
 		List<ArtWork> arts = getArtWorksModifiedSince(lastRunTime);
@@ -64,21 +71,47 @@ public class ArtWorksService {
 			saveArtToInternalDatabase(arts);
 			saveArtToTinEye(arts);
 		}
-		verifyFrames(lastRunTime);
+		saveFramesModifiedSince(lastRunTime);
 		
 	}
 	
 	//Fetches frames from shopify and verifies whether they have Mount and Frame Thickness
-	private void verifyFrames(DateTime lastRunTime) {
+	public void saveFramesModifiedSince(DateTime lastRunTime) {
 		List<Product> products = shopify.getFrameProductsSinceLastModified(lastRunTime);
 		for (Product product : products) {
-			if (!productHasFrameableValues(product)) {
-				LOGGER.info("No Frame or Mount Thicness: Frame {} Must have supportable Frame "
-						+ "and Mount thickness Rejecting Product ", product.getTitle());
-			}
+				List<FrameVariant> frameVariants = getFrameVariants(product);
+				frameRepository.save(frameVariants);	
 		}
+		
 	}
 	
+	private List<FrameVariant> getFrameVariants(Product product) {
+		List<FrameVariant> frameVariants = new ArrayList<>();
+		for (Variant variant : product.getVariants()) {
+			if (!variantHasFrameableValues(variant)) {
+				LOGGER.info("No Frame or Mount Thickness: Frame {} Must have supportable Frame "
+						+ "and Mount thickness Rejecting Product ", product.getTitle());
+				
+			} 
+			else {
+				FrameVariant frameVariant = new FrameVariant();
+				frameVariant.setId(variant.getId());
+				frameVariant.setFrameLength(Double.parseDouble((variant.getOption1()
+						.split("[Xx]")[0].split("\"")[0])));
+				frameVariant.setFrameBreadth(Double.parseDouble((variant.getOption1()
+						.split("[Xx]")[1].split("\"")[0])));
+				frameVariant.setMountThickness(Double.parseDouble((variant.getOption2())));
+				frameVariant.setFrameThickness(Double.parseDouble((variant.getOption3())));
+				frameVariant.setUnitPrice(variant.getPrice());
+				frameVariant.setImgSrc(product.getImage().getImgSrc());
+				frameVariants.add(frameVariant);
+			}
+			
+		}
+		
+		return frameVariants;
+	}
+
 	// Fetches Artworks from Shopify and saves as a saves a secondary to tineye.
 	private void saveArtToTinEye(List<ArtWork> arts) {
 			tineye.uploadArts(arts);
@@ -180,12 +213,15 @@ public class ArtWorksService {
 		
 		//If artwork is framable check if it has a mount thickness and a frame thickness
 		if (artwork.isFrameAvailable()) {
-			if (!productHasFrameableValues(p)) {
-				LOGGER.info("Missing Frame or Mount Thicness: The Framable Artwork {} must "
+			for (Variant variant : p.getVariants()) {
+				if (!variantHasFrameableValues(variant)) {
+					LOGGER.info("Missing Frame or Mount Thicness: The Framable Artwork {} must "
 					+ "have a Mount Thickness and a Frame Thickness mentioned.", p.getTitle());
-				//TODO Rejecting Artwork since no image must send an email with product id. 
-				return null;
+					//TODO Rejecting Artwork since no image must send an email with product id. 
+					return null;
+				}
 			}
+			
 		}
 		
 		
@@ -234,16 +270,29 @@ public class ArtWorksService {
 	}
 	
 
-	private boolean productHasFrameableValues(Product p) {
-		List<Variant> variants = p.getVariants();
-		for (Variant variant : variants) {
+	private boolean variantHasFrameableValues(Variant variant) {
+		try {
 			if (variant.getOption2() == null || variant.getOption3() == null 
 					|| variant.getOption2().equalsIgnoreCase("") 
 					|| variant.getOption3().equalsIgnoreCase("")) {
 				return false;
 			}
-		}
+			else if ((Double.parseDouble((variant.getOption1().split("[Xx]")[0].split("\"")[0])) < 0)
+				|| (Double.parseDouble((variant.getOption1().split("[Xx]")[1].split("\"")[0])) < 0)
+				|| (Double.parseDouble((variant.getOption2())) < 0) 
+				|| (Double.parseDouble((variant.getOption3())) < 0)) {
+						return false;
+					}
 		return true;
+		}
+		catch (NumberFormatException e) {
+			return false;
+		}
+		catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+		
+			
 	}
 
 	private boolean artWorkValidator(ArtWork artwork) {

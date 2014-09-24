@@ -91,6 +91,7 @@ public class TinEyeServiceImpl implements TinEyeService {
 		catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		LOGGER.info(postResponse.getBody());
 		List<ResponseResult> responseResult = searchResponseObj.getResult();
 		for (ResponseResult result : responseResult) {
 			TinEyeMetadata metadata = result.getMetadata();
@@ -98,7 +99,7 @@ public class TinEyeServiceImpl implements TinEyeService {
 			if (artworkId != null) {
 				ArtWork tinEyeSearchArt = artworkRepository.findOne(artworkId);
 				if (tinEyeSearchArt != null) {
-					artWorks.add(artworkRepository.findOne(artworkId));
+					artWorks.add(tinEyeSearchArt);
 				}
 			}
 		}
