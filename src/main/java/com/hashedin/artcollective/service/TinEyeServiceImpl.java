@@ -99,7 +99,7 @@ public class TinEyeServiceImpl implements TinEyeService {
 			if (artworkId != null) {
 				ArtWork tinEyeSearchArt = artworkRepository.findOne(artworkId);
 				if (tinEyeSearchArt != null) {
-					artWorks.add(artworkRepository.findOne(artworkId));
+					artWorks.add(tinEyeSearchArt);
 				}
 			}
 		}

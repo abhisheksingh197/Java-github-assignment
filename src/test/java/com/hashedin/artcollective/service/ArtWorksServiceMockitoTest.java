@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +43,7 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 	@Autowired
 	ArtWorksSearchService artworksSearchService;
 	
+	@Ignore
 	@Test
 	public void testArtwork() {
 		List<ArtWork> artworks = generateThousandArtWorks();

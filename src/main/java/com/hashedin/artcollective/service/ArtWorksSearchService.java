@@ -1,6 +1,4 @@
 package com.hashedin.artcollective.service;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,10 +74,8 @@ public class ArtWorksSearchService {
 		// If color list in null, we are avoiding tinEye API Call.
 		if (colorsList != null) {
 			List<ArtWork> artworks = findArtworksByColor(colorsList, weights);
-			List<String> nullId = new ArrayList<>();
 			// adding a list of Ids which consist -1 so that SQL Query parses response 
 				// with no artwork from TinEye
-			nullId.add("-1");
 			return (artworks.size() == 0 ? nullidString : getArtworkIds(artworks));
 		}
 		else {
@@ -88,14 +84,15 @@ public class ArtWorksSearchService {
 	}
 
 	public String getArtworkIds(List<ArtWork> artworks) {
-		List<String> idList = new ArrayList<>();
-		HashSet<String> hashSet = new HashSet<>();
 		String stringIdList = "";
 		for (ArtWork art : artworks) {
-			//hashSet.add(String.valueOf(art.getId()));
-			stringIdList = stringIdList + String.valueOf(art.getId()) + ",";
+			if (stringIdList == "") {
+				stringIdList = String.valueOf(art.getId());
+			} 
+			else {
+				stringIdList = stringIdList.concat(",").concat(String.valueOf(art.getId()));
+			}
 		}
-		idList.addAll(hashSet);
 		return stringIdList;
 	}
 	

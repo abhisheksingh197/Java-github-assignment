@@ -1,6 +1,5 @@
 package com.hashedin.artcollective.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ public class FrameVariantService {
 	
 	public List<FrameVariant> getFrames(Double frameLength, Double frameBreadth, 
 			Double mountThickness, Double frameThickness) {
-		List<Long> frameIds = new ArrayList<>();
 		List<FrameVariant> frameVariants = frameRepository.findVariants(frameLength, 
 				frameBreadth, mountThickness, frameThickness);
 		
