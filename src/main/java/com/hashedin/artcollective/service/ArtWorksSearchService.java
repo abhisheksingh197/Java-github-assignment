@@ -1,4 +1,6 @@
 package com.hashedin.artcollective.service;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,46 +56,46 @@ public class ArtWorksSearchService {
 			Pageable page) {
 		
 		
-		String idList = getIdListPostColorSearch(colorsList);
+		List<Long> idList = getIdListPostColorSearch(colorsList);
 		
 		//LOGGER.info(idList.toString());
-		List<ArtWork> artWorkList = artWorkRepository.findByCriteria(
+		List<ArtWork> artWorkList = artWorkRepository.findByCriteria(styleList,
 				subjectList,
-				styleList,
-				idList,
 				priceBucketRangeList,
 				medium, 
-				orientation, 
-				page);
+				orientation,
+				idList);
+		
 		return artWorkList;
 	}
 	
-	private String getIdListPostColorSearch(String[] colorsList) {
+	private List<Long> getIdListPostColorSearch(String[] colorsList) {
 		int[] weights = null;
-		String nullidString = "-1";
+
+		List<Long> nullIdList = new ArrayList<>();
+		nullIdList.add(-1L);
 		// If color list in null, we are avoiding tinEye API Call.
 		if (colorsList != null) {
 			List<ArtWork> artworks = findArtworksByColor(colorsList, weights);
 			// adding a list of Ids which consist -1 so that SQL Query parses response 
 				// with no artwork from TinEye
-			return (artworks.size() == 0 ? nullidString : getArtworkIds(artworks));
+			return (artworks.size() == 0 ? nullIdList : getArtworkIds(artworks));
 		}
 		else {
-			return null;
+			return nullIdList;
 		}
 	}
 
-	public String getArtworkIds(List<ArtWork> artworks) {
-		String stringIdList = "";
+	public List<Long> getArtworkIds(List<ArtWork> artworks) {
+		HashSet<Long> idHashSet = new HashSet<>();
+		List<Long> idList = new ArrayList<>();
 		for (ArtWork art : artworks) {
-			if (stringIdList == "") {
-				stringIdList = String.valueOf(art.getId());
-			} 
-			else {
-				stringIdList = stringIdList.concat(",").concat(String.valueOf(art.getId()));
-			}
+
+			idHashSet.add(art.getId());
+			
 		}
-		return stringIdList;
+		idList.addAll(idHashSet);
+		return idList;
 	}
 	
 	public List<ArtWork> findArtworksByColor(String[] colors, int[] weights) {

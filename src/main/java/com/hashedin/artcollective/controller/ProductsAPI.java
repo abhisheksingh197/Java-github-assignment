@@ -58,14 +58,16 @@ public class ProductsAPI {
 	//Add Price Range Bucket
 	@RequestMapping(value = "/manage/priceRange/add", method = RequestMethod.GET)
 	public void addPriceBucket(
+			@RequestParam(value = "id", required = true) Long id,
 			@RequestParam(value = "title", required = true) String title,
 			@RequestParam(value = "lowerRange", required = true) double lowerRange,
 			@RequestParam(value = "upperRange", required = true) double upperRange) {
-		PriceBucket priceBucket = new PriceBucket(title, lowerRange, upperRange);
+		PriceBucket priceBucket = new PriceBucket(id, title, lowerRange, upperRange);
 		priceBucketService.addPriceBucket(priceBucket);
 		LOGGER.info("Price Bucket: " + priceBucket.getTitle() + " Successfully Added");
 	
 	}
+	
 	
 	@RequestMapping(value = "/manage/priceRange/getall", method = RequestMethod.GET)
 	public List<PriceBucket> getAllPriceBuckets() {
@@ -96,14 +98,17 @@ public class ProductsAPI {
 		List<String> styleList = new ArrayList<>();
 		List<String> colorsList = new ArrayList<>();
 		List<String> priceBucketRangeList = new ArrayList<>();
- 		subjectList.add("");
-		styleList.add("");
+ 		subjectList.add("-1");
+		styleList.add("-1");
 		colorsList.add("");
-		priceBucketRangeList.add("");
-		subjectList = subjects != null ? Arrays.asList(subjects) : null;
-		styleList = styles != null ? Arrays.asList(styles) : null;
+		priceBucketRangeList.add("-1");
+		subjectList = subjects != null ? Arrays.asList(subjects) : subjectList;
+		styleList = styles != null ? Arrays.asList(styles) : styleList;
 		colors = colors != null ? colors : null;
-		priceBucketRangeList = priceBucketRange != null ? Arrays.asList(priceBucketRange) : null;
+		medium = (medium !=  null) && (!medium.equalsIgnoreCase("")) ? medium : "-1";
+		orientation = (orientation !=  null) && (!orientation.equalsIgnoreCase("")) ? orientation : "-1";
+		priceBucketRangeList = priceBucketRange != null ? Arrays.asList(priceBucketRange) 
+				: priceBucketRangeList;
 		List<ArtWork> artworks = artworksSearchService.findArtworksByCriteria(
 				subjectList, 
 				styleList,

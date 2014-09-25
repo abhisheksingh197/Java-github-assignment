@@ -1,19 +1,17 @@
 package com.hashedin.artcollective.service;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
-import org.apache.mina.filter.codec.statemachine.SkippingState;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
@@ -71,7 +69,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
 
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks"))
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=250"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artworks.json"));
 
@@ -168,7 +166,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.andRespond(withJson("frames.json"));
 		
 		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks"))
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=250"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artworksupdate.json"));
 
@@ -190,9 +188,9 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.andRespond(withJson("frames.json"));
 		
 		
-		PriceBucket priceBucketObj1 = new PriceBucket("low",2500,5000);
+		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500,5000);
 		priceBucketService.addPriceBucket(priceBucketObj1);
-		PriceBucket priceBucketObj2 = new PriceBucket("medium",5001,7500);
+		PriceBucket priceBucketObj2 = new PriceBucket(2L,"medium",5001,7500);
 		priceBucketService.addPriceBucket(priceBucketObj2);
 
 
@@ -223,7 +221,6 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		assertEquals(artWorkList.size(), 2);
 	}
 	
-	@Ignore
 	@Test
 	public void testForSearchByCriteria() {
 		MockRestServiceServer mockTinEyeService = MockRestServiceServer
@@ -234,13 +231,15 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		.andRespond(withJson("tin_eye_color_search_response.json"));
 		
 		List<String> subjectList = new ArrayList<>();
-		subjectList.add("geometric");
+		subjectList.add("26109780");
+
+		
 		List<String> styleList = new ArrayList<>();
-		styleList.add("nature");
+		styleList.add("12345");
 		String[] colorsList = new String[2];
 		colorsList[0] = "FFFFFF";
 		List<String> priceBucketRangeList = new ArrayList<>();
-		priceBucketRangeList.add("low");
+		priceBucketRangeList.add("1");
 		String medium = "paper";
 		String orientation = "landscape";
 		int pageNo = 0;
@@ -253,7 +252,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				medium, 
 				orientation, 
 				page);
-		assertEquals(artWorkList.size(), 1);
+		assertEquals(artWorkList.size(), 2);
 	}
 	
 	@Test
@@ -265,12 +264,16 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		.andExpect(method(HttpMethod.POST))
 		.andRespond(withJson("tin_eye_color_search_response.json"));
 		
-		List<String> subjectList = null;
-		List<String> styleList = null;
-		String[] colorsList = null;
-		List<String> priceBucketRangeList = null;
-		String medium = null;
-		String orientation = null;
+		List<String> subjectList = new ArrayList<>();
+		subjectList.add("-1");
+		List<String> styleList = new ArrayList<>();
+		styleList.add("-1");
+		String[] colorsList = new String[2];
+		colorsList[0] = "FFFFFF";
+		List<String> priceBucketRangeList = new ArrayList<>();
+		priceBucketRangeList.add("-1");
+		String medium = "-1";
+		String orientation = "-1";
 		int pageNo = 0;
 		Pageable page = new PageRequest(pageNo, 2);
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
