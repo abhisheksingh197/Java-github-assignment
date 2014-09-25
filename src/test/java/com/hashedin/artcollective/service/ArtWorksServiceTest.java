@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
-import org.apache.mina.filter.codec.statemachine.SkippingState;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
