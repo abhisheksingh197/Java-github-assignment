@@ -24,7 +24,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 	@Override
 	public List<Product> getArtWorkProductsSinceLastModified(DateTime lastModified) {
 		ShopifyProducts products = rest.getForObject(
-				baseUri + "products.json?product_type=artworks", ShopifyProducts.class);
+				baseUri + "products.json?product_type=artworks&limit=250", ShopifyProducts.class);
 		return products.getProducts();
 	}
 

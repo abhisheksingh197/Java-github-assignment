@@ -48,7 +48,7 @@ public class PriceBucketServiceTest extends BaseUnitTest{
 			return;
 		}
 		
-		PriceBucket priceBucketObj1 = new PriceBucket("low",2500,5000);
+		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500,5000);
 		priceBucketService.addPriceBucket(priceBucketObj1);
 		isInitialized = true;
 		
@@ -65,7 +65,7 @@ public class PriceBucketServiceTest extends BaseUnitTest{
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
 
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks"))
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=250"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artworksupdate.json"));
 		

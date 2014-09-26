@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +42,6 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 	@Autowired
 	ArtWorksSearchService artworksSearchService;
 	
-	@Ignore
 	@Test
 	public void testArtwork() {
 		List<ArtWork> artworks = generateThousandArtWorks();
@@ -60,8 +58,14 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 			int pageNo = 0;
 			Pageable page = new PageRequest(pageNo, 200);
 			List<String> subjects = new ArrayList<>();
-			subjects.add("goodSubject");
-		List<ArtWork> arts = testService.findArtworksByCriteria(subjects, null, new String[] {"fffff"}, null, null, null, page);
+			subjects.add("123");
+			List<String> styles = new ArrayList<>();
+			styles.add("-1");
+			List<String> priceBucket = new ArrayList<>();
+			priceBucket.add("-1");
+			String medium = "-1";
+			String orientation = "-1";
+		List<ArtWork> arts = testService.findArtworksByCriteria(subjects, styles, new String[] {"fffff"}, priceBucket, medium, orientation, page);
 		
 		assertEquals(arts.size(),151);
 
