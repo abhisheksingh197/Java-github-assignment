@@ -66,7 +66,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
 
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=250"))
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artworks.json"));
 
@@ -163,7 +163,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.andRespond(withJson("frames.json"));
 		
 		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=250"))
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artworksupdate.json"));
 
