@@ -1,20 +1,18 @@
-package com.hashedin.artcollective.entity;
+package com.hashedin.artcollective.service;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.hashedin.artcollective.entity.ArtStyle;
 
-
-
-@Entity
-public class ArtSubject {
-	@Id
+public class Style {
+	
 	private Long id;
 	private String title;
-
+	public Style(ArtStyle style) {
+		this.id = style.getId();
+		this.title = style.getTitle();
+	}
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -25,4 +23,5 @@ public class ArtSubject {
 		this.title = title;
 	}
 	
+
 }

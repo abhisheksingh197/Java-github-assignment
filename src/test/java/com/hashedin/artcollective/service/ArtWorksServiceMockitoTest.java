@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.ArtStyle;
@@ -55,17 +53,18 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 			}};
 			testService.artWorkRepository = this.artworkrepository;
 			
-			int pageNo = 0;
-			Pageable page = new PageRequest(pageNo, 200);
+			int offset = 0;
+			int limit = 151;
 			List<String> subjects = new ArrayList<>();
 			subjects.add("123");
 			List<String> styles = new ArrayList<>();
 			styles.add("-1");
 			List<String> priceBucket = new ArrayList<>();
 			priceBucket.add("-1");
-			String medium = "-1";
-			String orientation = "-1";
-		List<ArtWork> arts = testService.findArtworksByCriteria(subjects, styles, new String[] {"fffff"}, priceBucket, medium, orientation, page);
+			String medium = null;
+			String orientation = null;
+		List<ArtWork> arts = testService.findArtworksByCriteria(subjects, styles, new String[] {"fffff"}, priceBucket, 
+				medium, orientation, limit, offset);
 		
 		assertEquals(arts.size(),151);
 
