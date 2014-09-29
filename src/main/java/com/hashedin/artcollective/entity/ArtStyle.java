@@ -21,7 +21,7 @@ public class ArtStyle {
 		return id;
 	}
 	
-	@JsonProperty("stylesId")
+	@JsonProperty("styleId")
 	public void setWrapId(Long wrapId) {
 		this.id = wrapId;
 	}
