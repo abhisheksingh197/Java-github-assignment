@@ -30,7 +30,7 @@ public class ShopifyServiceTest extends BaseUnitTest {
 	public void testFetchArtworks() {
 		
 		MockRestServiceServer mockShopifyServer = MockRestServiceServer.createServer(rest);
-		mockShopifyServer.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=250"))
+		mockShopifyServer.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100"))
 			.andExpect(method(HttpMethod.GET))
 			.andRespond(withJson("single_product.json"));
 		
