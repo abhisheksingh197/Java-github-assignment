@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.hashedin.artcollective.entity.ArtWork;
@@ -46,14 +45,18 @@ public class ArtWorksSearchService {
 		return artWorkList;
 	}
 	
+	//CHECKSTYLE:OFF
 	public List<ArtWork> findArtworksByCriteria(
 			List<String> subjectList, 
 			List<String> styleList,
 			String[] colorsList,
 			List<String> priceBucketRangeList,
 			String medium, 
-			String orientation, 
-			Pageable page) {
+			String orientation,
+			Integer limit,
+			Integer offset){
+	//CHECKSTYLE:ON
+			
 		
 		
 		List<Long> idList = getIdListPostColorSearch(colorsList);
@@ -64,7 +67,9 @@ public class ArtWorksSearchService {
 				priceBucketRangeList,
 				medium, 
 				orientation,
-				idList);
+				idList,
+				limit,
+				offset);
 		
 		return artWorkList;
 	}

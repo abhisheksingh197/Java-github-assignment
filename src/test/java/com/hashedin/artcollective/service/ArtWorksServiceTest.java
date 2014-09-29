@@ -10,8 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
@@ -30,7 +28,6 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	// Comment saveToTinEye Method in ArtworksService before running Test Cases.
 	
 	private static boolean isInitialized = false;
-	
 	@Value("${shopify.baseurl}")
 	private String shopifyBaseUrl;
 
@@ -242,16 +239,17 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		priceBucketRangeList.add("1");
 		String medium = "paper";
 		String orientation = "landscape";
-		int pageNo = 0;
-		Pageable page = new PageRequest(pageNo, 20);
+		int offset = 0;
+		int limit = 2;
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
 				colorsList,
 				priceBucketRangeList,
 				medium, 
-				orientation, 
-				page);
+				orientation,
+				limit,
+				offset);
 		assertEquals(artWorkList.size(), 2);
 	}
 	
@@ -272,18 +270,19 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		colorsList[0] = "FFFFFF";
 		List<String> priceBucketRangeList = new ArrayList<>();
 		priceBucketRangeList.add("-1");
-		String medium = "-1";
-		String orientation = "-1";
-		int pageNo = 0;
-		Pageable page = new PageRequest(pageNo, 2);
+		String medium = null;
+		String orientation = null;
+		int offset = 0;
+		int limit = 2;
 		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
 				colorsList,
 				priceBucketRangeList,
 				medium, 
-				orientation, 
-				page);
+				orientation,
+				limit,
+				offset);
 		assertEquals(artWorkList.size(), 2);
 	}
 	
@@ -326,6 +325,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<PriceBucket> priceBucket = (List<PriceBucket>) priceBucketRepository.findAll();
 		assertEquals(priceBucket.size(), 2);
 	}
+
 
 	
 

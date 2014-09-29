@@ -9,7 +9,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 //import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,6 +84,7 @@ public class ProductsAPI {
 	
 	
 	// Search Artworks based on criteria
+	//CHECKSTYLE:OFF
 	@RequestMapping(value = "/api/artworks/search", method = RequestMethod.GET)
 	public Map<String, Object> getAllArtworksByCriteria(
 			@RequestParam(value = "subjects", required = false) String[] subjects,
@@ -93,7 +93,9 @@ public class ProductsAPI {
 			@RequestParam(value = "priceBucketRange", required = false) String[] priceBucketRange,
 			@RequestParam(value = "medium", required = false) String medium,
 			@RequestParam(value = "orientation", required = false) String orientation,
-			Pageable page) {
+			@RequestParam(value = "limit", required = true) Integer limit,
+			@RequestParam(value = "offset", required = true) Integer offset) {
+	//CHECKSTYLE:ON
 		List<String> subjectList = new ArrayList<>();
 		List<String> styleList = new ArrayList<>();
 		List<String> colorsList = new ArrayList<>();
@@ -105,8 +107,8 @@ public class ProductsAPI {
 		subjectList = subjects != null ? Arrays.asList(subjects) : subjectList;
 		styleList = styles != null ? Arrays.asList(styles) : styleList;
 		colors = colors != null ? colors : null;
-		medium = (medium !=  null) && (!medium.equalsIgnoreCase("")) ? medium : "-1";
-		orientation = (orientation !=  null) && (!orientation.equalsIgnoreCase("")) ? orientation : "-1";
+		medium = (medium !=  null) && (!medium.equalsIgnoreCase("")) ? medium : null;
+		orientation = (orientation !=  null) && (!orientation.equalsIgnoreCase("")) ? orientation : null;
 		priceBucketRangeList = priceBucketRange != null ? Arrays.asList(priceBucketRange) 
 				: priceBucketRangeList;
 		List<ArtWork> artworks = artworksSearchService.findArtworksByCriteria(
@@ -115,8 +117,9 @@ public class ProductsAPI {
 				colors,
 				priceBucketRangeList,
 				medium, 
-				orientation, 
-				page);
+				orientation,
+				limit,
+				offset);
 		return wrapResponse(artworks);
 	}
 	

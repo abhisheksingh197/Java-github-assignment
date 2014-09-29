@@ -104,6 +104,7 @@ public class ArtWorksService {
 				frameVariant.setFrameThickness(Double.parseDouble((variant.getOption3())));
 				frameVariant.setUnitPrice(variant.getPrice());
 				frameVariant.setImgSrc(product.getImage().getImgSrc());
+				frameVariant.setFrameTitle(product.getTitle());
 				frameVariants.add(frameVariant);
 			}
 			

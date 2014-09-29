@@ -15,6 +15,14 @@ public class FrameVariant {
 	private Double frameLength;
 	private Double frameBreadth;
 	private Double unitPrice;
+	private String frameTitle;
+	
+	public String getFrameTitle() {
+		return frameTitle;
+	}
+	public void setFrameTitle(String frameTitle) {
+		this.frameTitle = frameTitle;
+	}
 	public Double getUnitPrice() {
 		return unitPrice;
 	}
