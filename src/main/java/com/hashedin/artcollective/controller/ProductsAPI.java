@@ -27,6 +27,8 @@ import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
 import com.hashedin.artcollective.service.FrameVariantService;
 import com.hashedin.artcollective.service.PriceBucketService;
+import com.hashedin.artcollective.service.Style;
+import com.hashedin.artcollective.service.Subject;
 
 @RestController
 public class ProductsAPI {
@@ -135,10 +137,18 @@ public class ProductsAPI {
 	@RequestMapping(value = "/api/collections", method = RequestMethod.GET)
 	public Map<String, Object> getAllSubjects() {
 		List<ArtSubject> subjects = (List<ArtSubject>) artSubjectRepository.findAll();
+		List<Subject> tempSubjects = new ArrayList<>();
+		for (ArtSubject subj : subjects) {
+		    tempSubjects.add(new Subject(subj));
+		}
 		List<ArtStyle> styles = (List<ArtStyle>) artStyleRepository.findAll();
+		List<Style> tempStyles = new ArrayList<>();
+		for (ArtStyle style : styles) {
+		    tempStyles.add(new Style(style));
+		}
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("subjects", subjects);
-		map.put("styles", styles);
+		map.put("subjects", tempSubjects);
+		map.put("styles", tempStyles);
 		return map;
 	}
 	
