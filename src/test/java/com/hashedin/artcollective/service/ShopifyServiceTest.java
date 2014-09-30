@@ -106,4 +106,19 @@ public class ShopifyServiceTest extends BaseUnitTest {
 		mockShopifyServer.verify();
 	}
 	
+	@Test
+	public void testPostImageColorsMetaField() {
+		
+		MockRestServiceServer mockShopifyServer = MockRestServiceServer.createServer(rest);
+		mockShopifyServer
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/343096747/metafields.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("color_extract_metafield.json"));
+		
+		long productId = 343096747;
+		String imageColors = "11d45f,edc9af";
+		service.postImageColorsMetaField(productId, imageColors);
+	}
+	
 }

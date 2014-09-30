@@ -1,5 +1,7 @@
 package com.hashedin.artcollective.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hashedin.artcollective.entity.ArtStyle;
 import com.hashedin.artcollective.entity.ArtSubject;
@@ -29,6 +33,7 @@ import com.hashedin.artcollective.service.FrameVariantService;
 import com.hashedin.artcollective.service.PriceBucketService;
 import com.hashedin.artcollective.service.Style;
 import com.hashedin.artcollective.service.Subject;
+import com.hashedin.artcollective.service.TinEyeService;
 
 @RestController
 public class ProductsAPI {
@@ -53,6 +58,9 @@ public class ProductsAPI {
 	
 	@Autowired
 	private PriceBucketRepository priceBucketRepository;
+	
+	@Autowired
+	private TinEyeService tinEyeService;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
@@ -162,6 +170,26 @@ public class ProductsAPI {
 		
 		return frameVariantService.getFrames(frameLength, frameBreadth, mountThickness, frameThickness);
 	}
+	
+	@RequestMapping(value = "/api/uploadImage", headers = "content-type=multipart/*", method = RequestMethod.POST)
+	@ResponseBody String extractColorsFromImage(@RequestParam("file") MultipartFile file) throws IOException {
+		if (!file.isEmpty()) {
+			
+			LOGGER.info(file.getOriginalFilename());
+			LOGGER.info(file.getInputStream().toString());
+			InputStream io = file.getInputStream();
+			
+			
+			
+			String colors = tinEyeService.extractColorUploadImage(io);
+			return colors;
+		  
+        } 
+		else {
+            return "You failed to upload because the file was empty.";
+        }
+    }
+	
 	
 	
 

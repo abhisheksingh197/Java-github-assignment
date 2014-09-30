@@ -13,7 +13,7 @@
                     <button type="submit" class="btn">Log in</button>
                 </div>
             </fieldset>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+           
         </form>
     </body>
 </html>

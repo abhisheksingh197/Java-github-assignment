@@ -1,6 +1,7 @@
 package com.hashedin.artcollective.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,9 @@ public class TinEyeServiceImpl implements TinEyeService {
 	
 	@Autowired
 	private ArtWorkRepository artworkRepository;
+	
+	@Autowired
+	private ShopifyService shopifyService;
 	
 	@Autowired
 	public TinEyeServiceImpl(RestOperations rest, 
@@ -119,6 +123,103 @@ public class TinEyeServiceImpl implements TinEyeService {
 			params.add("return_metadata", "[\"artworkId\"]");
 			params.add("limit", "-1");
 		return params;
+	}
+	
+	// Extracting colors from an image and update metafields
+	@Override
+	public void extractColors(List<ArtWork> arts) {
+		
+		 				
+		for (ArtWork artwork : arts) {
+			List<Image> artworkImageList = artwork.getImages();
+			Image image = artworkImageList.get(0);			
+			String imageColors = getImageColors(image.getImgSrc());
+			shopifyService.postImageColorsMetaField(artwork.getId(), imageColors); 
+		}
+	}
+	
+	
+	public String getImageColors(String imageUrl) {
+		String extractImageColors = "";
+		MultiValueMap<String, String> params = getImageExtractPostParameters(imageUrl);
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<?> entity = new HttpEntity<Object>(params, headers);
+		SearchResponse searchResponseObj = new SearchResponse();
+		ResponseEntity<String> postResponse = 
+				rest.exchange(baseUri + "extract_image_colors/", 
+						HttpMethod.POST, entity, String.class);
+		try {
+			searchResponseObj = objectMapper.readValue(postResponse.getBody(), 
+					SearchResponse.class);
+		} 
+		catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		List<ResponseResult> responseResult = searchResponseObj.getResult();
+		int i = 0;
+		for (ResponseResult result : responseResult) {		
+			if (i == 0) {
+				extractImageColors = extractImageColors.concat(result.getColor());
+				i++;
+			} 
+			else {			
+				extractImageColors = extractImageColors.concat(",").concat(result.getColor());	
+			}
+		}
+
+		return extractImageColors;	
+
+	}
+	
+	private MultiValueMap<String, String> getImageExtractPostParameters(String imageUrl) {
+		
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+			params.add("urls[0]", imageUrl);
+			params.add("color_format", "hex");
+		return params;
+	}
+	
+	
+
+	private MultiValueMap<String, Object>  createUploadParams(InputStream io) {
+
+			MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+			params.add("images[0]", io);
+			params.add("color_format", "hex");
+
+		return params;		
+	}
+
+	@Override
+	public String extractColorUploadImage(InputStream io) {
+		 MultiValueMap<String, Object> params = createUploadParams(io);
+		   HttpHeaders headers = new HttpHeaders();
+		   HttpEntity<?> entity = new HttpEntity<Object>(params, headers);	
+		   String extractImageColors = "";
+		   SearchResponse searchResponseObj = new SearchResponse();
+		   ResponseEntity<String> postResponse = 
+					rest.exchange(baseUri + "extract_image_colors/", 
+							HttpMethod.POST, entity, String.class);
+			try {
+				searchResponseObj = objectMapper.readValue(postResponse.getBody(), 
+						SearchResponse.class);
+			} 
+			catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			List<ResponseResult> responseResult = searchResponseObj.getResult();
+			int i = 0;
+			for (ResponseResult result : responseResult) {		
+				if (i == 0) {
+				extractImageColors = extractImageColors.concat(result.getColor());
+				i++;
+				} 
+				else {			
+				extractImageColors = extractImageColors.concat(",").concat(result.getColor());	
+				}
+			}
+			
+		return extractImageColors;
 	}
 	
 //	@Override

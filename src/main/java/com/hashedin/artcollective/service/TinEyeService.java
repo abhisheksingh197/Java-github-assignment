@@ -1,5 +1,6 @@
 package com.hashedin.artcollective.service;
 
+import java.io.InputStream;
 import java.util.List;
 
 import com.hashedin.artcollective.entity.ArtWork;
@@ -10,5 +11,8 @@ public interface TinEyeService {
 	
 	public List<ArtWork> getMatchingArtWorks(ArtSearchCriteria criteria);
 
-	// void deleteTinEyeImages();
+	public void extractColors(List<ArtWork> arts);
+
+	public String extractColorUploadImage(InputStream io);
+
 }

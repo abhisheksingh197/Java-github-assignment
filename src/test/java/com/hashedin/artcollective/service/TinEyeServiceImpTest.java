@@ -75,5 +75,22 @@ public class TinEyeServiceImpTest extends BaseUnitTest {
 		assertEquals(artworks.size(),2);
 	}
 	
+	@Test
+	public void testForGetImageColors() {
+		
+		MockRestServiceServer mockTinEyeService = MockRestServiceServer
+				.createServer(rest);
+		mockTinEyeService
+				.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("tin_eye_color_extract_response.json"));
+		
+		String imgUrl = "www.example.com/first.img";	
+		String exractedColors = tineye.getImageColors(imgUrl);
+		assertEquals(exractedColors, "11d45f,edc9af");
+
+		
+	}
+	
 
 }

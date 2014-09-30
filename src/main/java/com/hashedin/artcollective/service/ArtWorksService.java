@@ -116,11 +116,13 @@ public class ArtWorksService {
 	// Fetches Artworks from Shopify and saves as a saves a secondary to tineye.
 	private void saveArtToTinEye(List<ArtWork> arts) {
 			tineye.uploadArts(arts);
+			tineye.extractColors(arts);
 	}
 
 	// Saves the list of arts into the internal Database.
 	private void saveArtToInternalDatabase(List<ArtWork> arts) {
 		artRepository.save(arts);
+		
 	}
 
 	List<ArtWork> getArtWorksModifiedSince(DateTime lastRunTime) {

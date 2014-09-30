@@ -162,6 +162,29 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("tineye_add_response.json"));
 		
+		 mockArtWorksService
+			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
+			.andExpect(method(HttpMethod.POST))
+			.andRespond(withJson("tin_eye_color_extract_response.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/503096747/metafields.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("color_extract_metafield.json"));
+		
+		 mockArtWorksService
+			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
+			.andExpect(method(HttpMethod.POST))
+			.andRespond(withJson("tin_eye_color_extract_response.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/504096747/metafields.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("color_extract_metafield.json"));
+		
+		
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=frames"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("frames.json"));

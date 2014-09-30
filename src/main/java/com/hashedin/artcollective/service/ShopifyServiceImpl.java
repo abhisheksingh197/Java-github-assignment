@@ -1,11 +1,17 @@
 package com.hashedin.artcollective.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
@@ -63,6 +69,30 @@ public class ShopifyServiceImpl implements ShopifyService {
 		ShopifyProducts products = rest.getForObject(
 				baseUri + "products.json?product_type=frames", ShopifyProducts.class);
 		return products.getProducts();
+	}
+	
+	private Map<String, Map<String, String>> getImageExtractPostParameters(String imageColors) {
+		Map<String, Map<String, String>> params = new HashMap<String, Map<String, String>>();
+		Map<String, String> colorExtract = new HashMap<String, String>();
+		colorExtract.put("namespace", "c_f");
+		colorExtract.put("key", "color_extract");
+		colorExtract.put("value", imageColors);
+		colorExtract.put("value_type", "string");
+		params.put("metafield", colorExtract);	
+		return params;
+	}
+
+	@Override
+	public void postImageColorsMetaField(Long productId, String imageColors) {
+		Map<String, Map<String, String>> params = getImageExtractPostParameters(imageColors);
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<?> entity = new HttpEntity<Object>(params, headers);
+		ResponseEntity<String> postResponse = rest.exchange(
+				baseUri + "products/" + productId + "/metafields.json",
+				HttpMethod.POST, entity, String.class);	
+		System.out.println("Response from shopify");
+		System.out.println(postResponse.getBody());
+		
 	}
 
 }

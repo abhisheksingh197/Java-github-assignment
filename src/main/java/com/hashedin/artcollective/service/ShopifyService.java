@@ -16,4 +16,6 @@ public interface ShopifyService {
 	public List<MetaField> getMetaFieldsForProduct(long productId);
 
 	public List<Product> getFrameProductsSinceLastModified(DateTime lastRunTime);
+
+	public void postImageColorsMetaField(Long id, String imageColors);
 }
