@@ -66,7 +66,11 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
 
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100"))
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products/count.json?product_type=artworks"))
+		.andExpect(method(HttpMethod.GET))
+		.andRespond(shopifyCount(7));
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100&page=1"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artworks.json"));
 
@@ -191,7 +195,6 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		priceBucketService.addPriceBucket(priceBucketObj2);
 
 
-		service.synchronize();
 		service.synchronize();
 		isInitialized = true;
 		

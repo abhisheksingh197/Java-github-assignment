@@ -1,6 +1,9 @@
 package com.hashedin.artcollective.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
 import java.util.List;
 
@@ -10,8 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
-
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 
 import com.hashedin.artcollective.BaseUnitTest;
 
@@ -30,7 +31,12 @@ public class ShopifyServiceTest extends BaseUnitTest {
 	public void testFetchArtworks() {
 		
 		MockRestServiceServer mockShopifyServer = MockRestServiceServer.createServer(rest);
-		mockShopifyServer.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100"))
+		
+		mockShopifyServer.expect(requestTo(shopifyBaseUrl + "products/count.json?product_type=artworks"))
+		.andExpect(method(HttpMethod.GET))
+		.andRespond(shopifyCount(1));
+		
+		mockShopifyServer.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100&page=1"))
 			.andExpect(method(HttpMethod.GET))
 			.andRespond(withJson("single_product.json"));
 		
@@ -99,6 +105,5 @@ public class ShopifyServiceTest extends BaseUnitTest {
 		assertEquals(metafield.getKey(), "is_canvas_available");
 		mockShopifyServer.verify();
 	}
-	
 	
 }

@@ -1,6 +1,6 @@
 package com.hashedin.artcollective.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
@@ -19,7 +19,7 @@ import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 
-public class PriceBucketServiceTest extends BaseUnitTest{
+public class PriceBucketServiceTest extends BaseUnitTest {
 	
 	private static boolean isInitialized = false;
 	
@@ -65,7 +65,11 @@ public class PriceBucketServiceTest extends BaseUnitTest{
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
 
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100"))
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products/count.json?product_type=artworks"))
+		.andExpect(method(HttpMethod.GET))
+		.andRespond(shopifyCount(1));
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100&page=1"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artworksupdate.json"));
 		
@@ -77,6 +81,5 @@ public class PriceBucketServiceTest extends BaseUnitTest{
 		assertEquals(priceBuckets.size(),1);
 		
 	}
-	
 
 }

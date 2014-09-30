@@ -1,5 +1,6 @@
 package com.hashedin.artcollective.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -11,6 +12,8 @@ import org.springframework.web.client.RestOperations;
 @Service
 public class ShopifyServiceImpl implements ShopifyService {
 
+	private static final int MAX_PAGE_SIZE = 100;
+	
 	private final String baseUri;
 	private final RestOperations rest;
 	
@@ -23,9 +26,20 @@ public class ShopifyServiceImpl implements ShopifyService {
 
 	@Override
 	public List<Product> getArtWorkProductsSinceLastModified(DateTime lastModified) {
-		ShopifyProducts products = rest.getForObject(
-				baseUri + "products.json?product_type=artworks&limit=100", ShopifyProducts.class);
-		return products.getProducts();
+		String queryString = "?product_type=artworks";
+		
+		int count = rest.getForObject(baseUri + "products/count.json" + queryString, ShopifyProductsCount.class).getCount();
+		List<Product> productsList = new ArrayList<>();
+		
+		int numPages = (count / MAX_PAGE_SIZE) + 1;
+		for(int page = 1; page <= numPages; page++) {
+			ShopifyProducts products = rest.getForObject(
+					String.format("%s%s%s&limit=%d&page=%d", baseUri, "products.json", queryString, MAX_PAGE_SIZE, page), 
+					ShopifyProducts.class);
+			productsList.addAll(products.getProducts());
+		}
+		
+		return productsList;
 	}
 
 	@Override

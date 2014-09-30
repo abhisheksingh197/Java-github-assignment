@@ -22,5 +22,9 @@ public class BaseUnitTest {
 	public DefaultResponseCreator withJson(String jsonFile) {
 		return withSuccess(loader.getResource(jsonFile), MediaType.APPLICATION_JSON);
 	}
-	
+
+
+	protected DefaultResponseCreator shopifyCount(int count) {
+		return withSuccess(String.format("{\"count\":%d}", count), MediaType.APPLICATION_JSON);
+	}
 }
