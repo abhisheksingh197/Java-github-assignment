@@ -148,7 +148,14 @@ public class ArtWorksService {
 		
 		// Classifying Collections into each category.
 		for (Collection collection : collections) {
-			switch(collection.getTitle().split("_")[0]) {
+			String tokens[] = collection.getTitle().split("_");
+			if (tokens == null || tokens.length < 2) {
+				LOGGER.info("Invalid Collection Type: Collection type {} not recognised", 
+						collection.getTitle());
+				continue;
+			}
+			String collectionType = tokens[0]; 
+			switch(collectionType) {
 			case "subject":
 				ArtSubject artSubject = new ArtSubject();
 				artSubject.setId(collection.getId());
