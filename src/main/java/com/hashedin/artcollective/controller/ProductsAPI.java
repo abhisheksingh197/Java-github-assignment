@@ -1,5 +1,6 @@
 package com.hashedin.artcollective.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -173,21 +174,10 @@ public class ProductsAPI {
 	
 	@RequestMapping(value = "/api/uploadImage", headers = "content-type=multipart/*", method = RequestMethod.POST)
 	@ResponseBody String extractColorsFromImage(@RequestParam("file") MultipartFile file) throws IOException {
-		if (!file.isEmpty()) {
-			
-			LOGGER.info(file.getOriginalFilename());
-			LOGGER.info(file.getInputStream().toString());
-			InputStream io = file.getInputStream();
-			
-			
-			
-			String colors = tinEyeService.extractColorUploadImage(io);
-			return colors;
-		  
-        } 
-		else {
-            return "You failed to upload because the file was empty.";
-        }
+		File tempFile = File.createTempFile("uploadedfile", null);
+		file.transferTo(tempFile);
+		String colors = tinEyeService.extractColorUploadImage(tempFile);
+		return colors;
     }
 	
 	

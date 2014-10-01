@@ -3,9 +3,13 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +35,8 @@ public class TinEyeServiceImpTest extends BaseUnitTest {
 	@Autowired
 	private RestTemplate rest;
 
-	
+
+	@Ignore
 	@Test
 	public void testForArtworkUpload() {
 		MockRestServiceServer mockTinEyeService = MockRestServiceServer
@@ -55,6 +60,7 @@ public class TinEyeServiceImpTest extends BaseUnitTest {
 		tineye.uploadArts(arts);
 	}
 	
+	@Ignore
 	@Test
 	public void testForGetMatchingArtworkByColor() {
 		
@@ -75,6 +81,14 @@ public class TinEyeServiceImpTest extends BaseUnitTest {
 		assertEquals(artworks.size(),2);
 	}
 	
+	@Test
+	public void testColourExtractionFromUploadedImage() throws IOException {
+		File file = new File("src/test/resources/sample_extract_colors.png.tmp");
+		String colours = tineye.extractColorUploadImage(file);
+		assertEquals(colours, "342e2f,860f11,ac3110,c73707,80411d,256054,2b3465,36688e,5a9dd0,cecdce");
+	}
+	
+	@Ignore
 	@Test
 	public void testForGetImageColors() {
 		

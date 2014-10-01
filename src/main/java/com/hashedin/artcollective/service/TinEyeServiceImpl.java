@@ -1,7 +1,7 @@
 package com.hashedin.artcollective.service;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -172,54 +174,48 @@ public class TinEyeServiceImpl implements TinEyeService {
 	}
 	
 	private MultiValueMap<String, String> getImageExtractPostParameters(String imageUrl) {
-		
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-			params.add("urls[0]", imageUrl);
-			params.add("color_format", "hex");
+		params.add("urls[0]", imageUrl);
+		params.add("color_format", "hex");
 		return params;
 	}
 	
 	
 
-	private MultiValueMap<String, Object>  createUploadParams(InputStream io) {
-
-			MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-			params.add("images[0]", io);
-			params.add("color_format", "hex");
-
-		return params;		
+	private MultiValueMap<String, Object>  createUploadParams(File imageFile) throws IOException {
+		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+		Resource resource = new FileSystemResource(imageFile);
+		params.add("images[0]", resource);
+		params.add("color_format", "hex");
+		return params;
 	}
 
 	@Override
-	public String extractColorUploadImage(InputStream io) {
-		 MultiValueMap<String, Object> params = createUploadParams(io);
-		   HttpHeaders headers = new HttpHeaders();
-		   HttpEntity<?> entity = new HttpEntity<Object>(params, headers);	
-		   String extractImageColors = "";
-		   SearchResponse searchResponseObj = new SearchResponse();
-		   ResponseEntity<String> postResponse = 
-					rest.exchange(baseUri + "extract_image_colors/", 
-							HttpMethod.POST, entity, String.class);
-			try {
-				searchResponseObj = objectMapper.readValue(postResponse.getBody(), 
-						SearchResponse.class);
-			} 
-			catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			List<ResponseResult> responseResult = searchResponseObj.getResult();
-			int i = 0;
-			for (ResponseResult result : responseResult) {		
-				if (i == 0) {
-				extractImageColors = extractImageColors.concat(result.getColor());
-				i++;
-				} 
-				else {			
-				extractImageColors = extractImageColors.concat(",").concat(result.getColor());	
-				}
-			}
-			
-		return extractImageColors;
+	public String extractColorUploadImage(File imageFile) throws IOException {
+		 MultiValueMap<String, Object> params = createUploadParams(imageFile);
+		 HttpHeaders headers = new HttpHeaders();
+		 HttpEntity<?> entity = new HttpEntity<Object>(params, headers);	
+		 String extractImageColors = "";
+		 SearchResponse searchResponseObj = new SearchResponse();
+		 ResponseEntity<String> postResponse = rest.postForEntity(baseUri + "extract_image_colors/", entity, String.class);
+		 try {
+			 searchResponseObj = objectMapper.readValue(postResponse.getBody(), SearchResponse.class);
+		 } 
+		 catch (IOException e1) {
+			 e1.printStackTrace();
+		 }
+		 List<ResponseResult> responseResult = searchResponseObj.getResult();
+		 int i = 0;
+		 for (ResponseResult result : responseResult) {		
+			 if (i == 0) {
+				 extractImageColors = extractImageColors.concat(result.getColor());
+				 i++;
+			 } 
+			 else {			
+				 extractImageColors = extractImageColors.concat(",").concat(result.getColor());	
+			 }
+		 }
+		 return extractImageColors;
 	}
 	
 //	@Override
