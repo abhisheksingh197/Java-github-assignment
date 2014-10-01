@@ -140,6 +140,9 @@ class Product {
 	}
 	@JsonSetter("published_at")
 	public void setPublishedAt(String publishedAt) {
+		if (publishedAt == null || publishedAt.isEmpty()) {
+			return;
+		}
 		this.publishedAt = DATE_FORMAT.parseDateTime(publishedAt);
 	}
 	public List<Variant> getVariants() {
