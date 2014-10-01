@@ -1,5 +1,6 @@
 package com.hashedin.artcollective.service;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -39,6 +40,8 @@ public class ArtWorksService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArtWorksService.class);
 	
 	private static final int TITLE_SIZE = 3;
+
+	private static final int WIDTH_OF_IMAGE = 198;
 	
 	@Autowired
 	private ShopifyService shopify;
@@ -317,7 +320,9 @@ public class ArtWorksService {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ImageIO.write(resized, format, bos);
 		
-		shopify.uploadImage(p, bos.toByteArray(), String.format("%s-artfinder.%s", p.getHandle(), format));
+		shopify.uploadImage(p, 
+				new ByteArrayInputStream(bos.toByteArray()), 
+				String.format("%s-artfinder.%s", p.getHandle(), format));
 	}
 
 	private boolean imageForArtFinderExists(List<Image> images) {
@@ -341,7 +346,7 @@ public class ArtWorksService {
 	}
 
 	private BufferedImage resizeImage(BufferedImage original) {
-		return Scalr.resize(original, Mode.FIT_TO_WIDTH, 198);
+		return Scalr.resize(original, Mode.FIT_TO_WIDTH, WIDTH_OF_IMAGE);
 	}
 	
 	private boolean variantHasFrameableValues(Variant variant) {

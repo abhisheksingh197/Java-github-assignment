@@ -62,7 +62,7 @@
                     "position": 1,
                     "product_id": 343096747,
                     "updated_at": "2014-08-21T07:03:38-04:00",
-                    "src": "abc"
+                    "src": "abc-artfinder.jpg"
                 }
             ],
             "image": {
@@ -71,7 +71,7 @@
                 "position": 1,
                 "product_id": 343096747,
                 "updated_at": "2014-08-21T07:03:38-04:00",
-                "src": "https://cdn.shopify.com/s/files/1/0608/8161/products/AMBH001_O.jpg?v=1408619020"
+                "src": "AMBH001_O.jpg?v=1408619020"
             }
         },
         {
@@ -129,6 +129,14 @@
                     "product_id": 343096748,
                     "updated_at": "2014-08-21T07:03:38-04:00",
                     "src": "abc"
+                },
+                {
+                    "created_at": "2014-08-21T07:03:38-04:00",
+                    "id": 798669748,
+                    "position": 1,
+                    "product_id": 343096748,
+                    "updated_at": "2014-08-21T07:03:38-04:00",
+                    "src": "abc-artfinder.jpg"
                 }
             ],
             "image": {
@@ -137,7 +145,7 @@
                 "position": 1,
                 "product_id": 343096747,
                 "updated_at": "2014-08-21T07:03:38-04:00",
-                "src": "https://cdn.shopify.com/s/files/1/0608/8161/products/AMBH001_O.jpg?v=1408619018"
+                "src": "AMBH001_O.jpg?v=1408619018"
             }
         },
         {
@@ -202,7 +210,7 @@
                     "position": 2,
                     "product_id": 503096747,
                     "updated_at": "2014-08-21T07:03:38-04:00",
-                    "src": "abc"
+                    "src": "abc-artfinder.jpg"
                 }
             ],
             "image": {
@@ -211,7 +219,7 @@
                 "position": 1,
                 "product_id": 503096747,
                 "updated_at": "2014-08-21T07:03:38-04:00",
-                "src": "https://cdn.shopify.com/s/files/1/0608/8161/products/AMBH001_O.jpg?v=1408619020"
+                "src": "AMBH001_O.jpg?v=1408619020"
             }
         },
          {
@@ -262,7 +270,22 @@
                 }
             ],
             "images": [
-               
+                {
+                    "created_at": "2014-08-21T07:03:38-04:00",
+                    "id": 808687747,
+                    "position": 1,
+                    "product_id": 523096747,
+                    "updated_at": "2014-08-21T07:03:38-04:00",
+                    "src": "abc"
+                },
+                {
+                    "created_at": "2014-08-21T07:03:38-04:00",
+                    "id": 813456750,
+                    "position": 2,
+                    "product_id": 523096747,
+                    "updated_at": "2014-08-21T07:03:38-04:00",
+                    "src": "abc-artfinder.jpg"
+                }               
             ],
             "image": {
                 "created_at": "2014-08-21T07:03:38-04:00",
@@ -270,7 +293,7 @@
                 "position": 1,
                 "product_id": 513096747,
                 "updated_at": "2014-08-21T07:03:38-04:00",
-                "src": "https://cdn.shopify.com/s/files/1/0608/8161/products/AMBH001_O.jpg?v=1408619020"
+                "src": "AMBH001_O.jpg?v=1408619020"
             }
         },
         {
@@ -335,7 +358,7 @@
                     "position": 2,
                     "product_id": 523096747,
                     "updated_at": "2014-08-21T07:03:38-04:00",
-                    "src": "abc"
+                    "src": "abc-artfinder.jpg"
                 }
             ],
             "image": {
@@ -344,7 +367,7 @@
                 "position": 1,
                 "product_id": 523096747,
                 "updated_at": "2014-08-21T07:03:38-04:00",
-                "src": "https://cdn.shopify.com/s/files/1/0608/8161/products/AMBH001_O.jpg?v=1408619020"
+                "src": "AMBH001_O.jpg?v=1408619020"
             }
         },
          {
@@ -386,7 +409,7 @@
                     "position": 2,
                     "product_id": 523096747,
                     "updated_at": "2014-08-21T07:03:38-04:00",
-                    "src": "abc"
+                    "src": "abc-artfinder.jpg"
                 }
             ],
             "image": {
@@ -395,7 +418,7 @@
                 "position": 1,
                 "product_id": 533096747,
                 "updated_at": "2014-08-21T07:03:38-04:00",
-                "src": "https://cdn.shopify.com/s/files/1/0608/8161/products/AMBH001_O.jpg?v=1408619020"
+                "src": "AMBH001_O.jpg?v=1408619020"
             }
         },
         {
@@ -460,7 +483,7 @@
                     "position": 2,
                     "product_id": 503096747,
                     "updated_at": "2014-08-21T07:03:38-04:00",
-                    "src": "abc"
+                    "src": "abc-artfinder.jpg"
                 }
             ],
             "image": {
@@ -469,7 +492,7 @@
                 "position": 1,
                 "product_id": 503096747,
                 "updated_at": "2014-08-21T07:03:38-04:00",
-                "src": "https://cdn.shopify.com/s/files/1/0608/8161/products/AMBH001_O.jpg?v=1408619020"
+                "src": "AMBH001_O.jpg?v=1408619020"
             }
         }
         

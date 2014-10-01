@@ -1,10 +1,14 @@
 package com.hashedin.artcollective.service;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,12 +107,15 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 
 	@Override
-	public void uploadImage(Product p, byte[] imageBytes, String imageName) {
+	public void uploadImage(Product p, InputStream image, String imageName) throws IOException {
 		String imageUploadUrl = String.format("%sproducts/%s/images.json", baseUri, p.getId());
 		
 		StringBuilder imageData = new StringBuilder();
 		imageData.append("{\"image\": {")
-			.append("\"attachment\": \"").append(new String(Base64.encode(imageBytes))).append("\"").append(",")
+			.append("\"attachment\": \"")
+			.append(new String(Base64.encode(
+						IOUtils.toByteArray(image)), Charset.forName("UTF-8")))
+			.append("\"").append(",")
 			.append("\"filename\": \"").append(imageName).append("\"")
 		.append("}}");
 		

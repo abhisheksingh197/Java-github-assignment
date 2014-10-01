@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 
+@Ignore
 public class PriceBucketServiceTest extends BaseUnitTest {
 	
 	private static boolean isInitialized = false;

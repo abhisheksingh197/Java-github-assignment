@@ -1,6 +1,8 @@
 package com.hashedin.artcollective.service;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -19,5 +21,5 @@ public interface ShopifyService {
 
 	public void postImageColorsMetaField(Long id, String imageColors);
 
-	public void uploadImage(Product product, byte[] byteArray, String format);
+	public void uploadImage(Product product, InputStream image, String format) throws IOException;
 }
