@@ -1,8 +1,16 @@
 package com.hashedin.artcollective.service;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Mode;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +23,7 @@ import com.hashedin.artcollective.entity.ArtSubject;
 import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.Artist;
 import com.hashedin.artcollective.entity.FrameVariant;
+import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.repository.ArtCollectionsRepository;
 import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
@@ -239,16 +248,20 @@ public class ArtWorksService {
 		if (p.getImages().size() == 0) {
 			LOGGER.info("Missing Image: The Artwork {} must at the least have one Image", 
 					p.getTitle());
-			//TODO Rejecting Artwork since no image must send an email with product id. 
 			return null;
 		}
 		imageRepository.save(p.getImages());
+		try {
+			maybeResizeImage(p, metafields, p.getImages(), p.getImage());
+		}
+		catch (IOException ioe) {
+			LOGGER.error("Could not resize image for Product " + p, ioe);
+		}
 		
 		// Fetching Cheapest and Costliest Variant
 		if (p.getVariants().size() == 0) {
 			LOGGER.info("Missing Variants: The Artwork {} must have at the least one variant", 
 					p.getTitle());
-			//TODO Rejecting Artwork since no image must send an email with product id. 
 			return null;
 		}
 		Variant cheapest = Collections.min(p.getVariants());
@@ -280,6 +293,57 @@ public class ArtWorksService {
 	}
 	
 
+	/*
+	 * 1. Check if the product has an image of width = 198px, height = whatever
+	 * 2. If it has, do nothing
+	 * 3. If it does not have - 
+	 * 3.1 Download the default image from shopify
+	 * 3.2 Resize the image
+	 * 3.3 Upload the resized image
+	 * 3.4 Store the id of the resized image in a meta-field
+	 * 
+	 */
+	private void maybeResizeImage(Product p, List<MetaField> metafields,
+			List<Image> images, Image featuredImage) throws IOException {
+		
+		if (imageForArtFinderExists(images)) {
+			return;
+		}
+		
+		String format = determineFormat(featuredImage);
+		BufferedImage original = ImageIO.read(new URL(featuredImage.getImgSrc()));
+		BufferedImage resized = resizeImage(original);
+		
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ImageIO.write(resized, format, bos);
+		
+		shopify.uploadImage(p, bos.toByteArray(), String.format("%s-artfinder.%s", p.getHandle(), format));
+	}
+
+	private boolean imageForArtFinderExists(List<Image> images) {
+		for (Image image : images) {
+			if (image.getImgSrc().contains("-artfinder")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private String determineFormat(Image image) {
+		String url = image.getImgSrc();
+		if (url.contains(".jpg") || url.contains(".jpeg")) {
+			return "jpg";
+		}
+		else if (url.contains(".png")) {
+			return "png";
+		}
+		return "jpg";
+	}
+
+	private BufferedImage resizeImage(BufferedImage original) {
+		return Scalr.resize(original, Mode.FIT_TO_WIDTH, 198);
+	}
+	
 	private boolean variantHasFrameableValues(Variant variant) {
 		try {
 			if (variant.getOption2() == null || variant.getOption3() == null 

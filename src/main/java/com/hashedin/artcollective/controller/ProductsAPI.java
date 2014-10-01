@@ -92,8 +92,6 @@ public class ProductsAPI {
 		LOGGER.info("Data Successfully Synchronized");
 	}
 	
-	
-	
 	// Search Artworks based on criteria
 	//CHECKSTYLE:OFF
 	@RequestMapping(value = "/api/artworks/search", method = RequestMethod.GET)

@@ -6,18 +6,25 @@ import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
+
 
 @Service
 public class ShopifyServiceImpl implements ShopifyService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShopifyServiceImpl.class);
+	
 	private static final int MAX_PAGE_SIZE = 100;
 	
 	private final String baseUri;
@@ -93,6 +100,28 @@ public class ShopifyServiceImpl implements ShopifyService {
 		System.out.println("Response from shopify");
 		System.out.println(postResponse.getBody());
 		
+	}
+
+	@Override
+	public void uploadImage(Product p, byte[] imageBytes, String imageName) {
+		String imageUploadUrl = String.format("%sproducts/%s/images.json", baseUri, p.getId());
+		
+		StringBuilder imageData = new StringBuilder();
+		imageData.append("{\"image\": {")
+			.append("\"attachment\": \"").append(new String(Base64.encode(imageBytes))).append("\"").append(",")
+			.append("\"filename\": \"").append(imageName).append("\"")
+		.append("}}");
+		
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> entity = new HttpEntity<String>(imageData.toString(), headers);
+		
+		
+		HttpEntity<String> response = rest.exchange(imageUploadUrl, HttpMethod.POST,
+				entity, String.class);
+		LOGGER.info("Uploaded compressed image for product {} to shopify", p.getTitle());
+		LOGGER.debug(response.getBody());
 	}
 
 }

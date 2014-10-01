@@ -18,4 +18,6 @@ public interface ShopifyService {
 	public List<Product> getFrameProductsSinceLastModified(DateTime lastRunTime);
 
 	public void postImageColorsMetaField(Long id, String imageColors);
+
+	public void uploadImage(Product product, byte[] byteArray, String format);
 }
