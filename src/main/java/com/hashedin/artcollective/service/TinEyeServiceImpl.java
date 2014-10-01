@@ -197,7 +197,8 @@ public class TinEyeServiceImpl implements TinEyeService {
 		 HttpEntity<?> entity = new HttpEntity<Object>(params, headers);	
 		 String extractImageColors = "";
 		 SearchResponse searchResponseObj = new SearchResponse();
-		 ResponseEntity<String> postResponse = rest.postForEntity(baseUri + "extract_image_colors/", entity, String.class);
+		 ResponseEntity<String> postResponse = rest.postForEntity(
+				 baseUri + "extract_image_colors/", entity, String.class);
 		 try {
 			 searchResponseObj = objectMapper.readValue(postResponse.getBody(), SearchResponse.class);
 		 } 
