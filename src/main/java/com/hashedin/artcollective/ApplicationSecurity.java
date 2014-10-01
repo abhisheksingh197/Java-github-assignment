@@ -17,6 +17,7 @@ class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 			.antMatchers("/assets/**").permitAll()
 			.antMatchers("/manage/**").hasRole("SUPERADMIN")
 			.antMatchers("/api/**").permitAll()
+			.antMatchers("/proxy/**").permitAll()
 			.antMatchers("/api/uploadImage").permitAll()
 			.anyRequest().fullyAuthenticated();
 		
