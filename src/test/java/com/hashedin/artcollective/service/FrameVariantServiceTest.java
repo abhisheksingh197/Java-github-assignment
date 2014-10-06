@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -50,8 +51,12 @@ public class FrameVariantServiceTest extends BaseUnitTest {
 	
 	@Test
 	public void testForFramesSearch() {
-		List<FrameVariant> ids = frameVariantService.getFrames(12.0, 16.0, 3.0, 4.0);
-		assertEquals(ids.size(), 1);
+		List<Frame> tempFrames = new ArrayList<>();
+		List<FrameVariant> frameVariants = frameVariantService.getFrames(12.0, 16.0, 3.0, 4.0);
+		for (FrameVariant frameVariant : frameVariants) {
+			tempFrames.add(new Frame(frameVariant));
+		}
+		assertEquals(tempFrames.size(), 1);
 	}
 	
 }
