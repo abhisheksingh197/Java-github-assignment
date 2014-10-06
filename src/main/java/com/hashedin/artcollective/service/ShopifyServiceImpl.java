@@ -101,8 +101,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 		ResponseEntity<String> postResponse = rest.exchange(
 				baseUri + "products/" + productId + "/metafields.json",
 				HttpMethod.POST, entity, String.class);	
-		System.out.println("Response from shopify");
-		System.out.println(postResponse.getBody());
+		LOGGER.debug(postResponse.getBody());
 		
 	}
 
