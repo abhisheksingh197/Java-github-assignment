@@ -189,7 +189,7 @@ public class ProductsAPI {
 			artworkMap.put("priceBuckets", art.getPriceBuckets());
 			artworkMap.put("details", art);
 			artworkMap.put("artist", art.getArtist());
-			map.put(art.getTitle(), artworkMap);
+			map.put(art.getHandle(), artworkMap);
 		}
 		return map;
 	}
