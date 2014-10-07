@@ -81,12 +81,20 @@ public class TinEyeServiceImpTest extends BaseUnitTest {
 		assertEquals(artworks.size(),2);
 	}
 	
-	@Ignore
 	@Test
 	public void testColourExtractionFromUploadedImage() throws IOException {
-		File file = new File("src/test/resources/sample_extract_colors.png.tmp");
+		
+		MockRestServiceServer mockTinEyeService = MockRestServiceServer
+				.createServer(rest);
+		
+		mockTinEyeService
+		.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
+		.andExpect(method(HttpMethod.POST))
+		.andRespond(withJson("tin_eye_color_extract_response.json"));
+		
+		File file = new File("src/test/resources/sample_extract_colors.jpg");
 		String colours = tineye.extractColorUploadImage(file);
-		assertEquals(colours, "342e2f,860f11,ac3110,c73707,80411d,256054,2b3465,36688e,5a9dd0,cecdce");
+		assertEquals(colours, "11d45f,edc9af");
 	}
 	
 	
