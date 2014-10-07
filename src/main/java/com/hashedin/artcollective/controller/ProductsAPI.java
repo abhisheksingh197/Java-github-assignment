@@ -29,6 +29,7 @@ import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
+import com.hashedin.artcollective.service.Frame;
 import com.hashedin.artcollective.service.FrameVariantService;
 import com.hashedin.artcollective.service.PriceBucketService;
 import com.hashedin.artcollective.service.Style;
@@ -159,14 +160,19 @@ public class ProductsAPI {
 	}
 	
 	@RequestMapping(value = "/api/frames", method = RequestMethod.GET)
-	public List<FrameVariant> getFrames(
+	public List<Frame> getFrames(
 			@RequestParam(value = "frameLength", required = true) Double frameLength,
 			@RequestParam(value = "frameBreadth", required = true) Double frameBreadth,
 			@RequestParam(value = "mountThickness", required = true) Double mountThickness,
 			@RequestParam(value = "frameThickness", required = true) Double frameThickness
 			) {
-		
-		return frameVariantService.getFrames(frameLength, frameBreadth, mountThickness, frameThickness);
+		List<Frame> tempFrames = new ArrayList<>();
+		List<FrameVariant> frameVariants = frameVariantService.getFrames(frameLength, 
+				frameBreadth, mountThickness, frameThickness);
+		for (FrameVariant frameVariant : frameVariants) {
+			tempFrames.add(new Frame(frameVariant));
+		}
+		return tempFrames;
 	}
 	
 	@RequestMapping(value = "/api/uploadImage", headers = "content-type=multipart/*", method = RequestMethod.POST)
@@ -189,7 +195,7 @@ public class ProductsAPI {
 			artworkMap.put("priceBuckets", art.getPriceBuckets());
 			artworkMap.put("details", art);
 			artworkMap.put("artist", art.getArtist());
-			map.put(art.getTitle(), artworkMap);
+			map.put(art.getHandle(), artworkMap);
 		}
 		return map;
 	}
