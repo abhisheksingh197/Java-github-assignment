@@ -34,7 +34,7 @@ public class ProductsAPITest extends BaseIntegrationTest {
         .andExpect(status().isOk());
 		
 		mockMvc.perform(get("/api/artworks/search?limit=10&offset=0"))
-        .andExpect(status().isInternalServerError());
+        .andExpect(status().isOk());
 		
 		mockMvc.perform(get("/api/artworks/search?limit=10&offset=0"
 				+ "&subjects=1234&styles=65432&medium=fineart&orientation=landscape&colors=ffffff,fff000"))

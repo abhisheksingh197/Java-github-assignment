@@ -15,14 +15,14 @@ import com.hashedin.artcollective.service.TinEyeServiceImpTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
+	ProductsAPITest.class,
 	ArtWorksServiceTest.class,
 	ShopifyServiceTest.class,
 	TinEyeServiceImpTest.class,
 	AuthorizationTests.class,
 	PriceBucketServiceTest.class,
 	ArtWorksServiceMockitoTest.class,
-	FrameVariantServiceTest.class,
-	ProductsAPITest.class
+	FrameVariantServiceTest.class
 })
 public class UnitTests {
 
