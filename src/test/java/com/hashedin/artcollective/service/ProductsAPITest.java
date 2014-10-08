@@ -21,7 +21,6 @@ public class ProductsAPITest extends BaseIntegrationTest {
 	@Before
     public void setup() {
 		this.mockMvc = MockMvcBuilders.standaloneSetup(productsAPI).build();
-        MockitoAnnotations.initMocks(this);
     }
 	
 	@Test
