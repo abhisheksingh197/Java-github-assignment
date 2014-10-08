@@ -14,6 +14,7 @@ public class Frame {
 		this.frameBreadth = frameVariant.getFrameLength();
 		this.unitPrice = frameVariant.getUnitPrice();
 		this.frameTitle = frameVariant.getFrameTitle();
+		this.imgSrc = frameVariant.getImgSrc();
 	}
 	private Long id;
 	private Long skuId;
@@ -23,6 +24,13 @@ public class Frame {
 	private Double frameLength;
 	private Double frameBreadth;
 	private Double unitPrice;
+	private String imgSrc;
+	public String getImgSrc() {
+		return imgSrc;
+	}
+	public void setImgSrc(String imgSrc) {
+		this.imgSrc = imgSrc;
+	}
 	public Long getId() {
 		return id;
 	}

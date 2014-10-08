@@ -9,6 +9,7 @@ import com.hashedin.artcollective.service.ArtWorksServiceMockitoTest;
 import com.hashedin.artcollective.service.ArtWorksServiceTest;
 import com.hashedin.artcollective.service.FrameVariantServiceTest;
 import com.hashedin.artcollective.service.PriceBucketServiceTest;
+import com.hashedin.artcollective.service.ProductsAPITest;
 import com.hashedin.artcollective.service.ShopifyServiceTest;
 import com.hashedin.artcollective.service.TinEyeServiceImpTest;
 
@@ -20,7 +21,8 @@ import com.hashedin.artcollective.service.TinEyeServiceImpTest;
 	AuthorizationTests.class,
 	PriceBucketServiceTest.class,
 	ArtWorksServiceMockitoTest.class,
-	FrameVariantServiceTest.class
+	FrameVariantServiceTest.class,
+	ProductsAPITest.class
 })
 public class UnitTests {
 

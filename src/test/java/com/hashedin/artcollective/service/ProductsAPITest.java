@@ -1,62 +1,52 @@
 package com.hashedin.artcollective.service;
-
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-
-import java.util.Map;
-
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
-
 import com.hashedin.artcollective.BaseIntegrationTest;
 import com.hashedin.artcollective.controller.ProductsAPI;
-import com.hashedin.artcollective.entity.ArtWork;
-
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 public class ProductsAPITest extends BaseIntegrationTest {
-
-	@Value("${shopify.baseurl}")
-	private String shopifyBaseUrl;
-
-	@Value("${tinEye.baseurl}")
-	private String tinEyeBaseUrl;
-
-	@Autowired
-	private RestTemplate rest;
 
 	@Autowired
 	private ProductsAPI productsAPI;
 	
-
-	@Test
-	public void userCanSearchForArtWorksByColor() {
-		
-		MockRestServiceServer mockTinEyeService = MockRestServiceServer
-				.createServer(rest);
-		mockTinEyeService
-				.expect(requestTo(tinEyeBaseUrl + "color_search/"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("tin_eye_color_search_response.json"));
-
-		given().sessionId(login("shopper", "shopper"))
-				.when()
-				.get("/api/artworks/search/color?colors=DF4F23&weights=70&colors=255,112,0&weights=30")
-				.then().statusCode(200)
-				.body(not(containsString("Access is denied")));
-
-		String[] colors = { "DF4F23", "255,112,0" };
-		int[] weights = { 1, 1 };
-		Map<String, Object> artMap = productsAPI.getAllArtworksByColor(colors,
-				weights);
-		assertEquals(artMap.size(), 1);
-	}
+	private MockMvc mockMvc;
 	
+	@Before
+    public void setup() {
+		this.mockMvc = MockMvcBuilders.standaloneSetup(productsAPI).build();
+        MockitoAnnotations.initMocks(this);
+    }
+	
+	@Test
+    public void testForAPICalls() throws Exception {
+		
+		mockMvc.perform(get("/api/collections"))
+        .andExpect(status().isOk());
+		
+		mockMvc.perform(get("/manage/priceRange/getall"))
+        .andExpect(status().isOk());
+		
+		mockMvc.perform(get("/api/artworks/search?limit=10&offset=0"))
+        .andExpect(status().isInternalServerError());
+		
+		mockMvc.perform(get("/api/artworks/search?limit=10&offset=0"
+				+ "&subjects=1234&styles=65432&medium=fineart&orientation=landscape&colors=ffffff,fff000"))
+        .andExpect(status().isOk());
+		
+		mockMvc.perform(get("/api/frames?frameLength=12&frameBreadth=17.5&mountThickness=1&frameThickness=1"))
+        .andExpect(status().isOk());
+		
+		mockMvc.perform(get("/manage/priceRange/add?id=1&title=low&lowerRange=2500&upperRange=5000"))
+        .andExpect(status().isOk());
+		
+        
+    }
 	
 }
