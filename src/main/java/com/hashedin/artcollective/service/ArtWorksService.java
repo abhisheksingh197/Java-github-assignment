@@ -187,7 +187,8 @@ public class ArtWorksService {
 			case "artist":
 				String[] artistTitle = collection.getTitle().split("_");
 				artist = new Artist(collection.getId(), artistTitle[1], 
-						artistTitle.length == TITLE_SIZE ? artistTitle[2] : "");
+						artistTitle.length == TITLE_SIZE ? artistTitle[2] : "", 
+						collection.getHandle());
 				artistRepository.save(artist);
 				break;
 			case "coll":
