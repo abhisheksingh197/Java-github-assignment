@@ -46,7 +46,7 @@ public class ArtWorksSearchService {
 	}
 	
 	//CHECKSTYLE:OFF
-	public List<ArtWork> findArtworksByCriteria(
+	public CriteriaSearchResponse findArtworksByCriteria(
 			List<String> subjectList, 
 			List<String> styleList,
 			String[] colorsList,
@@ -70,8 +70,16 @@ public class ArtWorksSearchService {
 				idList,
 				limit,
 				offset);
+		int artworkCount = artWorkRepository.findCountByCriteria(styleList,
+				subjectList,
+				priceBucketRangeList,
+				medium, 
+				orientation,
+				idList);
 		
-		return artWorkList;
+		CriteriaSearchResponse searchResponse = new CriteriaSearchResponse(artWorkList, artworkCount);
+		
+		return searchResponse;
 	}
 	
 	private List<Long> getIdListPostColorSearch(String[] colorsList) {
@@ -81,7 +89,8 @@ public class ArtWorksSearchService {
 		nullIdList.add(-1L);
 		// If color list in null, we are avoiding tinEye API Call.
 		if (colorsList != null) {
-			List<ArtWork> artworks = findArtworksByColor(colorsList, weights);
+			CriteriaSearchResponse searchResponse = findArtworksByColor(colorsList, weights);
+			List<ArtWork> artworks = searchResponse.getArtworks();
 			// adding a list of Ids which consist -1 so that SQL Query parses response 
 				// with no artwork from TinEye
 			return (artworks.size() == 0 ? nullIdList : getArtworkIds(artworks));
@@ -103,7 +112,7 @@ public class ArtWorksSearchService {
 		return idList;
 	}
 	
-	public List<ArtWork> findArtworksByColor(String[] colors, int[] weights) {
+	public CriteriaSearchResponse findArtworksByColor(String[] colors, int[] weights) {
 			ArtSearchCriteria searchCriteria = new ArtSearchCriteria();
 			if (colors.length > 1) {
 				searchCriteria.setColour1(colors[0]);
@@ -120,6 +129,7 @@ public class ArtWorksSearchService {
 				searchCriteria.setColor1Weight(weights[0]);
 			}
 			List<ArtWork> artWorks = tinEyeService.getMatchingArtWorks(searchCriteria);
-			return artWorks;
-		}
+			CriteriaSearchResponse searchResponse = new CriteriaSearchResponse(artWorks, artWorks.size());
+			return searchResponse;
+	}
 }

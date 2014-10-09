@@ -267,7 +267,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		String orientation = "landscape";
 		int offset = 0;
 		int limit = 2;
-		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
+		CriteriaSearchResponse searchResponse = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
 				colorsList,
@@ -276,7 +276,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				orientation,
 				limit,
 				offset);
-		assertEquals(artWorkList.size(), 2);
+		assertEquals(searchResponse.getArtworks().size(), 2);
 	}
 	
 	@Test
@@ -300,7 +300,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		String orientation = null;
 		int offset = 0;
 		int limit = 2;
-		List<ArtWork> artWorkList = searchService.findArtworksByCriteria(
+		CriteriaSearchResponse searchResponse = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
 				colorsList,
@@ -309,7 +309,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				orientation,
 				limit,
 				offset);
-		assertEquals(artWorkList.size(), 2);
+		assertEquals(searchResponse.getArtworks().size(), 2);
 	}
 	
 	@Test
@@ -324,8 +324,8 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		
 		String[] colors = {"255,255,255","0,0,0"};
 		int[] weights = {1,1};
-		List<ArtWork> artWorkList = searchService.findArtworksByColor(colors, weights);
-		assertEquals(artWorkList.size(), 2);
+		CriteriaSearchResponse searchResponse = searchService.findArtworksByColor(colors, weights);
+		assertEquals(searchResponse.getArtworks().size(), 2);
 	}
 	
 	@Test
@@ -339,8 +339,8 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		
 		String[] colors = {"255,255,255"};
 		int[] weights = {1};
-		List<ArtWork> artWorkList = searchService.findArtworksByColor(colors, weights);
-		assertEquals(artWorkList.size(), 2);
+		CriteriaSearchResponse searchResponse = searchService.findArtworksByColor(colors, weights);
+		assertEquals(searchResponse.getArtworks().size(), 2);
 	}
 	
 	@Test

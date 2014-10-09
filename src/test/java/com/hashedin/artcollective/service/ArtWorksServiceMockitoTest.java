@@ -47,7 +47,7 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 		ArtWorksSearchService testService = new ArtWorksSearchService() {
 
 			@Override
-			public List<ArtWork> findArtworksByColor(String[] colors,
+			public CriteriaSearchResponse findArtworksByColor(String[] colors,
 					int[] weights) {
 				return generateReturnColorByArtworks();
 			}};
@@ -63,10 +63,10 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 			priceBucket.add("-1");
 			String medium = null;
 			String orientation = null;
-		List<ArtWork> arts = testService.findArtworksByCriteria(subjects, styles, new String[] {"fffff"}, priceBucket, 
+		CriteriaSearchResponse searchResponse = testService.findArtworksByCriteria(subjects, styles, new String[] {"fffff"}, priceBucket, 
 				medium, orientation, limit, offset);
 		
-		assertEquals(arts.size(),151);
+		assertEquals(searchResponse.getTotalArtworkCount(),151);
 
 		
 	}
@@ -115,7 +115,7 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 		return artworks;
 	}
 	
-	private List<ArtWork> generateReturnColorByArtworks() {
+	private CriteriaSearchResponse generateReturnColorByArtworks() {
 		List<ArtWork> artworks = new ArrayList<>();
 		long idCount = 150;
 		for (int artworkIterator = 149; artworkIterator < 300; artworkIterator++ ) {
@@ -126,7 +126,8 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 			idCount ++;
 		}
 		artworks.removeAll(Collections.singleton(null));
-		return artworks;
+		CriteriaSearchResponse searchResponse = new CriteriaSearchResponse(artworks, artworks.size());
+		return searchResponse;
 	}
 	
 }
