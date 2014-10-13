@@ -9,11 +9,13 @@ import com.hashedin.artcollective.service.ArtWorksServiceMockitoTest;
 import com.hashedin.artcollective.service.ArtWorksServiceTest;
 import com.hashedin.artcollective.service.FrameVariantServiceTest;
 import com.hashedin.artcollective.service.PriceBucketServiceTest;
+import com.hashedin.artcollective.service.ProductsAPITest;
 import com.hashedin.artcollective.service.ShopifyServiceTest;
 import com.hashedin.artcollective.service.TinEyeServiceImpTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
+	ProductsAPITest.class,
 	ArtWorksServiceTest.class,
 	ShopifyServiceTest.class,
 	TinEyeServiceImpTest.class,

@@ -26,9 +26,12 @@ import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
+import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
+import com.hashedin.artcollective.service.CriteriaSearchResponse;
+import com.hashedin.artcollective.service.Frame;
 import com.hashedin.artcollective.service.FrameVariantService;
 import com.hashedin.artcollective.service.PriceBucketService;
 import com.hashedin.artcollective.service.Style;
@@ -61,6 +64,9 @@ public class ProductsAPI {
 	
 	@Autowired
 	private TinEyeService tinEyeService;
+	
+	@Autowired
+	private ArtWorkRepository artWorkRepository;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
@@ -119,7 +125,7 @@ public class ProductsAPI {
 		orientation = (orientation !=  null) && (!orientation.equalsIgnoreCase("")) ? orientation : null;
 		priceBucketRangeList = priceBucketRange != null ? Arrays.asList(priceBucketRange) 
 				: priceBucketRangeList;
-		List<ArtWork> artworks = artworksSearchService.findArtworksByCriteria(
+		CriteriaSearchResponse searchResponse = artworksSearchService.findArtworksByCriteria(
 				subjectList, 
 				styleList,
 				colors,
@@ -128,15 +134,15 @@ public class ProductsAPI {
 				orientation,
 				limit,
 				offset);
-		return wrapResponse(artworks);
+		return wrapResponse(searchResponse);
 	}
 	
 	// Search Tin Eye based on color Criteria
 	@RequestMapping(value = "/api/artworks/search/color", method = RequestMethod.GET)
 	public Map<String, Object> getAllArtworksByColor(@RequestParam(value = "colors") 
 		String[] colors, @RequestParam(value = "weights", required = false) int[] weights) {
-		List<ArtWork> artworks = artworksSearchService.findArtworksByColor(colors, weights);
-		return wrapResponse(artworks);
+		CriteriaSearchResponse searchResponse = artworksSearchService.findArtworksByColor(colors, weights);
+		return wrapResponse(searchResponse);
 	}
 	
 	// Search For Subjects and Styles
@@ -159,14 +165,19 @@ public class ProductsAPI {
 	}
 	
 	@RequestMapping(value = "/api/frames", method = RequestMethod.GET)
-	public List<FrameVariant> getFrames(
+	public List<Frame> getFrames(
 			@RequestParam(value = "frameLength", required = true) Double frameLength,
 			@RequestParam(value = "frameBreadth", required = true) Double frameBreadth,
 			@RequestParam(value = "mountThickness", required = true) Double mountThickness,
 			@RequestParam(value = "frameThickness", required = true) Double frameThickness
 			) {
-		
-		return frameVariantService.getFrames(frameLength, frameBreadth, mountThickness, frameThickness);
+		List<Frame> tempFrames = new ArrayList<>();
+		List<FrameVariant> frameVariants = frameVariantService.getFrames(frameLength, 
+				frameBreadth, mountThickness, frameThickness);
+		for (FrameVariant frameVariant : frameVariants) {
+			tempFrames.add(new Frame(frameVariant));
+		}
+		return tempFrames;
 	}
 	
 	@RequestMapping(value = "/api/uploadImage", headers = "content-type=multipart/*", method = RequestMethod.POST)
@@ -181,16 +192,22 @@ public class ProductsAPI {
 	
 
 	// Wrap Artwork objects into a Map Helper Function
-	private static Map<String, Object> wrapResponse(List<ArtWork> artworks) {
+	private Map<String, Object> wrapResponse(CriteriaSearchResponse searchResponse) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		List<ArtWork> artworks = searchResponse.getArtworks();
+		List<Object> artworksList = new ArrayList<>();
 		for (ArtWork art : artworks) {
 			Map<String, Object> artworkMap = new HashMap<String, Object>();
 			artworkMap.put("images", art.getImages());
 			artworkMap.put("priceBuckets", art.getPriceBuckets());
 			artworkMap.put("details", art);
 			artworkMap.put("artist", art.getArtist());
-			map.put(art.getTitle(), artworkMap);
+			artworksList.add(artworkMap);
 		}
+		Object allArtworksCount = artWorkRepository.count();
+		map.put("searchCount", searchResponse.getTotalArtworkCount());
+		map.put("allArtworksCount", allArtworksCount);
+		map.put("artworks", artworksList);
 		return map;
 	}
 }
