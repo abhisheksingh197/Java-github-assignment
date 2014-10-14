@@ -1,12 +1,9 @@
 package com.hashedin.artcollective.service;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.client.RestTemplate;
 import com.hashedin.artcollective.BaseIntegrationTest;
 import com.hashedin.artcollective.controller.ProductsAPI;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

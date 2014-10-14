@@ -24,10 +24,8 @@ public class ArtWorkRepositoryTest extends BaseUnitTest {
 		
 		ArtWork art = new ArtWork();
 		Artist artist = new Artist("Leonardo", "Picasso");
-		ArtStyle artStyle = new ArtStyle();
+		ArtStyle artStyle = new ArtStyle(2L, "Success");
 		List<ArtStyle> artStyleList = new ArrayList<>();
-		artStyle.setId(2L);
-		artStyle.setTitle("Success");
 		artStyleList.add(artStyle);
 		art.setId(1L);
 		art.setArtist(artist);
