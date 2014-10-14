@@ -10,6 +10,14 @@ public class ArtSubject {
 	@Id
 	private Long id;
 	private String title;
+	
+	public ArtSubject() {
+	}
+
+	public ArtSubject(Long id, String title) {
+		this.id = id;
+		this.title = title;
+	}
 
 	public Long getId() {
 		return id;

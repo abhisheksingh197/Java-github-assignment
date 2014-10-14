@@ -72,12 +72,8 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 	}
 	
 	private List<ArtWork> generateThousandArtWorks() {
-		ArtSubject subject = new ArtSubject();
-		subject.setId(123L);
-		subject.setTitle("goodSubject");
-		ArtStyle style = new ArtStyle();
-		style.setId(234L);
-		style.setTitle("goodStyle");
+		ArtSubject subject = new ArtSubject(123L, "goodSubject");
+		ArtStyle style = new ArtStyle(234L, "goodStyle");
 		PriceBucket priceBucket = new PriceBucket();
 		priceBucket.setId(897L);
 		priceBucket.setLowerRange(2500);

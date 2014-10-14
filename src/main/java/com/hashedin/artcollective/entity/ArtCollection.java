@@ -9,6 +9,12 @@ public class ArtCollection {
 	private Long id;
 	private String title;
 	
+	public ArtCollection() {
+	}
+	public ArtCollection(Long id, String title) {
+		this.id = id;
+		this.title = title;
+	}
 	public Long getId() {
 		return id;
 	}

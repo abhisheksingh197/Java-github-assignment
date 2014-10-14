@@ -152,14 +152,15 @@ public class ArtWorksService {
 		return arts;
 	}
 
-	private ArtWork createArtWork(Product p, List<Collection> collections,
-			List<MetaField> metafields) {
+	private ArtWork createArtWork(Product p, List<Collection> collections, List<MetaField> metafields) {
+		boolean origMedium = false;
+		boolean origSize = false;
+		boolean origPrice = false;
 		ArtWork artwork = new ArtWork();
 		List<ArtSubject> subject = new ArrayList<>();
 		List<ArtStyle> style = new ArrayList<>();
 		Artist artist = new Artist();
 		List<ArtCollection> artCollections = new ArrayList<>();
-		
 		// Classifying Collections into each category.
 		for (Collection collection : collections) {
 			String tokens[] = collection.getTitle().split("_");
@@ -171,30 +172,26 @@ public class ArtWorksService {
 			String collectionType = tokens[0]; 
 			switch(collectionType) {
 			case "subject":
-				ArtSubject artSubject = new ArtSubject();
-				artSubject.setId(collection.getId());
-				artSubject.setTitle(collection.getTitle().split("_")[1]);
+				ArtSubject artSubject = new ArtSubject(collection.getId(), 
+						collection.getTitle().split("_")[1]);
 				subject.add(artSubject);
 				artSubjectRepository.save(artSubject);
 				break;
 			case "styles":
-				ArtStyle artStyle = new ArtStyle();
-				artStyle.setId(collection.getId());
-				artStyle.setTitle(collection.getTitle().split("_")[1]);
+				ArtStyle artStyle = new ArtStyle(collection.getId(), 
+						collection.getTitle().split("_")[1]);
 				style.add(artStyle);
 				artStyleRepository.save(artStyle);
 				break;
 			case "artist":
 				String[] artistTitle = collection.getTitle().split("_");
-				artist = new Artist(collection.getId(), artistTitle[1], 
-						artistTitle.length == TITLE_SIZE ? artistTitle[2] : "", 
-						collection.getHandle());
+				artist = new Artist(collection.getId(), artistTitle[1], artistTitle.length 
+						== TITLE_SIZE ? artistTitle[2] : "", collection.getHandle());
 				artistRepository.save(artist);
 				break;
 			case "coll":
-				ArtCollection artCollection = new ArtCollection();
-				artCollection.setId(collection.getId());
-				artCollection.setTitle(collection.getTitle().split("_")[1]);
+				ArtCollection artCollection = new ArtCollection(collection.getId(), 
+						collection.getTitle().split("_")[1]);
 				artCollections.add(artCollection);
 				artCollectionsRepository.save(artCollection);
 				break;
@@ -204,7 +201,6 @@ public class ArtWorksService {
 				break;
 			}
 		}
-		
 		//Classifying Metafields and storing them.
 		for (MetaField metafield : metafields) {
 			switch (metafield.getKey()) {
@@ -229,11 +225,22 @@ public class ArtWorksService {
 			case "artwork_orientation":
 				artwork.setOrientation(metafield.getValue() == null ? "" : metafield.getValue());
 				break;
+			case "original_art_medium":
+				origMedium = metafield.getValue() != null || !metafield.getValue().equalsIgnoreCase("") 
+					? true : false;
+				break;
+			case "original_art_size":
+				origSize = metafield.getValue() != null || !metafield.getValue().equalsIgnoreCase("") 
+					? true : false;
+				break;
+			case "original_art_price":
+				origPrice = metafield.getValue() != null || !metafield.getValue().equalsIgnoreCase("") 
+					? true : false;
+				break;
 			default:
 				break;
 			}
 		}
-		
 		//If artwork is framable check if it has a mount thickness and a frame thickness
 		if (artwork.isFrameAvailable()) {
 			for (Variant variant : p.getVariants()) {
@@ -244,10 +251,7 @@ public class ArtWorksService {
 					return null;
 				}
 			}
-			
 		}
-		
-		
 		// Saving Images into Repository.
 		if (p.getImages().size() == 0) {
 			LOGGER.info("Missing Image: The Artwork {} must at the least have one Image", 
@@ -261,7 +265,6 @@ public class ArtWorksService {
 		catch (IOException ioe) {
 			LOGGER.error("Could not resize image for Product " + p, ioe);
 		}
-		
 		// Fetching Cheapest and Costliest Variant
 		if (p.getVariants().size() == 0) {
 			LOGGER.info("Missing Variants: The Artwork {} must have at the least one variant", 
@@ -270,10 +273,14 @@ public class ArtWorksService {
 		}
 		Variant cheapest = Collections.min(p.getVariants());
 		Variant costliest = Collections.max(p.getVariants());
-		
-		
-		
-		
+		//Loggers for original Artwork
+		if (artwork.isOriginalAvailable()) {
+			if (!origMedium || !origPrice || !origSize) {
+				LOGGER.info("Missing Original Artwork Details: The has original Artwork {} must have "
+						+ "original price, size and medium mentioned", artwork.getTitle());
+				return null;
+			}
+		}
 		// Setting attribute values to artwork object and saving them.
 		artwork.setTitle(p.getTitle());
 		artwork.setId(p.getId());
@@ -296,7 +303,8 @@ public class ArtWorksService {
 		return null;
 	}
 	
-
+	
+	
 	/*
 	 * 1. Check if the product has an image of width = 198px, height = whatever
 	 * 2. If it has, do nothing
@@ -305,15 +313,12 @@ public class ArtWorksService {
 	 * 3.2 Resize the image
 	 * 3.3 Upload the resized image
 	 * 3.4 Store the id of the resized image in a meta-field
-	 * 
 	 */
 	private void maybeResizeImage(Product p, List<MetaField> metafields,
 			List<Image> images, Image featuredImage) throws IOException {
-		
 		if (imageForArtFinderExists(images)) {
 			return;
 		}
-		
 		String format = determineFormat(featuredImage);
 		BufferedImage original = ImageIO.read(new URL(featuredImage.getImgSrc()));
 		BufferedImage resized = resizeImage(original);
@@ -407,10 +412,13 @@ public class ArtWorksService {
 					artwork.getTitle());
 			isValid = false;
 		}
+
 		
 		return isValid;
 		
 	}
+
+
 
 	private DateTime getLastRunTime() {
 		return null;

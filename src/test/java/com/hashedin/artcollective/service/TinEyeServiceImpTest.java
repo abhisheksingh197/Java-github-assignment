@@ -78,7 +78,7 @@ public class TinEyeServiceImpTest extends BaseUnitTest {
 		artSearchCiteria.setColour1("255,255,255");
 		artSearchCiteria.setColour2("0,0,0");
 		List<ArtWork> artworks = tineye.getMatchingArtWorks(artSearchCiteria);
-		assertEquals(artworks.size(),2);
+		assertEquals(artworks.size(),1);
 	}
 	
 	@Test

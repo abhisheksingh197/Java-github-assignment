@@ -167,16 +167,16 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 			.andExpect(method(HttpMethod.POST))
 			.andRespond(withJson("tin_eye_color_extract_response.json"));
 		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/503096747/metafields.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("color_extract_metafield.json"));
-		
-		 mockArtWorksService
-			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
-			.andExpect(method(HttpMethod.POST))
-			.andRespond(withJson("tin_eye_color_extract_response.json"));
+//		mockArtWorksService
+//				.expect(requestTo(shopifyBaseUrl
+//						+ "products/503096747/metafields.json"))
+//				.andExpect(method(HttpMethod.POST))
+//				.andRespond(withJson("color_extract_metafield.json"));
+//		
+//		 mockArtWorksService
+//			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
+//			.andExpect(method(HttpMethod.POST))
+//			.andRespond(withJson("tin_eye_color_extract_response.json"));
 		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
@@ -227,7 +227,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
 		ArtWork artwork = artList.get(0);
 		assertEquals(artwork.getTitle(), "India Gate");
-		assertEquals(artList.size(),2);
+		assertEquals(artList.size(),1);
 	}
 	
 	@Test
@@ -241,7 +241,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	@Test
 	public void testForSearchByArtist() {
 		List<ArtWork> artWorkList = searchService.findArtworksByArtist("Amit");
-		assertEquals(artWorkList.size(), 2);
+		assertEquals(artWorkList.size(), 1);
 	}
 	
 	@Test
@@ -276,7 +276,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				orientation,
 				limit,
 				offset);
-		assertEquals(searchResponse.getArtworks().size(), 2);
+		assertEquals(searchResponse.getArtworks().size(), 1);
 	}
 	
 	@Test
@@ -309,7 +309,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				orientation,
 				limit,
 				offset);
-		assertEquals(searchResponse.getArtworks().size(), 2);
+		assertEquals(searchResponse.getArtworks().size(), 1);
 	}
 	
 	@Test
@@ -325,7 +325,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		String[] colors = {"255,255,255","0,0,0"};
 		int[] weights = {1,1};
 		CriteriaSearchResponse searchResponse = searchService.findArtworksByColor(colors, weights);
-		assertEquals(searchResponse.getArtworks().size(), 2);
+		assertEquals(searchResponse.getArtworks().size(), 1);
 	}
 	
 	@Test
@@ -340,7 +340,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		String[] colors = {"255,255,255"};
 		int[] weights = {1};
 		CriteriaSearchResponse searchResponse = searchService.findArtworksByColor(colors, weights);
-		assertEquals(searchResponse.getArtworks().size(), 2);
+		assertEquals(searchResponse.getArtworks().size(), 1);
 	}
 	
 	@Test
