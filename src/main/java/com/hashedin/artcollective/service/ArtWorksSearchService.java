@@ -1,5 +1,6 @@
 package com.hashedin.artcollective.service;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -70,6 +71,7 @@ public class ArtWorksSearchService {
 				idList,
 				limit,
 				offset);
+		
 		int artworkCount = artWorkRepository.findCountByCriteria(styleList,
 				subjectList,
 				priceBucketRangeList,
@@ -77,8 +79,10 @@ public class ArtWorksSearchService {
 				orientation,
 				idList);
 		
-		CriteriaSearchResponse searchResponse = new CriteriaSearchResponse(artWorkList, artworkCount);
+		ArtWorkComparator comparator = new ArtWorkComparator(idList);
+		Collections.sort(artWorkList, comparator);
 		
+		CriteriaSearchResponse searchResponse = new CriteriaSearchResponse(artWorkList, artworkCount);
 		return searchResponse;
 	}
 	
