@@ -254,16 +254,8 @@ public class ArtWorksService {
 		}
 		// Saving Images into Repository.
 		if (p.getImages().size() == 0) {
-			LOGGER.info("Missing Image: The Artwork {} must at the least have one Image", 
-					p.getTitle());
+			LOGGER.info("Missing Image: The Artwork {} must at the least have one Image", p.getTitle());
 			return null;
-		}
-		imageRepository.save(p.getImages());
-		try {
-			maybeResizeImage(p, metafields, p.getImages(), p.getImage());
-		}
-		catch (IOException ioe) {
-			LOGGER.error("Could not resize image for Product " + p, ioe);
 		}
 		// Fetching Cheapest and Costliest Variant
 		if (p.getVariants().size() == 0) {
@@ -298,13 +290,35 @@ public class ArtWorksService {
 		artwork.setMaxSize(costliest.getOption1());
 		artwork.setVariantCount(p.getVariants().size());
 		if (artWorkValidator(artwork)) {
+			Image image = resizeFeaturedImage(p, metafields, p.getImages(), p.getImage());
+			if (image != null) {
+				List<Image> images = p.getImages();
+				images.add(image);
+				p.setImages(images);
+			}
+			imageRepository.save(p.getImages());
 			return artwork;
 		}
 		return null;
 	}
 	
 	
-	
+	// Created a new method since the Create Artwork method crossed 150 Lines 
+	// and Checkstyle did not allow the same
+	private Image resizeFeaturedImage(Product p, List<MetaField> metafields,
+			List<Image> images, Image image) {
+		try {
+			Image resizedimage = maybeResizeImage(p, metafields, p.getImages(), p.getImage());
+			return resizedimage;
+		}
+		catch (IOException ioe) {
+			LOGGER.error("Could not resize image for Product " + p, ioe);
+		}
+		
+		return null;
+		
+	}
+
 	/*
 	 * 1. Check if the product has an image of width = 198px, height = whatever
 	 * 2. If it has, do nothing
@@ -314,21 +328,25 @@ public class ArtWorksService {
 	 * 3.3 Upload the resized image
 	 * 3.4 Store the id of the resized image in a meta-field
 	 */
-	private void maybeResizeImage(Product p, List<MetaField> metafields,
+	private Image maybeResizeImage(Product p, List<MetaField> metafields,
 			List<Image> images, Image featuredImage) throws IOException {
 		if (imageForArtFinderExists(images)) {
-			return;
+			return null;
 		}
 		String format = determineFormat(featuredImage);
 		BufferedImage original = ImageIO.read(new URL(featuredImage.getImgSrc()));
-		BufferedImage resized = resizeImage(original);
-		
+		BufferedImage resizedImage = resizeImage(original);
+		int resizedHeight = resizedImage.getHeight();
+		int resizedWidth = resizedImage.getWidth();
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ImageIO.write(resized, format, bos);
+		ImageIO.write(resizedImage, format, bos);
 		
-		shopify.uploadImage(p, 
+		Image image = shopify.uploadImage(p, 
 				new ByteArrayInputStream(bos.toByteArray()), 
 				String.format("%s-artfinder.%s", p.getHandle(), format));
+		image.setHeight(resizedHeight);
+		image.setWidth(resizedWidth);
+		return image;
 	}
 
 	private boolean imageForArtFinderExists(List<Image> images) {
@@ -353,6 +371,7 @@ public class ArtWorksService {
 
 	private BufferedImage resizeImage(BufferedImage original) {
 		return Scalr.resize(original, Mode.FIT_TO_WIDTH, WIDTH_OF_IMAGE);
+		
 	}
 	
 	private boolean variantHasFrameableValues(Variant variant) {

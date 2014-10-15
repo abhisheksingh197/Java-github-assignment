@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -22,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
+import com.hashedin.artcollective.entity.Image;
 
 
 @Service
@@ -106,7 +106,8 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 
 	@Override
-	public void uploadImage(Product p, InputStream image, String imageName) throws IOException {
+	public Image uploadImage(Product p, InputStream image, String imageName) throws IOException {
+
 		String imageUploadUrl = String.format("%sproducts/%s/images.json", baseUri, p.getId());
 		
 		StringBuilder imageData = new StringBuilder();
@@ -123,11 +124,13 @@ public class ShopifyServiceImpl implements ShopifyService {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> entity = new HttpEntity<String>(imageData.toString(), headers);
 		
-		
-		HttpEntity<String> response = rest.exchange(imageUploadUrl, HttpMethod.POST,
-				entity, String.class);
+		ShopifyImageUploadResponse uploadResponse = rest.postForObject(imageUploadUrl, entity, 
+				ShopifyImageUploadResponse.class);
+		Image img = uploadResponse.getImage();
 		LOGGER.info("Uploaded compressed image for product {} to shopify", p.getTitle());
-		LOGGER.debug(response.getBody());
+		LOGGER.debug(uploadResponse.toString());
+		return img;
+
 	}
 
 }

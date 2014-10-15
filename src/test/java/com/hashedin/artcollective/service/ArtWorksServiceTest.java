@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.ArtWork;
+import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
@@ -156,6 +157,12 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 						+ "products/504096747/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_504096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/504096747/images.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("image_upload_response.json"));
 				
 		mockArtWorksService
 				.expect(requestTo(tinEyeBaseUrl + "add"))
@@ -350,6 +357,17 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		assertEquals(artwork.getPriceBuckets().size(), 1);
 		List<PriceBucket> priceBucket = (List<PriceBucket>) priceBucketRepository.findAll();
 		assertEquals(priceBucket.size(), 2);
+	}
+	
+	@Test
+	public void testForResizeImageWidthandHeight() {
+		ArtWork art = artRepository.findOne(504096747L);
+		List<Image> images = art.getImages();
+		for (Image image : images) {
+			if (image.getImgSrc().contains("-artfinder")) {
+				assertEquals(image.getWidth(), 198);
+			}
+		}
 	}
 
 
