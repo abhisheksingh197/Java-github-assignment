@@ -8,6 +8,8 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
+import com.hashedin.artcollective.entity.Image;
+
 @Service
 public interface ShopifyService {
 
@@ -21,5 +23,5 @@ public interface ShopifyService {
 
 	public void postImageColorsMetaField(Long id, String imageColors);
 
-	public void uploadImage(Product product, InputStream image, String format) throws IOException;
+	public Image uploadImage(Product product, InputStream image, String format) throws IOException;
 }
