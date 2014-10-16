@@ -29,7 +29,8 @@ JpaSpecificationExecutor<ArtWork> {
 			+ "(:priceBucketRangeList)))"
 			+ "and (art.medium = :medium or :medium is null )"
 			+ "and (art.orientation = :orientation or :orientation is null )"
-			+ "and (art.id in (:idList) or -1 in (:idList)) limit :pageLimit offset :pageOffset" ,
+			+ "and (art.id in (:idList) or -1 in (:idList)) order by art.created_at asc "
+			+ "limit :pageLimit offset :pageOffset " ,
 			nativeQuery = true)
 	
 	//CHECKSTYLE:OFF
@@ -66,5 +67,5 @@ JpaSpecificationExecutor<ArtWork> {
 			@Param("medium") String medium, 
 			@Param("orientation") String orientation,
 			@Param("idList") List<Long> idList);
-
+	
 }

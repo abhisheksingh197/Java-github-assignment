@@ -5,7 +5,6 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class TinEyeServiceImpTest extends BaseUnitTest {
 		artSearchCiteria.setColour1("255,255,255");
 		artSearchCiteria.setColour2("0,0,0");
 		List<ArtWork> artworks = tineye.getMatchingArtWorks(artSearchCiteria);
-		assertEquals(artworks.size(),1);
+		assertEquals(artworks.size(),3);
 	}
 	
 	@Test

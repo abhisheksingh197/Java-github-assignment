@@ -1,0 +1,49 @@
+{
+    "custom_collections": [
+        {
+            "body_html": null,
+            "handle": "subject_geometric",
+            "id": 26109780,
+            "published_at": "2014-08-08T05:48:02-04:00",
+            "published_scope": "global",
+            "sort_order": "alpha-asc",
+            "template_suffix": null,
+            "title": "subject_geometric",
+            "updated_at": "2014-08-25T02:24:33-04:00"
+        },
+        {
+            "body_html": null,
+            "handle": "artist_Amit_Bhar",
+            "id": 26109781,
+            "published_at": "2014-08-08T05:48:02-04:00",
+            "published_scope": "global",
+            "sort_order": "alpha-asc",
+            "template_suffix": null,
+            "title": "artist_Amit_Bhar",
+            "updated_at": "2014-08-25T02:24:33-04:00"
+        },
+        {
+            "body_html": null,
+            "handle": "styles_nature",
+            "id": 12345,
+            "published_at": "2014-08-08T05:48:02-04:00",
+            "published_scope": "global",
+            "sort_order": "alpha-asc",
+            "template_suffix": null,
+            "title": "styles_nature",
+            "updated_at": "2014-08-25T02:24:33-04:00"
+        },
+        {
+            "body_html": null,
+            "handle": "coll_diwali",
+            "id": 678910,
+            "published_at": "2014-08-08T05:48:02-04:00",
+            "published_scope": "global",
+            "sort_order": "alpha-asc",
+            "template_suffix": null,
+            "title": "coll_diwali",
+            "updated_at": "2014-08-25T02:24:33-04:00"
+        }
+        
+    ]
+}

@@ -77,14 +77,15 @@
 		</dependency>
 		<dependency>
 		    <groupId>joda-time</groupId>
-		    <artifactId>joda-time</artifactId>
+		    <artifactId>joda-time-hibernate</artifactId>
+		    <version>0.8</version>
 		</dependency>
         <!-- So that joda time instances can be saved to database using hibernate -->
         <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.core</artifactId>
-            <version>3.2.0.GA</version>
-        </dependency>
+		   <groupId>org.jadira.usertype</groupId>
+		   <artifactId>usertype.core</artifactId>
+		   <version>3.1.0.CR1</version>
+		</dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
