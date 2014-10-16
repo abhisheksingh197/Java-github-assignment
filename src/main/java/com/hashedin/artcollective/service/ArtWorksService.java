@@ -3,6 +3,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -331,8 +332,16 @@ public class ArtWorksService {
 	private Image maybeResizeImage(Product p, List<MetaField> metafields,
 			List<Image> images, Image featuredImage) throws IOException {
 		if (imageForArtFinderExists(images)) {
-			return null;
+			/*
+			 * TODO - Delete this block
+			 * Code was added to compute dimensions of existing images
+			 * After a few runs of synchronize, this block is pointless
+			 */
+			Image image = getArtFinderImage(images);
+			setImageDimensions(image);
+			return image;
 		}
+		
 		String format = determineFormat(featuredImage);
 		BufferedImage original = ImageIO.read(new URL(featuredImage.getImgSrc()));
 		BufferedImage resizedImage = resizeImage(original);
@@ -349,13 +358,24 @@ public class ArtWorksService {
 		return image;
 	}
 
-	private boolean imageForArtFinderExists(List<Image> images) {
+	private void setImageDimensions(final Image image) throws IOException {
+		BufferedImage original = ImageIO.read(new URL(image.getImgSrc()));
+		image.setWidth(original.getWidth());
+		image.setHeight(original.getHeight());
+	}
+
+	private Image getArtFinderImage(List<Image> images) {
 		for (Image image : images) {
 			if (image.getImgSrc().contains("-artfinder")) {
-				return true;
+				return image;
 			}
 		}
-		return false;
+		return null;
+	}
+
+	private boolean imageForArtFinderExists(List<Image> images) {
+		Image image = getArtFinderImage(images);
+		return (image != null);
 	}
 
 	private String determineFormat(Image image) {
