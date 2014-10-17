@@ -162,32 +162,80 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.expect(requestTo(shopifyBaseUrl
 						+ "products/504096747/images.json"))
 				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("image_upload_response.json"));
+				.andRespond(withJson("image_upload_response_504096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections.json?product_id=505096747"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("collections_505096747.json"));
+
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/505096747/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("metafields_505096747.json"));
+
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/505096747/images.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("image_upload_response_505096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections.json?product_id=506096747"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("collections_506096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/506096747/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("metafields_506096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/506096747/images.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("image_upload_response_506096747.json"));
 				
 		mockArtWorksService
 				.expect(requestTo(tinEyeBaseUrl + "add"))
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("tineye_add_response.json"));
 		
+		
 		 mockArtWorksService
 			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
 			.andExpect(method(HttpMethod.POST))
 			.andRespond(withJson("tin_eye_color_extract_response.json"));
 		
-//		mockArtWorksService
-//				.expect(requestTo(shopifyBaseUrl
-//						+ "products/503096747/metafields.json"))
-//				.andExpect(method(HttpMethod.POST))
-//				.andRespond(withJson("color_extract_metafield.json"));
-//		
-//		 mockArtWorksService
-//			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
-//			.andExpect(method(HttpMethod.POST))
-//			.andRespond(withJson("tin_eye_color_extract_response.json"));
-		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
 						+ "products/504096747/metafields.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("color_extract_metafield.json"));
+		
+		mockArtWorksService
+			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
+			.andExpect(method(HttpMethod.POST))
+			.andRespond(withJson("tin_eye_color_extract_response.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/505096747/metafields.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("color_extract_metafield.json"));
+		
+		mockArtWorksService
+			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
+			.andExpect(method(HttpMethod.POST))
+			.andRespond(withJson("tin_eye_color_extract_response.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/506096747/metafields.json"))
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("color_extract_metafield.json"));
 		
@@ -234,7 +282,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
 		ArtWork artwork = artList.get(0);
 		assertEquals(artwork.getTitle(), "India Gate");
-		assertEquals(artList.size(),1);
+		assertEquals(artList.size(),3);
 	}
 	
 	@Test
@@ -248,7 +296,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	@Test
 	public void testForSearchByArtist() {
 		List<ArtWork> artWorkList = searchService.findArtworksByArtist("Amit");
-		assertEquals(artWorkList.size(), 1);
+		assertEquals(artWorkList.size(), 3);
 	}
 	
 	@Test
@@ -273,7 +321,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		String medium = "paper";
 		String orientation = "landscape";
 		int offset = 0;
-		int limit = 2;
+		int limit = 3;
 		CriteriaSearchResponse searchResponse = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
@@ -283,7 +331,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				orientation,
 				limit,
 				offset);
-		assertEquals(searchResponse.getArtworks().size(), 1);
+		assertEquals(searchResponse.getArtworks().size(), 2);
 	}
 	
 	@Test
@@ -306,7 +354,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		String medium = null;
 		String orientation = null;
 		int offset = 0;
-		int limit = 2;
+		int limit = 3;
 		CriteriaSearchResponse searchResponse = searchService.findArtworksByCriteria(
 				subjectList,
 				styleList,
@@ -316,7 +364,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				orientation,
 				limit,
 				offset);
-		assertEquals(searchResponse.getArtworks().size(), 1);
+		assertEquals(searchResponse.getArtworks().size(), artRepository.count());
 	}
 	
 	@Test
@@ -332,7 +380,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		String[] colors = {"255,255,255","0,0,0"};
 		int[] weights = {1,1};
 		CriteriaSearchResponse searchResponse = searchService.findArtworksByColor(colors, weights);
-		assertEquals(searchResponse.getArtworks().size(), 1);
+		assertEquals(searchResponse.getArtworks().size(), 3);
 	}
 	
 	@Test
@@ -347,7 +395,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		String[] colors = {"255,255,255"};
 		int[] weights = {1};
 		CriteriaSearchResponse searchResponse = searchService.findArtworksByColor(colors, weights);
-		assertEquals(searchResponse.getArtworks().size(), 1);
+		assertEquals(searchResponse.getArtworks().size(), 3);
 	}
 	
 	@Test
@@ -369,9 +417,77 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 			}
 		}
 	}
-
-
 	
+	@Test 
+	public void testThatArtworksAreReturnedInTheOrderByColorMatch() {
+		MockRestServiceServer mockTinEyeService = MockRestServiceServer
+				.createServer(rest);
+		mockTinEyeService
+			.expect(requestTo(tinEyeBaseUrl + "color_search/"))
+			.andExpect(method(HttpMethod.POST))
+			.andRespond(withJson("tin_eye_color_search_response.json"));
+		
+		List<String> subjectList = new ArrayList<>();
+		subjectList.add("26109780");
 
+		
+		List<String> styleList = new ArrayList<>();
+		styleList.add("12345");
+		String[] colorsList = new String[2];
+		colorsList[0] = "FFFFFF";
+		List<String> priceBucketRangeList = new ArrayList<>();
+		priceBucketRangeList.add("1");
+		String medium = "paper";
+		String orientation = "landscape";
+		int offset = 0;
+		int limit = 3;
+		CriteriaSearchResponse searchResponse = searchService.findArtworksByCriteria(
+				subjectList,
+				styleList,
+				colorsList,
+				priceBucketRangeList,
+				medium, 
+				orientation,
+				limit,
+				offset);
+		ArtWork firstArtWork = searchResponse.getArtworks().get(0);
+		long artID = firstArtWork.getId();
+		assertEquals(artID, 505096747);
+	}
+
+	@Test 
+	public void testThatArtworksAreReturnedInTheOrderByCreatedAt() {
+		MockRestServiceServer mockTinEyeService = MockRestServiceServer
+				.createServer(rest);
+		mockTinEyeService
+			.expect(requestTo(tinEyeBaseUrl + "color_search/"))
+			.andExpect(method(HttpMethod.POST))
+			.andRespond(withJson("tin_eye_color_search_response.json"));
+		
+		List<String> subjectList = new ArrayList<>();
+		subjectList.add("-1");
+		List<String> styleList = new ArrayList<>();
+		styleList.add("-1");
+		String[] colorsList = new String[2];
+		colorsList = null;
+		List<String> priceBucketRangeList = new ArrayList<>();
+		priceBucketRangeList.add("-1");
+		String medium = null;
+		String orientation = null;
+		int offset = 0;
+		int limit = 3;
+		CriteriaSearchResponse searchResponse = searchService.findArtworksByCriteria(
+				subjectList,
+				styleList,
+				colorsList,
+				priceBucketRangeList,
+				medium, 
+				orientation,
+				limit,
+				offset);
+		long artID = searchResponse.getArtworks().get(0).getId();
+		assertEquals(artID, 506096747);
+	}
+	
 
 }

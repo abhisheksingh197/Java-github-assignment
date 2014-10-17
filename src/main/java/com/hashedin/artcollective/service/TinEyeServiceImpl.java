@@ -3,6 +3,7 @@ package com.hashedin.artcollective.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -98,14 +99,16 @@ public class TinEyeServiceImpl implements TinEyeService {
 			e1.printStackTrace();
 		}
 		LOGGER.debug(postResponse.getBody());
+		HashSet<Long> idHashSet = new HashSet<>();
 		List<ResponseResult> responseResult = searchResponseObj.getResult();
 		for (ResponseResult result : responseResult) {
 			TinEyeMetadata metadata = result.getMetadata();
 			Long artworkId = metadata.getArtworkId();
 			if (artworkId != null) {
 				ArtWork tinEyeSearchArt = artworkRepository.findOne(artworkId);
-				if (tinEyeSearchArt != null) {
+				if (tinEyeSearchArt != null && !idHashSet.contains(tinEyeSearchArt.getId())) {
 					artWorks.add(tinEyeSearchArt);
+					idHashSet.add(tinEyeSearchArt.getId());
 				}
 			}
 		}

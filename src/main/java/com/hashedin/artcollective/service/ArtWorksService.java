@@ -284,6 +284,7 @@ public class ArtWorksService {
 		artwork.setStyle(style);
 		artwork.setImages(p.getImages());
 		artwork.setHandle(p.getHandle());
+		artwork.setCreatedAt(p.getCreatedAt());
 		artwork.setPriceBuckets(priceBucketService.getPriceBuckets(p));
 		artwork.setMinPrice(cheapest.getPrice());
 		artwork.setMaxPrice(costliest.getPrice());
@@ -304,8 +305,8 @@ public class ArtWorksService {
 	}
 	
 	
-	// Created a new method since the Create Artwork method crossed 150 Lines 
-	// and Checkstyle did not allow the same
+	/* Created a new method since the Create Artwork method crossed 150 Lines 
+	 and Checkstyle did not allow the same */
 	private Image resizeFeaturedImage(Product p, List<MetaField> metafields,
 			List<Image> images, Image image) {
 		try {
