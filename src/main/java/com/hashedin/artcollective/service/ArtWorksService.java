@@ -3,7 +3,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -304,9 +303,7 @@ public class ArtWorksService {
 		return null;
 	}
 	
-	
-	/* Created a new method since the Create Artwork method crossed 150 Lines 
-	 and Checkstyle did not allow the same */
+
 	private Image resizeFeaturedImage(Product p, List<MetaField> metafields,
 			List<Image> images, Image image) {
 		try {
