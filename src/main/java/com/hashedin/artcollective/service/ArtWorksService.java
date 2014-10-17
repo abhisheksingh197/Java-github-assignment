@@ -303,9 +303,7 @@ public class ArtWorksService {
 		return null;
 	}
 	
-	
-	/* Created a new method since the Create Artwork method crossed 150 Lines 
-	 and Checkstyle did not allow the same */
+
 	private Image resizeFeaturedImage(Product p, List<MetaField> metafields,
 			List<Image> images, Image image) {
 		try {
@@ -332,14 +330,23 @@ public class ArtWorksService {
 	private Image maybeResizeImage(Product p, List<MetaField> metafields,
 			List<Image> images, Image featuredImage) throws IOException {
 		if (imageForArtFinderExists(images)) {
+			Image image = null;
 			/*
 			 * TODO - Delete this block
 			 * Code was added to compute dimensions of existing images
 			 * After a few runs of synchronize, this block is pointless
 			 */
-			Image image = getArtFinderImage(images);
-			setImageDimensions(image);
-			return image;
+			try {
+				image = getArtFinderImage(images);
+				setImageDimensions(image);
+				return image;
+			} 
+			catch (Exception ioe) {
+				LOGGER.info(
+						"Error - setting image dimensions for Image id - "
+								+ image.getId(), ioe);
+			}
+			
 		}
 		
 		String format = determineFormat(featuredImage);
