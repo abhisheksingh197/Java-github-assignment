@@ -1,6 +1,6 @@
 package com.hashedin.artcollective.service;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +58,11 @@ public class ArtWorksSearchService {
 	//CHECKSTYLE:ON
 			
 		
-		
+		boolean isColorSearch = false;
 		List<Long> idList = getIdListPostColorSearch(colorsList);
-		
+		if (idList.get(0) != -1) {
+			isColorSearch = true;
+		}
 		//LOGGER.info(idList.toString());
 		List<ArtWork> artWorkList = artWorkRepository.findByCriteria(styleList,
 				subjectList,
@@ -70,6 +72,7 @@ public class ArtWorksSearchService {
 				idList,
 				limit,
 				offset);
+		
 		int artworkCount = artWorkRepository.findCountByCriteria(styleList,
 				subjectList,
 				priceBucketRangeList,
@@ -77,8 +80,13 @@ public class ArtWorksSearchService {
 				orientation,
 				idList);
 		
+		/* If the search includes a color list, we sort the artworks resulted from 
+		   the query by the order in which color search results. */
+		if (isColorSearch) {
+			ArtWorkComparatorByColourMatch comparator = new ArtWorkComparatorByColourMatch(idList);
+			Collections.sort(artWorkList, comparator);
+		}
 		CriteriaSearchResponse searchResponse = new CriteriaSearchResponse(artWorkList, artworkCount);
-		
 		return searchResponse;
 	}
 	
@@ -101,14 +109,11 @@ public class ArtWorksSearchService {
 	}
 
 	public List<Long> getArtworkIds(List<ArtWork> artworks) {
-		HashSet<Long> idHashSet = new HashSet<>();
+		
 		List<Long> idList = new ArrayList<>();
 		for (ArtWork art : artworks) {
-
-			idHashSet.add(art.getId());
-			
+			idList.add(art.getId());
 		}
-		idList.addAll(idHashSet);
 		return idList;
 	}
 	
