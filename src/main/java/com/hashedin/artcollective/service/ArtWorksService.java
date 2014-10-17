@@ -330,7 +330,7 @@ public class ArtWorksService {
 	private Image maybeResizeImage(Product p, List<MetaField> metafields,
 			List<Image> images, Image featuredImage) throws IOException {
 		if (imageForArtFinderExists(images)) {
-			Image image = null;
+			Image image = new Image();
 			/*
 			 * TODO - Delete this block
 			 * Code was added to compute dimensions of existing images
@@ -344,7 +344,7 @@ public class ArtWorksService {
 			catch (Exception ioe) {
 				LOGGER.info(
 						"Error - setting image dimensions for Image id - "
-								+ image.getId(), ioe);
+		 						+ image.getId(), ioe);
 			}
 			
 		}
