@@ -335,9 +335,15 @@ public class ArtWorksService {
 			 * Code was added to compute dimensions of existing images
 			 * After a few runs of synchronize, this block is pointless
 			 */
-			Image image = getArtFinderImage(images);
-			setImageDimensions(image);
-			return image;
+			try {
+				Image image = getArtFinderImage(images);
+				setImageDimensions(image);
+				return image;
+			} 
+			catch (Exception ioe) {
+				LOGGER.info("Exception at maybeResize");
+			}
+			
 		}
 		
 		String format = determineFormat(featuredImage);
