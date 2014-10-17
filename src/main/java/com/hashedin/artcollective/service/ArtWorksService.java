@@ -341,7 +341,7 @@ public class ArtWorksService {
 				return image;
 			} 
 			catch (Exception ioe) {
-				LOGGER.info("Exception at maybeResize");
+				LOGGER.info("Exception at mayBeResize Block - ", ioe);
 			}
 			
 		}
