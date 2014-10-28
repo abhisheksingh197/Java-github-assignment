@@ -291,8 +291,7 @@ public class ArtWorksService {
 			Image image = resizeFeaturedImage(p, metafields, p.getImages(), p.getImage());
 			if (image != null) {
 				List<Image> images = p.getImages();
-				/* Removing the Image from the Image list before adding the same Image after 
-					setting its dimensions */
+				/* Old image is removed and the same image with Dimensions are added */
 				images.remove(image);
 				images.add(image);
 				p.setImages(images);
