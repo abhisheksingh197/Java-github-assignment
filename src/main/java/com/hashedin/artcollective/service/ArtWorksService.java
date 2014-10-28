@@ -153,9 +153,7 @@ public class ArtWorksService {
 	}
 
 	private ArtWork createArtWork(Product p, List<Collection> collections, List<MetaField> metafields) {
-		boolean origMedium = false;
-		boolean origSize = false;
-		boolean origPrice = false;
+		boolean origMedium = false, origSize = false, origPrice = false;
 		ArtWork artwork = new ArtWork();
 		List<ArtSubject> subject = new ArrayList<>();
 		List<ArtStyle> style = new ArrayList<>();
@@ -165,8 +163,7 @@ public class ArtWorksService {
 		for (Collection collection : collections) {
 			String tokens[] = collection.getTitle().split("_");
 			if (tokens == null || tokens.length < 2) {
-				LOGGER.info("Invalid Collection Type: Collection type {} not recognised", 
-						collection.getTitle());
+				LOGGER.info("Invalid Collection Type:", collection.getTitle());
 				continue;
 			}
 			String collectionType = tokens[0]; 
@@ -268,7 +265,7 @@ public class ArtWorksService {
 		//Loggers for original Artwork
 		if (artwork.isOriginalAvailable()) {
 			if (!origMedium || !origPrice || !origSize) {
-				LOGGER.info("Missing Original Artwork Details: The has original Artwork {} must have "
+				LOGGER.info("Missing Original Artwork Details: The original Artwork {} must have "
 						+ "original price, size and medium mentioned", artwork.getTitle());
 				return null;
 			}
@@ -294,6 +291,8 @@ public class ArtWorksService {
 			Image image = resizeFeaturedImage(p, metafields, p.getImages(), p.getImage());
 			if (image != null) {
 				List<Image> images = p.getImages();
+				/* Old image is removed and the same image with Dimensions is added */
+				images.remove(image);
 				images.add(image);
 				p.setImages(images);
 			}
