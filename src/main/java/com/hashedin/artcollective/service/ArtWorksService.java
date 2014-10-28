@@ -165,8 +165,7 @@ public class ArtWorksService {
 		for (Collection collection : collections) {
 			String tokens[] = collection.getTitle().split("_");
 			if (tokens == null || tokens.length < 2) {
-				LOGGER.info("Invalid Collection Type: Collection type {} not recognised", 
-						collection.getTitle());
+				LOGGER.info("Invalid Collection Type:", collection.getTitle());
 				continue;
 			}
 			String collectionType = tokens[0]; 
@@ -294,6 +293,7 @@ public class ArtWorksService {
 			Image image = resizeFeaturedImage(p, metafields, p.getImages(), p.getImage());
 			if (image != null) {
 				List<Image> images = p.getImages();
+				images.remove(image);
 				images.add(image);
 				p.setImages(images);
 			}
