@@ -18,9 +18,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.PriceBucket;
+import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 
-@Ignore
+
 public class PriceBucketServiceTest extends BaseUnitTest {
 	
 	private static boolean isInitialized = false;
@@ -35,7 +36,7 @@ public class PriceBucketServiceTest extends BaseUnitTest {
 	private RestTemplate rest;
 	
 	@Autowired
-	private PriceBucketService priceBucketService;
+	private PriceAndSizeBucketService priceAndSizeBucketService;
 	
 	@Autowired
 	private PriceBucketRepository priceBucketRepository;
@@ -51,7 +52,13 @@ public class PriceBucketServiceTest extends BaseUnitTest {
 		}
 		
 		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500,5000);
-		priceBucketService.addPriceBucket(priceBucketObj1);
+		priceAndSizeBucketService.addPriceBucket(priceBucketObj1);
+		SizeBucket sizeBucketObj1 = new SizeBucket(1L,"small",0.0,400.0);
+		priceAndSizeBucketService.addSizeBucket(sizeBucketObj1);
+		sizeBucketObj1 = new SizeBucket(2L,"medium",401.0,900.0);
+		priceAndSizeBucketService.addSizeBucket(sizeBucketObj1);
+		sizeBucketObj1 = new SizeBucket(3L,"large",901.0,100000.0);
+		priceAndSizeBucketService.addSizeBucket(sizeBucketObj1);
 		isInitialized = true;
 		
 	}
@@ -59,7 +66,7 @@ public class PriceBucketServiceTest extends BaseUnitTest {
 	@Test
 	public void testForAddingpriceBuckets() {
 		List<PriceBucket> priceBuckets = (List<PriceBucket>) priceBucketRepository.findAll();
-		assertEquals(priceBuckets.size(), 1);
+		assertEquals(priceBuckets.size(), 2);
 	}
 	
 	@Test
@@ -73,14 +80,16 @@ public class PriceBucketServiceTest extends BaseUnitTest {
 		
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100&page=1"))
 				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("artworksupdate.json"));
+				.andRespond(withJson("artworks.json"));
 		
 		DateTime lastModified = new DateTime();
 		List<Product> p = shopifyService.getArtWorkProductsSinceLastModified(lastModified);
-		
-		List<PriceBucket> priceBuckets = priceBucketService.getPriceBuckets(p.get(0));
-		
+		PriceAndSizeBucket priceAndSizeBucket = priceAndSizeBucketService.getPriceAndSizeBuckets(p.get(0));
+		List<PriceBucket> priceBuckets = priceAndSizeBucket.getPriceBuckets();
+		List<SizeBucket> sizeBuckets = priceAndSizeBucket.getSizeBuckets();
 		assertEquals(priceBuckets.size(),1);
+		assertEquals(sizeBuckets.size(), 1);
+		assertEquals(sizeBuckets.get(0).getTitle(), "small");
 		
 	}
 

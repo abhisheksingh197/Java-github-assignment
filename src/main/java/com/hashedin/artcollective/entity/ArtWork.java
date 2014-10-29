@@ -49,6 +49,16 @@ public class ArtWork {
 		this.priceBuckets = priceBuckets;
 	}
 	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<SizeBucket> sizeBuckets;
+	
+	public List<SizeBucket> getSizeBuckets() {
+		return sizeBuckets;
+	}
+	public void setSizeBuckets(List<SizeBucket> sizeBuckets) {
+		this.sizeBuckets = sizeBuckets;
+	}
+	
 	// Adding fetch type eager so that we can access images of an artwork for the Test case
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Image> images;

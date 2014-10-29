@@ -53,6 +53,7 @@ public class ArtWorksSearchService {
 			List<String> priceBucketRangeList,
 			String medium, 
 			String orientation,
+			List<String> sizeBucketRangeList,
 			Integer limit,
 			Integer offset){
 	//CHECKSTYLE:ON
@@ -69,6 +70,7 @@ public class ArtWorksSearchService {
 				priceBucketRangeList,
 				medium, 
 				orientation,
+				sizeBucketRangeList,
 				idList,
 				limit,
 				offset);
@@ -78,6 +80,7 @@ public class ArtWorksSearchService {
 				priceBucketRangeList,
 				medium, 
 				orientation,
+				sizeBucketRangeList,
 				idList);
 		
 		/* If the search includes a color list, we sort the artworks resulted from 

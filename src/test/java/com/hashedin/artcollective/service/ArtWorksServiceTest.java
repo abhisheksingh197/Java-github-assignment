@@ -18,6 +18,7 @@ import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.entity.PriceBucket;
+import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
@@ -57,7 +58,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	private ArtWorksSearchService searchService;
 	
 	@Autowired
-	private PriceBucketService priceBucketService;
+	private PriceAndSizeBucketService priceBucketService;
 	
 	@Before
 	public void setup() {
@@ -271,6 +272,12 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		priceBucketService.addPriceBucket(priceBucketObj1);
 		PriceBucket priceBucketObj2 = new PriceBucket(2L,"medium",5001,7500);
 		priceBucketService.addPriceBucket(priceBucketObj2);
+		SizeBucket sizeBucketObj1 = new SizeBucket(1L,"small",0.0,400.0);
+		priceBucketService.addSizeBucket(sizeBucketObj1);
+		sizeBucketObj1 = new SizeBucket(2L,"medium",401.0,900.0);
+		priceBucketService.addSizeBucket(sizeBucketObj1);
+		sizeBucketObj1 = new SizeBucket(3L,"large",901.0,100000.0);
+		priceBucketService.addSizeBucket(sizeBucketObj1);
 
 
 		service.synchronize();
@@ -318,6 +325,8 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		colorsList[0] = "FFFFFF";
 		List<String> priceBucketRangeList = new ArrayList<>();
 		priceBucketRangeList.add("1");
+		List<String> sizeBucketRangeList = new ArrayList<>();
+		sizeBucketRangeList.add("1");
 		String medium = "paper";
 		String orientation = "landscape";
 		int offset = 0;
@@ -329,9 +338,10 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				priceBucketRangeList,
 				medium, 
 				orientation,
+				sizeBucketRangeList,
 				limit,
 				offset);
-		assertEquals(searchResponse.getArtworks().size(), 2);
+		assertEquals(searchResponse.getArtworks().size(), 1);
 	}
 	
 	@Test
@@ -351,6 +361,8 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		colorsList[0] = "FFFFFF";
 		List<String> priceBucketRangeList = new ArrayList<>();
 		priceBucketRangeList.add("-1");
+		List<String> sizeBucketRangeList = new ArrayList<>();
+		sizeBucketRangeList.add("-1");
 		String medium = null;
 		String orientation = null;
 		int offset = 0;
@@ -362,6 +374,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				priceBucketRangeList,
 				medium, 
 				orientation,
+				sizeBucketRangeList,
 				limit,
 				offset);
 		assertEquals(searchResponse.getArtworks().size(), artRepository.count());
@@ -437,6 +450,8 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		colorsList[0] = "FFFFFF";
 		List<String> priceBucketRangeList = new ArrayList<>();
 		priceBucketRangeList.add("1");
+		List<String> sizeBucketRangeList = new ArrayList<>();
+		sizeBucketRangeList.add("1");
 		String medium = "paper";
 		String orientation = "landscape";
 		int offset = 0;
@@ -448,11 +463,12 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				priceBucketRangeList,
 				medium, 
 				orientation,
+				sizeBucketRangeList,
 				limit,
 				offset);
 		ArtWork firstArtWork = searchResponse.getArtworks().get(0);
 		long artID = firstArtWork.getId();
-		assertEquals(artID, 505096747);
+		assertEquals(artID, 504096747);
 	}
 
 	@Test 
@@ -472,6 +488,8 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		colorsList = null;
 		List<String> priceBucketRangeList = new ArrayList<>();
 		priceBucketRangeList.add("-1");
+		List<String> sizeBucketRangeList = new ArrayList<>();
+		sizeBucketRangeList.add("1");
 		String medium = null;
 		String orientation = null;
 		int offset = 0;
@@ -483,10 +501,52 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				priceBucketRangeList,
 				medium, 
 				orientation,
+				sizeBucketRangeList,
 				limit,
 				offset);
 		long artID = searchResponse.getArtworks().get(0).getId();
 		assertEquals(artID, 504096747);
+	}
+	
+	
+	@Test
+	public void testThatArtworksHaveTheRightSizeRange() {
+		MockRestServiceServer mockTinEyeService = MockRestServiceServer
+				.createServer(rest);
+		mockTinEyeService
+			.expect(requestTo(tinEyeBaseUrl + "color_search/"))
+			.andExpect(method(HttpMethod.POST))
+			.andRespond(withJson("tin_eye_color_search_response.json"));
+		
+		List<String> subjectList = new ArrayList<>();
+		subjectList.add("26109780");
+
+		
+		List<String> styleList = new ArrayList<>();
+		styleList.add("12345");
+		String[] colorsList = new String[2];
+		colorsList[0] = "FFFFFF";
+		List<String> priceBucketRangeList = new ArrayList<>();
+		priceBucketRangeList.add("-1");
+		List<String> sizeBucketRangeList = new ArrayList<>();
+		sizeBucketRangeList.add("-1");
+		String medium = "paper";
+		String orientation = "landscape";
+		int offset = 0;
+		int limit = 3;
+		CriteriaSearchResponse searchResponse = searchService.findArtworksByCriteria(
+				subjectList,
+				styleList,
+				colorsList,
+				priceBucketRangeList,
+				medium, 
+				orientation,
+				sizeBucketRangeList,
+				limit,
+				offset);
+		ArtWork firstArtWork = searchResponse.getArtworks().get(0);
+		SizeBucket sizeBucket = firstArtWork.getSizeBuckets().get(0);
+		assertEquals(sizeBucket.getTitle(), "large");
 	}
 	
 
