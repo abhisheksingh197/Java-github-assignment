@@ -486,7 +486,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				limit,
 				offset);
 		long artID = searchResponse.getArtworks().get(0).getId();
-		assertEquals(artID, 506096747);
+		assertEquals(artID, 504096747);
 	}
 	
 

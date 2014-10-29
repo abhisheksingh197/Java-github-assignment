@@ -163,7 +163,8 @@ public class ArtWorksService {
 		for (Collection collection : collections) {
 			String tokens[] = collection.getTitle().split("_");
 			if (tokens == null || tokens.length < 2) {
-				LOGGER.info("Invalid Collection Type:", collection.getTitle());
+				LOGGER.info("Invalid Collection Type: Collection type {} not recognised", 
+						collection.getTitle());
 				continue;
 			}
 			String collectionType = tokens[0]; 
@@ -198,6 +199,11 @@ public class ArtWorksService {
 				break;
 			}
 		}
+		artwork.setSubject(subject);
+		artwork.setArtist(artist);
+		artwork.setStyle(style);
+		artwork.setCollection(artCollections);
+		
 		//Classifying Metafields and storing them.
 		for (MetaField metafield : metafields) {
 			switch (metafield.getKey()) {
@@ -238,56 +244,25 @@ public class ArtWorksService {
 				break;
 			}
 		}
-		//If artwork is framable check if it has a mount thickness and a frame thickness
-		if (artwork.isFrameAvailable()) {
-			for (Variant variant : p.getVariants()) {
-				if (!variantHasFrameableValues(variant)) {
-					LOGGER.info("Missing Frame or Mount Thicness: The Framable Artwork {} must "
-					+ "have a Mount Thickness and a Frame Thickness mentioned.", p.getTitle());
-					//TODO Rejecting Artwork since no image must send an email with product id. 
-					return null;
-				}
-			}
-		}
-		// Saving Images into Repository.
-		if (p.getImages().size() == 0) {
-			LOGGER.info("Missing Image: The Artwork {} must at the least have one Image", p.getTitle());
-			return null;
-		}
-		// Fetching Cheapest and Costliest Variant
-		if (p.getVariants().size() == 0) {
-			LOGGER.info("Missing Variants: The Artwork {} must have at the least one variant", 
-					p.getTitle());
-			return null;
-		}
-		Variant cheapest = Collections.min(p.getVariants());
-		Variant costliest = Collections.max(p.getVariants());
-		//Loggers for original Artwork
-		if (artwork.isOriginalAvailable()) {
-			if (!origMedium || !origPrice || !origSize) {
-				LOGGER.info("Missing Original Artwork Details: The original Artwork {} must have "
-						+ "original price, size and medium mentioned", artwork.getTitle());
-				return null;
-			}
-		}
-		// Setting attribute values to artwork object and saving them.
-		artwork.setTitle(p.getTitle());
-		artwork.setId(p.getId());
-		artwork.setSkuId(p.getId());
-		artwork.setSubject(subject);
-		artwork.setArtist(artist);
-		artwork.setCollection(artCollections);
-		artwork.setStyle(style);
-		artwork.setImages(p.getImages());
-		artwork.setHandle(p.getHandle());
-		artwork.setCreatedAt(p.getCreatedAt());
-		artwork.setPriceBuckets(priceBucketService.getPriceBuckets(p));
-		artwork.setMinPrice(cheapest.getPrice());
-		artwork.setMaxPrice(costliest.getPrice());
-		artwork.setMinSize(cheapest.getOption1());
-		artwork.setMaxSize(costliest.getOption1());
-		artwork.setVariantCount(p.getVariants().size());
-		if (artWorkValidator(artwork)) {
+		
+		boolean isValidArtwork = validateArtwork(artwork, p, origMedium, origPrice, origSize);
+		
+		if (isValidArtwork) {
+			Variant cheapest = Collections.min(p.getVariants());
+			Variant costliest = Collections.max(p.getVariants());
+			// Setting attribute values to artwork object and saving them.
+			artwork.setTitle(p.getTitle());
+			artwork.setId(p.getId());
+			artwork.setSkuId(p.getId());
+			artwork.setImages(p.getImages());
+			artwork.setHandle(p.getHandle());
+			artwork.setCreatedAt(p.getCreatedAt());
+			artwork.setPriceBuckets(priceBucketService.getPriceBuckets(p));
+			artwork.setMinPrice(cheapest.getPrice());
+			artwork.setMaxPrice(costliest.getPrice());
+			artwork.setMinSize(cheapest.getOption1());
+			artwork.setMaxSize(costliest.getOption1());
+			artwork.setVariantCount(p.getVariants().size());
 			Image image = resizeFeaturedImage(p, metafields, p.getImages(), p.getImage());
 			if (image != null) {
 				List<Image> images = p.getImages();
@@ -299,9 +274,86 @@ public class ArtWorksService {
 			imageRepository.save(p.getImages());
 			return artwork;
 		}
+		
 		return null;
+		
+
 	}
 	
+
+	private boolean validateArtwork(ArtWork artwork, 
+			Product p, boolean origMedium, boolean origPrice, boolean origSize) {
+		String artworkLogger = String.format("Artwork Id:%d - Handle:%s :", 
+				p.getId(), p.getHandle());
+		boolean isValid = true;
+		//If artwork is framable check if it has a mount thickness and a frame thickness
+		if (artwork.isFrameAvailable()) {
+			for (Variant variant : p.getVariants()) {
+				if (!variantHasFrameableValues(variant)) {
+					artworkLogger = artworkLogger.concat("-- Missing Frame or Mount Thicness "
+							+ "in Variants:The Artwork variants do not have frame and "
+							+ "mount Thickness");
+					//TODO Rejecting Artwork since no image must send an email with product id. 
+					isValid = false;
+				}
+			}
+		}
+		// Saving Images into Repository.
+		if (p.getImages().size() == 0) {
+			artworkLogger = artworkLogger.concat("-- Missing Image: The Artwork must have "
+					+ "atleast one image");
+			isValid = false;
+		}
+		// Fetching Cheapest and Costliest Variant
+		if (p.getVariants().size() == 0) {
+			artworkLogger = artworkLogger.concat("-- Missing Variants: The Artwork must have "
+					+ "atleast one variant");
+			isValid = false;
+		}
+		
+		if (artwork.getSubject().size() == 0) {
+			artworkLogger = artworkLogger.concat("-- Missing Subject List: The Artwork must "
+					+ "belong to at the least one subject");
+			isValid = false;
+		}
+		if (artwork.getCollection().size() == 0) {
+			artworkLogger = artworkLogger.concat("-- Missing Collections List: The Artwork must belong "
+					+ "to at the least one collection");
+			isValid = false;
+		}
+		if (artwork.getStyle().size() == 0) {
+			artworkLogger = artworkLogger.concat("-- Missing Style List: The Artwork must belong to at the "
+					+ "least one style");
+			isValid = false;
+		}
+		if (artwork.getArtist() == null) {
+			artworkLogger = artworkLogger.concat("-- Missing Artist: The Artwork must have an artist");
+			isValid = false;
+		}
+		if (artwork.getMedium().equalsIgnoreCase("")) {
+			artworkLogger = artworkLogger.concat("-- Missing Medium: The Artwork must belong to a medium");
+			isValid = false;
+		}
+		if (artwork.getOrientation().equalsIgnoreCase("")) {
+			artworkLogger = artworkLogger.concat("-- Missing Orientation: The Artwork must "
+					+ "belong to an orientation");
+			isValid = false;
+		}
+		//Loggers for original Artwork
+		if (artwork.isOriginalAvailable()) {
+			if (!origMedium || !origPrice || !origSize) {
+				artworkLogger = artworkLogger.concat("-- Missing Original Artwork Details: "
+						+ "The original Artwork must have original price, size and medium "
+						+ "mentioned");
+				isValid = false;
+			}
+		}
+		if (!isValid) {
+			LOGGER.info(artworkLogger);
+			return false;
+		}
+		return true;
+	}
 
 	private Image resizeFeaturedImage(Product p, List<MetaField> metafields,
 			List<Image> images, Image image) {
@@ -341,7 +393,7 @@ public class ArtWorksService {
 				return image;
 			} 
 			catch (Exception ioe) {
-				LOGGER.info(
+				LOGGER.error(
 						"Error - setting image dimensions for Image id - "
 		 						+ image.getId(), ioe);
 			}
@@ -424,46 +476,6 @@ public class ArtWorksService {
 		
 			
 	}
-
-	private boolean artWorkValidator(ArtWork artwork) {
-		boolean isValid = true;
-		if (artwork.getSubject().size() == 0) {
-			LOGGER.info("Missing Subject List: The Artwork {} must belong to at the least one subject", 
-					artwork.getTitle());
-			isValid = false;
-		}
-		if (artwork.getCollection().size() == 0) {
-			LOGGER.info("Missing Collections List: The Artwork {} must belong "
-					+ "to at the least one collection", artwork.getTitle());
-			isValid = false;
-		}
-		if (artwork.getStyle().size() == 0) {
-			LOGGER.info("Missing Style List: The Artwork {} must belong to at the least one style", 
-					artwork.getTitle());
-			isValid = false;
-		}
-		if (artwork.getArtist() == null) {
-			LOGGER.info("Missing Artist: TThe Artwork {} must have an artist", 
-					artwork.getTitle());
-			isValid = false;
-		}
-		if (artwork.getMedium().equalsIgnoreCase("")) {
-			LOGGER.info("Missing Medium: The Artwork {} must belong to a medium", 
-					artwork.getTitle());
-			isValid = false;
-		}
-		if (artwork.getOrientation().equalsIgnoreCase("")) {
-			LOGGER.info("Missing Orientation: The Artwork {} must belong to an orientation", 
-					artwork.getTitle());
-			isValid = false;
-		}
-
-		
-		return isValid;
-		
-	}
-
-
 
 	private DateTime getLastRunTime() {
 		return null;
