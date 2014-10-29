@@ -76,14 +76,21 @@ public class ArtWorksService {
 	@Autowired
 	private FrameVariantRepository frameRepository;
 	
+	// Method to synchronize data from Shopify
 	public void synchronize() {
-		DateTime lastRunTime = getLastRunTime();
-		List<ArtWork> arts = getArtWorksModifiedSince(lastRunTime);
-		if (arts.size() > 0) {
-			saveArtToInternalDatabase(arts);
-			saveArtToTinEye(arts);
+		try {
+			DateTime lastRunTime = getLastRunTime();
+			List<ArtWork> arts = getArtWorksModifiedSince(lastRunTime);
+			if (arts.size() > 0) {
+				saveArtToInternalDatabase(arts);
+				saveArtToTinEye(arts);
+			}
+			saveFramesModifiedSince(lastRunTime);
 		}
-		saveFramesModifiedSince(lastRunTime);
+		catch (Exception e) {
+			LOGGER.error("Error in synchrnozation", e);
+			throw new RuntimeException(e);
+		}
 		
 	}
 	
