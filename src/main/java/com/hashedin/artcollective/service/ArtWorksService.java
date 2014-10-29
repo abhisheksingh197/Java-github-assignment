@@ -76,6 +76,7 @@ public class ArtWorksService {
 	@Autowired
 	private FrameVariantRepository frameRepository;
 	
+	// Method to synchronize data from Shopify
 	public void synchronize() {
 		try {
 			DateTime lastRunTime = getLastRunTime();
