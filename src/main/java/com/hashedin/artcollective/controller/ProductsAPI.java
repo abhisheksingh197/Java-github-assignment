@@ -80,8 +80,8 @@ public class ProductsAPI {
 	public void addPriceBucket(
 			@RequestParam(value = "id", required = true) Long id,
 			@RequestParam(value = "title", required = true) String title,
-			@RequestParam(value = "lowerRange", required = true) double lowerRange,
-			@RequestParam(value = "upperRange", required = true) double upperRange) {
+			@RequestParam(value = "lowerRange", required = true) Double lowerRange,
+			@RequestParam(value = "upperRange", required = false) Double upperRange) {
 		PriceBucket priceBucket = new PriceBucket(id, title, lowerRange, upperRange);
 		priceAndSizeBucketService.addPriceBucket(priceBucket);
 		LOGGER.info("Price Bucket: " + priceBucket.getTitle() + " Successfully Added");
@@ -93,8 +93,8 @@ public class ProductsAPI {
 		public void addSizeBucket(
 				@RequestParam(value = "id", required = true) Long id,
 				@RequestParam(value = "title", required = true) String title,
-				@RequestParam(value = "lowerValue", required = true) double lowerRange,
-				@RequestParam(value = "upperValue", required = true) double upperRange) {
+				@RequestParam(value = "lowerValue", required = true) Double lowerRange,
+				@RequestParam(value = "upperValue", required = false) Double upperRange) {
 			SizeBucket sizeBucket = new SizeBucket(id, title, lowerRange, upperRange);
 			priceAndSizeBucketService.addSizeBucket(sizeBucket);
 			LOGGER.info("Price Bucket: " + sizeBucket.getTitle() + " Successfully Added");

@@ -8,8 +8,8 @@ public class SizeBucket {
 	@Id
 	private Long id;
 	private String title;
-	private double lowerValue;
-	private double upperValue;
+	private Double lowerValue;
+	private Double upperValue;
 	
 	public SizeBucket(Long id, String title, Double lowerValue,
 			Double upperValue) {
@@ -33,7 +33,7 @@ public class SizeBucket {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public double getLowerValue() {
+	public Double getLowerValue() {
 		return lowerValue;
 	}
 	public void setLowerValue(Double lowerValue) {

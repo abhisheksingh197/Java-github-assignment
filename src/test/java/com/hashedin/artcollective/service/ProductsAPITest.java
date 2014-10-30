@@ -42,6 +42,14 @@ public class ProductsAPITest extends BaseIntegrationTest {
 		mockMvc.perform(get("/manage/priceRange/add?id=1&title=low&lowerRange=2500&upperRange=5000"))
         .andExpect(status().isOk());
 		
+		mockMvc.perform(get("/manage/sizeRange/add?id=1&title=small&lowerValue=2500&upperValue=5000"))
+        .andExpect(status().isOk());
+		
+		mockMvc.perform(get("/manage/priceRange/add?id=1&title=low&lowerRange=2500"))
+        .andExpect(status().isOk());
+		
+		mockMvc.perform(get("/manage/sizeRange/add?id=1&title=small&lowerValue=2500"))
+        .andExpect(status().isOk());
         
     }
 	

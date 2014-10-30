@@ -9,10 +9,10 @@ public class PriceBucket {
 	@Id
 	private Long id;
 	private String title;
-	private double lowerRange;
-	private double upperRange;
-	public PriceBucket(Long id, String pTitle, double lower,
-			double upper) {
+	private Double lowerRange;
+	private Double upperRange;
+	public PriceBucket(Long id, String pTitle, Double lower,
+			Double upper) {
 		super();
 		this.id = id;
 		this.title = pTitle;
@@ -22,16 +22,16 @@ public class PriceBucket {
 	public PriceBucket() {
 		// TODO Auto-generated constructor stub
 	}
-	public double getLowerRange() {
+	public Double getLowerRange() {
 		return lowerRange;
 	}
-	public void setLowerRange(double lowerRange) {
+	public void setLowerRange(Double lowerRange) {
 		this.lowerRange = lowerRange;
 	}
-	public double getUpperRange() {
+	public Double getUpperRange() {
 		return upperRange;
 	}
-	public void setUpperRange(double upperRange) {
+	public void setUpperRange(Double upperRange) {
 		this.upperRange = upperRange;
 	}
 	public Long getId() {

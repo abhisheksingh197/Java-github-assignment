@@ -83,9 +83,9 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 		ArtStyle style = new ArtStyle(234L, "goodStyle");
 		PriceBucket priceBucket = new PriceBucket();
 		priceBucket.setId(897L);
-		priceBucket.setLowerRange(2500);
+		priceBucket.setLowerRange(2500.00);
 		priceBucket.setTitle("low");
-		priceBucket.setUpperRange(5000);
+		priceBucket.setUpperRange(5000.00);
 		SizeBucket sizeBucketObj1 = new SizeBucket(1L,"small",0.0,400.0);
 		
 

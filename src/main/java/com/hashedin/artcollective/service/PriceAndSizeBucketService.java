@@ -82,18 +82,18 @@ public class PriceAndSizeBucketService {
 	// Checks whether a variant belongs to particular Price Bucket or not.
 	private boolean doesVariantBelongToPriceBucket(Variant variant,
 			PriceBucket priceBucketIteratorObject) {
-		double price = variant.getPrice(), lower = priceBucketIteratorObject.getLowerRange(), 
+		Double price = variant.getPrice(), lower = priceBucketIteratorObject.getLowerRange(), 
 				upper = priceBucketIteratorObject.getUpperRange();
-		return lower + 1 <= price && price <= upper;
+		return lower + 1 <= price && (upper == null ? true : price <= upper);
 	}
 	
 	// Checks whether a variant belongs to particular Size Bucket or not.
 	private boolean doesVariantBelongToSizeBucket(Variant variant,
 			SizeBucket sizeBucketIteratorObject) {
 		
-		double size = getVariantArea(variant), lower = sizeBucketIteratorObject.getLowerValue(),  
+		Double size = getVariantArea(variant), lower = sizeBucketIteratorObject.getLowerValue(),  
 				upper = sizeBucketIteratorObject.getUpperValue();
-		return lower + 1 <= size && size <= upper;
+		return lower + 1 <= size && (upper == null ? true : size <= upper);
 	}
 	
 	// Returns the Area(Length * Breadth) of a variant

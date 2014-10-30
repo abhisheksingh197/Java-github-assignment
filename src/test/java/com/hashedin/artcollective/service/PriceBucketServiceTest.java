@@ -51,7 +51,7 @@ public class PriceBucketServiceTest extends BaseUnitTest {
 			return;
 		}
 		
-		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500,5000);
+		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500.00,5000.00);
 		priceAndSizeBucketService.addPriceBucket(priceBucketObj1);
 		SizeBucket sizeBucketObj1 = new SizeBucket(1L,"small",0.0,400.0);
 		priceAndSizeBucketService.addSizeBucket(sizeBucketObj1);
@@ -66,7 +66,7 @@ public class PriceBucketServiceTest extends BaseUnitTest {
 	@Test
 	public void testForAddingpriceBuckets() {
 		List<PriceBucket> priceBuckets = (List<PriceBucket>) priceBucketRepository.findAll();
-		assertEquals(priceBuckets.size(), 2);
+		assertEquals(priceBuckets.size(), 3);
 	}
 	
 	@Test

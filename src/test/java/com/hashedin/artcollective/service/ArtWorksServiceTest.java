@@ -268,15 +268,17 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				.andRespond(withJson("frames.json"));
 		
 		
-		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500,5000);
+		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500.00,5000.00);
 		priceBucketService.addPriceBucket(priceBucketObj1);
-		PriceBucket priceBucketObj2 = new PriceBucket(2L,"medium",5001,7500);
+		PriceBucket priceBucketObj2 = new PriceBucket(2L,"medium",5001.00, 7500.00);
 		priceBucketService.addPriceBucket(priceBucketObj2);
+		PriceBucket priceBucketObj3 = new PriceBucket(3L,"average",7501.00, null);
+		priceBucketService.addPriceBucket(priceBucketObj3);
 		SizeBucket sizeBucketObj1 = new SizeBucket(1L,"small",0.0,400.0);
 		priceBucketService.addSizeBucket(sizeBucketObj1);
 		sizeBucketObj1 = new SizeBucket(2L,"medium",401.0,900.0);
 		priceBucketService.addSizeBucket(sizeBucketObj1);
-		sizeBucketObj1 = new SizeBucket(3L,"large",901.0,100000.0);
+		sizeBucketObj1 = new SizeBucket(3L,"large",901.0, null);
 		priceBucketService.addSizeBucket(sizeBucketObj1);
 
 
@@ -417,7 +419,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		ArtWork artwork = artList.get(0);
 		assertEquals(artwork.getPriceBuckets().size(), 1);
 		List<PriceBucket> priceBucket = (List<PriceBucket>) priceBucketRepository.findAll();
-		assertEquals(priceBucket.size(), 2);
+		assertEquals(priceBucket.size(), 3);
 	}
 	
 	@Test
@@ -529,7 +531,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		List<String> priceBucketRangeList = new ArrayList<>();
 		priceBucketRangeList.add("-1");
 		List<String> sizeBucketRangeList = new ArrayList<>();
-		sizeBucketRangeList.add("-1");
+		sizeBucketRangeList.add("3");
 		String medium = "paper";
 		String orientation = "landscape";
 		int offset = 0;
@@ -546,7 +548,9 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				offset);
 		ArtWork firstArtWork = searchResponse.getArtworks().get(0);
 		SizeBucket sizeBucket = firstArtWork.getSizeBuckets().get(0);
+		PriceBucket priceBucket = firstArtWork.getPriceBuckets().get(0);
 		assertEquals(sizeBucket.getTitle(), "large");
+		assertEquals(priceBucket.getTitle(), "average");
 	}
 	
 
