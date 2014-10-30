@@ -68,7 +68,7 @@ public class ArtWorksService {
 	private ImageRepository imageRepository;
 	
 	@Autowired
-	private PriceBucketService priceBucketService;
+	private PriceAndSizeBucketService priceAndSizeBucketService;
 	
 	@Autowired
 	private PriceBucketRepository priceBucketRepository;
@@ -264,7 +264,9 @@ public class ArtWorksService {
 			artwork.setImages(p.getImages());
 			artwork.setHandle(p.getHandle());
 			artwork.setCreatedAt(p.getCreatedAt());
-			artwork.setPriceBuckets(priceBucketService.getPriceBuckets(p));
+			PriceAndSizeBucket priceAndSizeBucket = priceAndSizeBucketService.getPriceAndSizeBuckets(p);
+			artwork.setPriceBuckets(priceAndSizeBucket.getPriceBuckets());
+			artwork.setSizeBuckets(priceAndSizeBucket.getSizeBuckets());
 			artwork.setMinPrice(cheapest.getPrice());
 			artwork.setMaxPrice(costliest.getPrice());
 			artwork.setMinSize(cheapest.getOption1());

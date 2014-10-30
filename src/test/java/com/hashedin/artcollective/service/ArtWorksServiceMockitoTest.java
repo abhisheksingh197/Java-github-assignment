@@ -11,10 +11,12 @@ import com.hashedin.artcollective.entity.ArtStyle;
 import com.hashedin.artcollective.entity.ArtSubject;
 import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.PriceBucket;
+import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
+import com.hashedin.artcollective.repository.SizeBucketRepository;
 
 import static org.junit.Assert.*;
 public class ArtWorksServiceMockitoTest extends BaseUnitTest {
@@ -40,6 +42,9 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 	@Autowired
 	ArtWorksSearchService artworksSearchService;
 	
+	@Autowired
+	private SizeBucketRepository sizeBucketRepository;
+	
 	@Test
 	public void testArtwork() {
 		List<ArtWork> artworks = generateThousandArtWorks();
@@ -61,10 +66,12 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 			styles.add("-1");
 			List<String> priceBucket = new ArrayList<>();
 			priceBucket.add("-1");
+			List<String> sizeBucketRangeList = new ArrayList<>();
+			sizeBucketRangeList.add("-1");
 			String medium = null;
 			String orientation = null;
 		CriteriaSearchResponse searchResponse = testService.findArtworksByCriteria(subjects, styles, new String[] {"fffff"}, priceBucket, 
-				medium, orientation, limit, offset);
+				medium, orientation, sizeBucketRangeList, limit, offset);
 		
 		assertEquals(searchResponse.getTotalArtworkCount(),151);
 
@@ -76,11 +83,13 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 		ArtStyle style = new ArtStyle(234L, "goodStyle");
 		PriceBucket priceBucket = new PriceBucket();
 		priceBucket.setId(897L);
-		priceBucket.setLowerRange(2500);
+		priceBucket.setLowerRange(2500.00);
 		priceBucket.setTitle("low");
-		priceBucket.setUpperRange(5000);
-
+		priceBucket.setUpperRange(5000.00);
+		SizeBucket sizeBucketObj1 = new SizeBucket(1L,"small",0.0,400.0);
 		
+
+		sizeBucketRepository.save(sizeBucketObj1);
 		artSubjectRepository.save(subject);
 		artStyleRepository.save(style);
 		priceBuckettRepository.save(priceBucket);
@@ -88,7 +97,9 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 		List<ArtSubject> artSubjects = new ArrayList<>();
 		List<ArtStyle> artStyles = new ArrayList<>();
 		List<PriceBucket>priceBuckets = new ArrayList<>();
+		List<SizeBucket>sizeBuckets = new ArrayList<>();
 		
+		sizeBuckets.add(sizeBucketObj1);
 		artSubjects.add(subject);
 		artStyles.add(style);
 		priceBuckets.add(priceBucket);
@@ -102,6 +113,7 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 			art.setSubject(artSubjects);
 			art.setStyle(artStyles);
 			art.setPriceBuckets(priceBuckets);
+			art.setSizeBuckets(sizeBuckets);
 			art.setMedium("canvas");
 			art.setOrientation("landscape");
 			artworks.add(art);

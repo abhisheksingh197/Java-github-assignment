@@ -27,6 +27,10 @@ JpaSpecificationExecutor<ArtWork> {
 			+ "(   select 'x' from art_work_price_buckets" 
 			+ "    where art_work_id = art.id and (price_buckets_id in (:priceBucketRangeList) or -1 in "
 			+ "(:priceBucketRangeList)))"
+			+ " and exists "
+			+ "(   select 'x' from art_work_size_buckets" 
+			+ "    where art_work_id = art.id and (size_buckets_id in (:sizeBucketRangeList) or -1 in "
+			+ "(:sizeBucketRangeList)))"
 			+ "and (art.medium = :medium or :medium is null )"
 			+ "and (art.orientation = :orientation or :orientation is null )"
 			+ "and (art.id in (:idList) or -1 in (:idList)) order by art.created_at desc "
@@ -39,6 +43,7 @@ JpaSpecificationExecutor<ArtWork> {
 			@Param("priceBucketRangeList") List<String> priceBucketRangeList,
 			@Param("medium") String medium, 
 			@Param("orientation") String orientation,
+			@Param("sizeBucketRangeList") List<String> sizeBucketRangeList,
 			@Param("idList") List<Long> idList,
 			@Param("pageLimit") Integer pageLimit,
 			@Param("pageOffset") Integer pageOffset);
@@ -56,6 +61,10 @@ JpaSpecificationExecutor<ArtWork> {
 			+ "(   select 'x' from art_work_price_buckets" 
 			+ "    where art_work_id = art.id and (price_buckets_id in (:priceBucketRangeList) or -1 in "
 			+ "(:priceBucketRangeList)))"
+			+ " and exists "
+			+ "(   select 'x' from art_work_size_buckets" 
+			+ "    where art_work_id = art.id and (size_buckets_id in (:sizeBucketRangeList) or -1 in "
+			+ "(:sizeBucketRangeList)))"
 			+ "and (art.medium = :medium or :medium is null )"
 			+ "and (art.orientation = :orientation or :orientation is null )"
 			+ "and (art.id in (:idList) or -1 in (:idList))",
@@ -66,6 +75,7 @@ JpaSpecificationExecutor<ArtWork> {
 			@Param("priceBucketRangeList") List<String> priceBucketRangeList,
 			@Param("medium") String medium, 
 			@Param("orientation") String orientation,
+			@Param("sizeBucketRangeList") List<String> sizeBucketRangeList,
 			@Param("idList") List<Long> idList);
 	
 }

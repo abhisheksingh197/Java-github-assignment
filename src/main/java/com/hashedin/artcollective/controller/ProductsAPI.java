@@ -24,16 +24,18 @@ import com.hashedin.artcollective.entity.ArtSubject;
 import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.PriceBucket;
+import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
+import com.hashedin.artcollective.repository.SizeBucketRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
 import com.hashedin.artcollective.service.CriteriaSearchResponse;
 import com.hashedin.artcollective.service.Frame;
 import com.hashedin.artcollective.service.FrameVariantService;
-import com.hashedin.artcollective.service.PriceBucketService;
+import com.hashedin.artcollective.service.PriceAndSizeBucketService;
 import com.hashedin.artcollective.service.Style;
 import com.hashedin.artcollective.service.Subject;
 import com.hashedin.artcollective.service.TinEyeService;
@@ -51,7 +53,7 @@ public class ProductsAPI {
 	private FrameVariantService frameVariantService;
 	
 	@Autowired
-	private PriceBucketService priceBucketService;
+	private PriceAndSizeBucketService priceAndSizeBucketService;
 	
 	@Autowired
 	private ArtSubjectRepository artSubjectRepository;
@@ -68,6 +70,9 @@ public class ProductsAPI {
 	@Autowired
 	private ArtWorkRepository artWorkRepository;
 	
+	@Autowired
+	private SizeBucketRepository sizeBucketRepository;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
 	//Add Price Range Bucket
@@ -75,19 +80,38 @@ public class ProductsAPI {
 	public void addPriceBucket(
 			@RequestParam(value = "id", required = true) Long id,
 			@RequestParam(value = "title", required = true) String title,
-			@RequestParam(value = "lowerRange", required = true) double lowerRange,
-			@RequestParam(value = "upperRange", required = true) double upperRange) {
+			@RequestParam(value = "lowerRange", required = true) Double lowerRange,
+			@RequestParam(value = "upperRange", required = false) Double upperRange) {
 		PriceBucket priceBucket = new PriceBucket(id, title, lowerRange, upperRange);
-		priceBucketService.addPriceBucket(priceBucket);
+		priceAndSizeBucketService.addPriceBucket(priceBucket);
 		LOGGER.info("Price Bucket: " + priceBucket.getTitle() + " Successfully Added");
 	
 	}
+	
+	//Add Size Range Bucket
+		@RequestMapping(value = "/manage/sizeRange/add", method = RequestMethod.GET)
+		public void addSizeBucket(
+				@RequestParam(value = "id", required = true) Long id,
+				@RequestParam(value = "title", required = true) String title,
+				@RequestParam(value = "lowerValue", required = true) Double lowerRange,
+				@RequestParam(value = "upperValue", required = false) Double upperRange) {
+			SizeBucket sizeBucket = new SizeBucket(id, title, lowerRange, upperRange);
+			priceAndSizeBucketService.addSizeBucket(sizeBucket);
+			LOGGER.info("Price Bucket: " + sizeBucket.getTitle() + " Successfully Added");
+		
+		}
 	
 	
 	@RequestMapping(value = "/manage/priceRange/getall", method = RequestMethod.GET)
 	public List<PriceBucket> getAllPriceBuckets() {
 		
 		return (List<PriceBucket>) priceBucketRepository.findAll();
+	}
+	
+	@RequestMapping(value = "/manage/sizeRange/getall", method = RequestMethod.GET)
+	public List<SizeBucket> getAllSizeBuckets() {
+		
+		return (List<SizeBucket>) sizeBucketRepository.findAll();
 	}
 	
 	// Synchronize data from Shopify into internal Database and Tin Eye
@@ -107,6 +131,7 @@ public class ProductsAPI {
 			@RequestParam(value = "priceBucketRange", required = false) String[] priceBucketRange,
 			@RequestParam(value = "medium", required = false) String medium,
 			@RequestParam(value = "orientation", required = false) String orientation,
+			@RequestParam(value = "sizeRange", required = false) String sizeRange,
 			@RequestParam(value = "limit", required = true) Integer limit,
 			@RequestParam(value = "offset", required = true) Integer offset) {
 	//CHECKSTYLE:ON
@@ -114,10 +139,12 @@ public class ProductsAPI {
 		List<String> styleList = new ArrayList<>();
 		List<String> colorsList = new ArrayList<>();
 		List<String> priceBucketRangeList = new ArrayList<>();
+		List<String> sizeBucketRangeList = new ArrayList<>();
  		subjectList.add("-1");
 		styleList.add("-1");
 		colorsList.add("");
 		priceBucketRangeList.add("-1");
+		sizeBucketRangeList.add("-1");
 		subjectList = subjects != null ? Arrays.asList(subjects) : subjectList;
 		styleList = styles != null ? Arrays.asList(styles) : styleList;
 		colors = colors != null ? colors : null;
@@ -125,6 +152,8 @@ public class ProductsAPI {
 		orientation = (orientation !=  null) && (!orientation.equalsIgnoreCase("")) ? orientation : null;
 		priceBucketRangeList = priceBucketRange != null ? Arrays.asList(priceBucketRange) 
 				: priceBucketRangeList;
+		sizeBucketRangeList = sizeRange != null ? Arrays.asList(sizeRange) 
+				: sizeBucketRangeList;
 		CriteriaSearchResponse searchResponse = artworksSearchService.findArtworksByCriteria(
 				subjectList, 
 				styleList,
@@ -132,6 +161,7 @@ public class ProductsAPI {
 				priceBucketRangeList,
 				medium, 
 				orientation,
+				sizeBucketRangeList,
 				limit,
 				offset);
 		return wrapResponse(searchResponse);
