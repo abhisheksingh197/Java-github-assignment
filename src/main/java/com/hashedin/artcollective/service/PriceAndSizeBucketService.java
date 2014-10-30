@@ -57,7 +57,7 @@ public class PriceAndSizeBucketService {
 	}
 	
 	
-	// Iterate through Price Bucket objects to see if the variant belongs to any and return the same.
+	// Iterate through Size Bucket objects to see if the variant belongs to any and return the same.
 	private SizeBucket findSizeBucketForVariant(Variant variant, 
 			List<SizeBucket> sizeBucketsFromRepo) {
 		for (SizeBucket sizeBucketIteratorObject : sizeBucketsFromRepo) {
