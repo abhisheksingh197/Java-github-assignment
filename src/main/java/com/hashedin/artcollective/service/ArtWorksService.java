@@ -41,7 +41,9 @@ public class ArtWorksService {
 	
 	private static final int TITLE_SIZE = 3;
 
-	private static final int WIDTH_OF_IMAGE = 198;
+	private static final int WIDTH_OF_ART_FINDER_IMAGE = 198;
+	
+	private static final int WIDTH_OF_ART_DETAILS_IMAGE = 462;
 	
 	@Autowired
 	private ShopifyService shopify;
@@ -389,7 +391,19 @@ public class ArtWorksService {
 	 */
 	private Image maybeResizeImage(Product p, List<MetaField> metafields,
 			List<Image> images, Image featuredImage) throws IOException {
-		if (imageForArtFinderExists(images)) {
+		
+		String format = determineFormat(featuredImage);
+		BufferedImage original = ImageIO.read(new URL(featuredImage.getImgSrc()));
+		
+		if (!imageExistsWithPattern(images, "-artdetails")) {
+			BufferedImage resizedArtDetailsImage = resizeImage(original, WIDTH_OF_ART_DETAILS_IMAGE);
+			ByteArrayOutputStream artDetailsBos = new ByteArrayOutputStream();
+			ImageIO.write(resizedArtDetailsImage, format, artDetailsBos);
+			shopify.uploadImage(p, 
+				new ByteArrayInputStream(artDetailsBos.toByteArray()), 
+					String.format("%s-artdetails.%s", p.getHandle(), format));
+		}
+		if (imageExistsWithPattern(images, "-artfinder")) {
 			Image image = new Image();
 			/*
 			 * TODO - Delete this block
@@ -397,7 +411,7 @@ public class ArtWorksService {
 			 * After a few runs of synchronize, this block is pointless
 			 */
 			try {
-				image = getArtFinderImage(images);
+				image = getImageWithPattern(images, "-artfinder");
 				setImageDimensions(image);
 				return image;
 			} 
@@ -409,20 +423,19 @@ public class ArtWorksService {
 			
 		}
 		
-		String format = determineFormat(featuredImage);
-		BufferedImage original = ImageIO.read(new URL(featuredImage.getImgSrc()));
-		BufferedImage resizedImage = resizeImage(original);
-		int resizedHeight = resizedImage.getHeight();
-		int resizedWidth = resizedImage.getWidth();
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ImageIO.write(resizedImage, format, bos);
 		
-		Image image = shopify.uploadImage(p, 
-				new ByteArrayInputStream(bos.toByteArray()), 
+		BufferedImage resizedArtFinderImage = resizeImage(original, WIDTH_OF_ART_FINDER_IMAGE);
+		int resizedHeight = resizedArtFinderImage.getHeight();
+		int resizedWidth = resizedArtFinderImage.getWidth();
+		ByteArrayOutputStream artFinderBos = new ByteArrayOutputStream();
+		ImageIO.write(resizedArtFinderImage, format, artFinderBos);
+		
+		Image artFinderImage = shopify.uploadImage(p, 
+				new ByteArrayInputStream(artFinderBos.toByteArray()), 
 				String.format("%s-artfinder.%s", p.getHandle(), format));
-		image.setHeight(resizedHeight);
-		image.setWidth(resizedWidth);
-		return image;
+		artFinderImage.setHeight(resizedHeight);
+		artFinderImage.setWidth(resizedWidth);
+		return artFinderImage;
 	}
 
 	private void setImageDimensions(final Image image) throws IOException {
@@ -431,17 +444,17 @@ public class ArtWorksService {
 		image.setHeight(original.getHeight());
 	}
 
-	private Image getArtFinderImage(List<Image> images) {
+	private Image getImageWithPattern(List<Image> images, String pattern) {
 		for (Image image : images) {
-			if (image.getImgSrc().contains("-artfinder")) {
+			if (image.getImgSrc().contains(pattern)) {
 				return image;
 			}
 		}
 		return null;
 	}
 
-	private boolean imageForArtFinderExists(List<Image> images) {
-		Image image = getArtFinderImage(images);
+	private boolean imageExistsWithPattern(List<Image> images, String pattern) {
+		Image image = getImageWithPattern(images, pattern);
 		return (image != null);
 	}
 
@@ -456,8 +469,8 @@ public class ArtWorksService {
 		return "jpg";
 	}
 
-	private BufferedImage resizeImage(BufferedImage original) {
-		return Scalr.resize(original, Mode.FIT_TO_WIDTH, WIDTH_OF_IMAGE);
+	private BufferedImage resizeImage(BufferedImage original, int widthOfImage) {
+		return Scalr.resize(original, Mode.FIT_TO_WIDTH, widthOfImage);
 		
 	}
 	
