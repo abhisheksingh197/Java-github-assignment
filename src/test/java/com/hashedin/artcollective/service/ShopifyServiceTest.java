@@ -34,7 +34,7 @@ public class ShopifyServiceTest extends BaseUnitTest {
 		
 		mockShopifyServer.expect(requestTo(shopifyBaseUrl + "products/count.json?product_type=artworks"))
 		.andExpect(method(HttpMethod.GET))
-		.andRespond(shopifyCount(1));
+		.andRespond(shopifyArtworksCount(1));
 		
 		mockShopifyServer.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100&page=1"))
 			.andExpect(method(HttpMethod.GET))

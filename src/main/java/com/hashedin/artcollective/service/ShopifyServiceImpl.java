@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
+
 import com.hashedin.artcollective.entity.Image;
 
 
@@ -28,7 +30,7 @@ import com.hashedin.artcollective.entity.Image;
 public class ShopifyServiceImpl implements ShopifyService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ShopifyServiceImpl.class);
-	
+		
 	private static final int MAX_PAGE_SIZE = 100;
 	
 	private final String baseUri;
@@ -44,7 +46,9 @@ public class ShopifyServiceImpl implements ShopifyService {
 	@Override
 	public List<Product> getArtWorkProductsSinceLastModified(DateTime lastModified) {
 		String queryString = "?product_type=artworks";
-		
+		if (lastModified != null) {
+			queryString = "?product_type=artworks&updated_at_min=".concat(lastModified.toString());
+		}
 		int count = rest.getForObject(baseUri + "products/count.json" + queryString,
 				ShopifyProductsCount.class).getCount();
 		List<Product> productsList = new ArrayList<>();
@@ -131,6 +135,30 @@ public class ShopifyServiceImpl implements ShopifyService {
 		LOGGER.debug(uploadResponse.toString());
 		return img;
 
+	}
+
+	@Override
+	public List<Order> getOrderSinceLastModified(DateTime lastModified) {
+			String queryString = "?fulfillment_status=shipped";
+		
+		if (lastModified != null) {
+			queryString = "?fulfillment_status=shipped&updated_at_min=".concat(lastModified.toString());
+		}
+		
+		int count = rest.getForObject(baseUri + "orders/count.json".concat(queryString),
+				ShopifyProductsCount.class).getCount();
+		List<Order> ordersList = new ArrayList<>();
+		
+		int numPages = (count / MAX_PAGE_SIZE) + 1;
+		for (int page = 1; page <= numPages; page++) {
+			ShopifyOrders orders = rest.getForObject(
+					String.format("%s%s%s&limit=%d&page=%d", baseUri, 
+							"orders.json", queryString, MAX_PAGE_SIZE, page), 
+					ShopifyOrders.class);
+			ordersList.addAll(orders.getOrders());
+		}
+		
+		return ordersList;
 	}
 
 }

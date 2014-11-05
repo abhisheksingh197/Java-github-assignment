@@ -70,7 +70,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products/count.json?product_type=artworks"))
 		.andExpect(method(HttpMethod.GET))
-		.andRespond(shopifyCount(7));
+		.andRespond(shopifyArtworksCount(7));
 		
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100&page=1"))
 				.andExpect(method(HttpMethod.GET))
@@ -294,7 +294,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		priceBucketService.addSizeBucket(sizeBucketObj1);
 
 
-		service.synchronize();
+		service.synchronize(null);
 		isInitialized = true;
 		
 	}

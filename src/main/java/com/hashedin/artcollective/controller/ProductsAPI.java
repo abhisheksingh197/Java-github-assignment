@@ -35,6 +35,7 @@ import com.hashedin.artcollective.service.ArtWorksService;
 import com.hashedin.artcollective.service.CriteriaSearchResponse;
 import com.hashedin.artcollective.service.Frame;
 import com.hashedin.artcollective.service.FrameVariantService;
+import com.hashedin.artcollective.service.OrdersService;
 import com.hashedin.artcollective.service.PriceAndSizeBucketService;
 import com.hashedin.artcollective.service.Style;
 import com.hashedin.artcollective.service.Subject;
@@ -45,6 +46,9 @@ public class ProductsAPI {
 
 	@Autowired
 	private ArtWorksService artworkService;
+	
+	@Autowired
+	private OrdersService ordersService;
 	
 	@Autowired
 	private ArtWorksSearchService artworksSearchService;
@@ -116,10 +120,20 @@ public class ProductsAPI {
 	
 	// Synchronize data from Shopify into internal Database and Tin Eye
 	@RequestMapping(value = "/manage/shopify/synchronize", method = RequestMethod.GET)
-	public void synchronizeArtWorks() {
-		artworkService.synchronize();
-		LOGGER.info("Data Successfully Synchronized");
+	public void synchronize(
+			@RequestParam(value = "type", required = true) String type,
+			@RequestParam(value = "mode", required = false) String mode) {
+		if (type.equalsIgnoreCase("artworks")) {
+			artworkService.synchronize(mode);
+			LOGGER.info("Artworks Successfully Synchronized");
+		}
+		else if (type.equalsIgnoreCase("orders")) {
+			ordersService.synchronize(mode);
+			LOGGER.info("Orders Successfully Synchronized");
+		}
+		
 	}
+	
 	
 	// Search Artworks based on criteria
 	//CHECKSTYLE:OFF

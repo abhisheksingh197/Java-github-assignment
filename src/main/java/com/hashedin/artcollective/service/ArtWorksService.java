@@ -25,6 +25,7 @@ import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.Artist;
 import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.Image;
+import com.hashedin.artcollective.entity.SynchronizeLog;
 import com.hashedin.artcollective.repository.ArtCollectionsRepository;
 import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
@@ -33,6 +34,7 @@ import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.FrameVariantRepository;
 import com.hashedin.artcollective.repository.ImageRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
+import com.hashedin.artcollective.repository.SynchronizeLogRepository;
 
 @Service
 public class ArtWorksService {
@@ -50,6 +52,9 @@ public class ArtWorksService {
 	
 	@Autowired
 	private TinEyeService tineye;
+	
+	@Autowired
+	private SynchronizeLogRepository syncLogRepository;
 	
 	@Autowired 
 	private ArtWorkRepository artRepository;
@@ -78,16 +83,25 @@ public class ArtWorksService {
 	@Autowired
 	private FrameVariantRepository frameRepository;
 	
+	
 	// Method to synchronize data from Shopify
-	public void synchronize() {
+	public void synchronize(String mode) {
 		try {
-			DateTime lastRunTime = getLastRunTime();
+			DateTime lastRunTime = null;
+			if (!mode.equalsIgnoreCase("full")) {
+				lastRunTime = getLastRunTime();
+			}
+			DateTime syncStartTime = new DateTime();
 			List<ArtWork> arts = getArtWorksModifiedSince(lastRunTime);
 			if (arts.size() > 0) {
 				saveArtToInternalDatabase(arts);
 				saveArtToTinEye(arts);
 			}
 			saveFramesModifiedSince(lastRunTime);
+			DateTime syncEndTime = new DateTime();
+			SynchronizeLog syncLog = new SynchronizeLog(syncStartTime, syncEndTime, "artworks",
+					"successfull", (long) arts.size());
+			syncLogRepository.save(syncLog);
 		}
 		catch (Exception e) {
 			LOGGER.error("Error in synchrnozation", e);
@@ -500,7 +514,7 @@ public class ArtWorksService {
 	}
 
 	private DateTime getLastRunTime() {
-		return null;
+		return syncLogRepository.getLastSynchronizeDate("artworks");
 	}
 	
 }

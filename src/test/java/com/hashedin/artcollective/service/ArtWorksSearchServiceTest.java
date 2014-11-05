@@ -59,7 +59,7 @@ public class ArtWorksSearchServiceTest extends BaseUnitTest {
 		String[] colors = {"DF4F23","255,112,0"};
 		int[] weights ={1,1};
 		searchService.findArtworksByColor(colors, weights);
-		service.synchronize();
+		service.synchronize(null);
 		isInitialized = true;
 		
 	}

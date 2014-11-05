@@ -24,7 +24,12 @@ public class BaseUnitTest {
 	}
 
 
-	protected DefaultResponseCreator shopifyCount(int count) {
+	protected DefaultResponseCreator shopifyArtworksCount(int count) {
 		return withSuccess(String.format("{\"count\":%d}", count), MediaType.APPLICATION_JSON);
 	}
+	
+	protected DefaultResponseCreator shopifyOrdersCount(int count) {
+		return withSuccess(String.format("{\"count\":%d}", count), MediaType.APPLICATION_JSON);
+	}
+	
 }
