@@ -88,7 +88,7 @@ public class ArtWorksService {
 	public void synchronize(String mode) {
 		try {
 			DateTime lastRunTime = null;
-			if (!mode.equalsIgnoreCase("full")) {
+			if (!"full".equalsIgnoreCase(mode)) {
 				lastRunTime = getLastRunTime();
 			}
 			DateTime syncStartTime = new DateTime();
@@ -407,7 +407,14 @@ public class ArtWorksService {
 			List<Image> images, Image featuredImage) throws IOException {
 		
 		String format = determineFormat(featuredImage);
-		BufferedImage original = ImageIO.read(new URL(featuredImage.getImgSrc()));
+		BufferedImage original;
+		try {
+			original = ImageIO.read(new URL(featuredImage.getImgSrc()));
+		}
+		catch (Exception e) {
+			LOGGER.error("Could not read image {}", featuredImage.getImgSrc(), e);
+			throw new RuntimeException("Could not read image " + featuredImage.getImgSrc(), e);
+		}
 		
 		if (!imageExistsWithPattern(images, "-artdetails")) {
 			BufferedImage resizedArtDetailsImage = resizeImage(original, WIDTH_OF_ART_DETAILS_IMAGE);
