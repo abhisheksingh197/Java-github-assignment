@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.auditing.CurrentDateTimeProvider;
+import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.client.RestTemplate;
@@ -30,7 +32,7 @@ public class Main extends WebMvcConfigurerAdapter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String args[]) {
-		//System.setProperty("spring.profiles.active", "prod");
+		System.setProperty("spring.profiles.active", "dev");
 		SpringApplication.run(Main.class, args);
 		LOGGER.info("Started Application Art Collective");
 	}
@@ -81,6 +83,11 @@ public class Main extends WebMvcConfigurerAdapter {
 		return template;
 	}
 
+	@Bean
+	public DateTimeProvider getDateTimeProvider() {
+		return CurrentDateTimeProvider.INSTANCE;
+	}
+	
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/login").setViewName("login");
