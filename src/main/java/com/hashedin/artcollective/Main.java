@@ -1,10 +1,14 @@
 package com.hashedin.artcollective;
 
+import javax.imageio.ImageIO;
+
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -18,8 +22,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 
@@ -56,6 +58,37 @@ public class Main extends WebMvcConfigurerAdapter {
 	
 	@Bean
 	public RestTemplate getRestTemplate() {
+		/*
+		 * Crazy bug in ImageIO. At random times, it stops loading images
+		 * 
+		 * Cause :
+		 *   This line in ImageIO throws NullPointerException
+		 *   private static final IIORegistry theRegistry = IIORegistry.getDefaultInstance();
+		 * 
+		 *  ... because 
+		 *  AppContext context = AppContext.getAppContext();
+		 *  context is null
+		 *  
+		 *  Our HACK:
+		 *  Loading an image using ImageIO very early in the application startup cycle seems to work
+		 *  ... and also continues working thereafter. 
+		 *  Why this is so, nobody knows
+		 *  
+		 *  So, here we are. We load an image at startup - 
+		 *  and then pray that image loading works forever after that
+		 *  
+		 *  P.S. This hack can be put in any place that is loaded by Spring. 
+		 *  Got nothing to do with RestTemplate
+		 */
+		try {
+			ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("lucky_image.jpg"));
+		}
+		catch(Throwable t) {
+			LOGGER.error("Cannot load images using ImageIO. A lot of things will fail subsequently");
+		}
+		
+		/*END OF ImageIO HACK*/
+		
 		BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
 		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
 				shopifyApiKey, 
