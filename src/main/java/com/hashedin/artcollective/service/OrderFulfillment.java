@@ -8,6 +8,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.hashedin.artcollective.entity.OrderLineItem;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderFulfillment {
@@ -21,7 +22,7 @@ public class OrderFulfillment {
 	private String service;
 	private String status;
 	private String trackingCompany;
-	private List<LineItem> orderLineItems;
+	private List<OrderLineItem> orderLineItems;
 	
 	public Long getId() {
 		return id;
@@ -69,11 +70,11 @@ public class OrderFulfillment {
 	public void setTrackingCompany(String trackingCompany) {
 		this.trackingCompany = trackingCompany;
 	}
-	public List<LineItem> getOrderLineItems() {
+	public List<OrderLineItem> getOrderLineItems() {
 		return orderLineItems;
 	}
 	@JsonSetter("line_items")
-	public void setOrderLineItems(List<LineItem> orderLineItems) {
+	public void setOrderLineItems(List<OrderLineItem> orderLineItems) {
 		this.orderLineItems = orderLineItems;
 	}
 	

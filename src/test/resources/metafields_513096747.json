@@ -1,5 +1,17 @@
 {
     "metafields": [
+    	 {
+            "created_at": "2014-08-25T02:29:43-04:00",
+            "description": null,
+            "id": 727945651,
+            "key": "is_frame_available",
+            "namespace": "c_f",
+            "owner_id": 513096747,
+            "updated_at": "2014-08-25T02:29:43-04:00",
+            "value": "true",
+            "value_type": "string",
+            "owner_resource": "product"
+        },
         {
             "created_at": "2014-08-25T02:29:43-04:00",
             "description": null,

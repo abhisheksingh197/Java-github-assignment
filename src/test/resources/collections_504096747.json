@@ -13,8 +13,8 @@
         },
         {
             "body_html": null,
-            "handle": "artist_Amit_Bhar",
-            "id": 26109781,
+            "handle": "artist_Sunil_Sarkar",
+            "id": 26209781,
             "published_at": "2014-08-08T05:48:02-04:00",
             "published_scope": "global",
             "sort_order": "alpha-asc",
@@ -42,6 +42,28 @@
             "sort_order": "alpha-asc",
             "template_suffix": null,
             "title": "coll_diwali",
+            "updated_at": "2014-08-25T02:24:33-04:00"
+        },
+        {
+            "body_html": null,
+            "handle": "invalid_coll",
+            "id": 67423430,
+            "published_at": "2014-08-08T05:48:02-04:00",
+            "published_scope": "global",
+            "sort_order": "alpha-asc",
+            "template_suffix": null,
+            "title": "invalid_coll",
+            "updated_at": "2014-08-25T02:24:33-04:00"
+        },
+        {
+            "body_html": null,
+            "handle": "invalidcoll",
+            "id": 67426730,
+            "published_at": "2014-08-08T05:48:02-04:00",
+            "published_scope": "global",
+            "sort_order": "alpha-asc",
+            "template_suffix": null,
+            "title": "invalid_coll",
             "updated_at": "2014-08-25T02:24:33-04:00"
         }
         

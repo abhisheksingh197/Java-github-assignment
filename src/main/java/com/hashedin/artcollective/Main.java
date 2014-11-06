@@ -15,14 +15,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.auditing.CurrentDateTimeProvider;
-import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
 
 
 @EnableWebSecurity
@@ -83,7 +80,7 @@ public class Main extends WebMvcConfigurerAdapter {
 		try {
 			ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("lucky_image.jpg"));
 		}
-		catch(Throwable t) {
+		catch (Throwable t) {
 			LOGGER.error("Cannot load images using ImageIO. A lot of things will fail subsequently");
 		}
 		
@@ -114,11 +111,6 @@ public class Main extends WebMvcConfigurerAdapter {
 		
 		RestTemplate template = new RestTemplate(factory);
 		return template;
-	}
-
-	@Bean
-	public DateTimeProvider getDateTimeProvider() {
-		return CurrentDateTimeProvider.INSTANCE;
 	}
 	
 	@Override

@@ -21,7 +21,9 @@ import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
+import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
+import com.hashedin.artcollective.utils.SynchronizeSetup;
 
 
 
@@ -60,241 +62,18 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	@Autowired
 	private PriceAndSizeBucketService priceBucketService;
 	
+	@Autowired
+	private SynchronizeSetup synchronizeSetup;
+	
+	@Autowired
+	private ArtistRepository artistRepository;
+	
 	@Before
 	public void setup() {
 		if(isInitialized) {
 			return;
 		}
-		MockRestServiceServer mockArtWorksService = MockRestServiceServer
-				.createServer(rest);
-
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products/count.json?product_type=artworks"))
-		.andExpect(method(HttpMethod.GET))
-		.andRespond(shopifyArtworksCount(7));
-		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100&page=1"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("artworks.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=343096747"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_343096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/343096747/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_343096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=343096748"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_343096748.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/343096748/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_343096748.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=503096747"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_503096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/503096747/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_503096747.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=513096747"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_513096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/513096747/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_513096747.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=523096747"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_523096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/523096747/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_523096747.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=533096747"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_533096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/533096747/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_533096747.json"));
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=504096747"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_504096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/504096747/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_504096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/504096747/images.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("image_upload_response_504096747.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/504096747/images.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("image_upload_response_504096747.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=505096747"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_505096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/505096747/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_505096747.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/505096747/images.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("image_upload_response_505096747.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=506096747"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_506096747.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/506096747/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_506096747.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/506096747/images.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("image_upload_response_506096747.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/506096747/images.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("image_upload_response_506096747.json"));
-				
-		mockArtWorksService
-				.expect(requestTo(tinEyeBaseUrl + "add"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("tineye_add_response.json"));
-		
-		
-		 mockArtWorksService
-			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
-			.andExpect(method(HttpMethod.POST))
-			.andRespond(withJson("tin_eye_color_extract_response.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/504096747/metafields.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("color_extract_metafield.json"));
-		
-		mockArtWorksService
-			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
-			.andExpect(method(HttpMethod.POST))
-			.andRespond(withJson("tin_eye_color_extract_response.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/505096747/metafields.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("color_extract_metafield.json"));
-		
-		mockArtWorksService
-			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
-			.andExpect(method(HttpMethod.POST))
-			.andRespond(withJson("tin_eye_color_extract_response.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/506096747/metafields.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("color_extract_metafield.json"));
-		
-		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=frames"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("frames.json"));
-		
-		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("artworksupdate.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=343096747"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_343096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/343096747/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_343096747.json"));
-		
-		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=frames"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("frames.json"));
-		
-		
-		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500.00,5000.00);
-		priceBucketService.addPriceBucket(priceBucketObj1);
-		PriceBucket priceBucketObj2 = new PriceBucket(2L,"medium",5001.00, 7500.00);
-		priceBucketService.addPriceBucket(priceBucketObj2);
-		PriceBucket priceBucketObj3 = new PriceBucket(3L,"average",7501.00, null);
-		priceBucketService.addPriceBucket(priceBucketObj3);
-		SizeBucket sizeBucketObj1 = new SizeBucket(1L,"small",0.0,400.0);
-		priceBucketService.addSizeBucket(sizeBucketObj1);
-		sizeBucketObj1 = new SizeBucket(2L,"medium",401.0,900.0);
-		priceBucketService.addSizeBucket(sizeBucketObj1);
-		sizeBucketObj1 = new SizeBucket(3L,"large",901.0, null);
-		priceBucketService.addSizeBucket(sizeBucketObj1);
-
-
-		service.synchronize(null);
+		synchronizeSetup.setup();
 		isInitialized = true;
 		
 	}
@@ -563,6 +342,11 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		PriceBucket priceBucket = firstArtWork.getPriceBuckets().get(0);
 		assertEquals(sizeBucket.getTitle(), "large");
 		assertEquals(priceBucket.getTitle(), "average");
+	}
+	
+	@Test 
+	public void testForActualCountOfArtists() {
+		assertEquals(artistRepository.count(), 2);
 	}
 	
 

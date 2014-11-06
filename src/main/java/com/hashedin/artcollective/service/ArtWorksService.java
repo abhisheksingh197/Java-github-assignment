@@ -206,9 +206,13 @@ public class ArtWorksService {
 				break;
 			case "artist":
 				String[] artistTitle = collection.getTitle().split("_");
-				artist = new Artist(collection.getId(), artistTitle[1], artistTitle.length 
-						== TITLE_SIZE ? artistTitle[2] : "", collection.getHandle());
-				artistRepository.save(artist);
+				artist = artistWithCollectionId(collection.getId());
+				if (artist == null) {
+					artist = new Artist(artistTitle[1], artistTitle.length 
+							== TITLE_SIZE ? artistTitle[2] : "", collection.getHandle(), 
+							collection.getId());
+					artistRepository.save(artist);
+				} 
 				break;
 			case "coll":
 				ArtCollection artCollection = new ArtCollection(collection.getId(), 
@@ -306,6 +310,10 @@ public class ArtWorksService {
 	}
 	
 
+	private Artist artistWithCollectionId(Long collectionId) {
+		 return artistRepository.findArtistByCollectionID(collectionId);
+	}
+
 	private boolean validateArtwork(ArtWork artwork, 
 			Product p, boolean origMedium, boolean origPrice, boolean origSize) {
 		String artworkLogger = String.format("Artwork Id:%d - Handle:%s :", 
@@ -318,8 +326,10 @@ public class ArtWorksService {
 					artworkLogger = artworkLogger.concat("-- Missing Frame or Mount Thicness "
 							+ "in Variants:The Artwork variants do not have frame and "
 							+ "mount Thickness");
-					//TODO Rejecting Artwork since no image must send an email with product id. 
+					/*TODO Rejecting Artwork since no frameable values
+					*must send an email with product id.*/ 
 					isValid = false;
+					break;
 				}
 			}
 		}

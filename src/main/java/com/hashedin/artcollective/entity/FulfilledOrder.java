@@ -1,13 +1,10 @@
 package com.hashedin.artcollective.entity;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @Entity
@@ -16,9 +13,17 @@ public class FulfilledOrder {
 	@Id
 	private Long id;
 	private Boolean buyerAcceptsMarketing;
+	@Column(name = "created_at")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime createdAt;
+	@Column(name = "updated_at")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime updatedAt;
+	@Column(name = "processed_at")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime processedAt;
+	@Column(name = "cancelled_at")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime cancelledAt;
 	private String cartToken;
 	private String checkoutToken;
@@ -44,8 +49,6 @@ public class FulfilledOrder {
 	private String browserIp;
 	private Long orderNo;
 	private Long checkoutId;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<OrderLineItem> orderLineItems;
 	public Long getId() {
 		return id;
 	}
@@ -226,10 +229,5 @@ public class FulfilledOrder {
 	public void setCheckoutId(Long checkoutId) {
 		this.checkoutId = checkoutId;
 	}
-	public List<OrderLineItem> getOrderLineItems() {
-		return orderLineItems;
-	}
-	public void setOrderLineItems(List<OrderLineItem> orderLineItems) {
-		this.orderLineItems = orderLineItems;
-	}
+
 }
