@@ -1,0 +1,9 @@
+.list{
+	min-width:200px;
+}
+.artwork-box .description{
+	min-height: 120px;
+}
+.payment ul li a{
+	padding: 0 10px;
+}

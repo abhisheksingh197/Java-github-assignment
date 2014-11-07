@@ -1,0 +1,239 @@
+/*
+ Table Of Contents
+
+ 1.) Homepage
+ ===============================================*/
+
+/*
+ 1.) Homepage
+ ----------------------------------------*/
+@media only screen and (min-width: 0px) and (max-width: 767px) {
+	.header-sec-one, .header-sec-one nav ul, .header-sec-one nav ul li, .view-sec, .description-sec, .our-services, .paint-sec, .more-artist .w2, .about-paint, #gallery-group, #gallery-group .item, .footer-one .list, .social-links, .footer-nav, .aside, .main-content {
+		width: 100%;
+		float: none;
+	}
+	.header-sec-one {
+		overflow: hidden;
+		padding: 0;
+	}
+	.logo {
+		width: 155px;
+	}
+	.mobile-menu {
+		display: block;
+	}
+	.header-sec-one nav {
+		display: none;
+		clear: both;
+	}
+	.header-sec-one nav ul li {
+		text-align: right;
+		margin: 0;
+	}
+	.header-sec-one nav ul li a {
+		display: block;
+		padding: 8px 10px;
+	}
+	.header-sec-one nav ul li a:hover {
+		background-color: #fae9d9;
+	}
+	.view-sec, .paint-sec, .footer-one .list {
+		margin: 0 0 30px;
+	}
+	.view-sec img {
+		width: 100%;
+	}
+	.painting-properties label {
+		width: 90px;
+	}
+	.painting-properties a {
+		margin-right: 5px;
+	}
+	.col-box {
+		height: 8px;
+		width: 22px;
+	}
+	.price-sec span:nth-child(3) {
+		margin: 0 10px;
+	}
+	.price-sec span {
+		font-size: 1.2em;
+	}
+	.product-desc h3 {
+		font-size: 2.2em;
+	}
+	.frame-option-wrap {
+		padding: 0;
+	}
+	.flex-direction-nav .flex-prev, i.icon-removecart {
+		left: 0;
+	}
+	.flex-direction-nav .flex-next {
+		right: 0;
+	}
+	.frame-view-img {
+		/*border: 10px solid #ffffff;*/
+	}
+	.frame-name {
+		padding: 14px;
+	}
+	.service-types li img {
+		margin-top: 0;
+	}
+	.service-types li a {
+		line-height: 2;
+	}
+	.more-artist h2 {
+		font-size: 2em;
+		padding-bottom: 0px;
+	}
+	.more-artist .w2, .paint-sec, .more-artist .w1, .gallery-wrap .w1 {
+		margin-right: 0;
+	}
+	.paint-sec, .footer-one, .footer-two ul {
+		text-align: center;
+	}
+	.paint-sec a {
+		display: block;
+	}
+	#gallery-group {
+		margin: 0;
+	}
+	.footer-one .list {
+		padding-right: 0;
+	}
+	.footer-one .list h4 {
+		margin-bottom: 15px;
+	}
+	.footer-two {
+		width: 100%;
+	}
+	.footer-two ul li {
+		float: none;
+		display: inline-block;
+	}
+	.popup-overlay {
+		position: absolute;
+	}
+	.addtocart-popup {
+		width: 90%;
+		padding: 15px 10px;
+	}
+	.cart-block, .subtotal-block, .decision {
+		width: 265px;
+		margin: 0 auto;
+	}
+	.sizes-block, .items-block p {
+		max-width: 132px;
+	}
+	.price-block {
+		width: 132px;
+	}
+	.sizes-block, .price-block, .subtotal-block, .addtocart-popup h2 {
+		margin-bottom: 10px;
+	}
+	.subtotal {
+		height: 85px;
+	}
+	.remove-cart {
+		padding-left: 0;
+	}
+	.rate span {
+		padding-top: 15px;
+	}
+	.rate span:last-child, .rate span {
+		height: 50px;
+	}
+	.rate, .sizes {
+		height: 100px;
+	}
+	.decision a {
+		font-size: 1em;
+		width: 118px;
+	}
+	.share-popup {
+		width: 300px;
+		height: auto;
+	}
+	.share-popup span {
+		padding-left: 10px;
+	}
+	.sizes, .subtotal {
+		border-left: none;
+	}
+	.main-content {
+		border: none;
+	}
+	.objects {
+		float: none;
+		width: 100%;
+	}
+	#animate-pannel {
+		display: none;
+	}
+	.color-range span {
+		text-align: center;
+	}
+	.description {
+		margin: 0 auto;
+		width: 242px;
+	}
+	.popup-sign-in, .popup-signup {
+		left: 3%;
+		min-width: inherit;
+		padding: 10px 10px 0;
+		top: 3%;
+	}
+	.popup-sign-in, .popup-signup {
+		height: auto;
+	}
+	.popup-sign-in .input-block, .popup-signup .input-block, .popup-sign-in .social-login, .popup-signup .social-login {
+		float: none;
+		padding-left: 0px;
+		margin-top: 40px;
+	}
+	.popup-sign-in .social-login, .popup-signup .social-login {
+		border: none;
+	}
+	.popup-sign-in h5, .popup-signup h5, .popup-sign-in h4, .popup-signup h4 {
+		font-size: 1.2em;
+	}
+	.flexslider .slides .frame-view-img img {		
+		max-width: 155px;		
+	}
+	.art-category{
+		width:202px;
+	}
+	span.cart-text{
+		margin-right: 4px;
+	}
+	.access-block i{
+		margin-left: 2px;
+	}
+	span.cart-text{
+		margin-right: 4px;
+	}
+	.access-block span.sign-in-block {
+		padding-left: 5px;
+	}
+	i.icon-cart{
+		width: 40px;
+	}
+	.addtocart-popup {
+		left:4%;
+		top:2%;
+	}
+	.share-popup {
+    left: 71%;
+    }	
+    .popup-contact{
+    	 margin-left: -150px;
+    	  width: 300px;
+    }
+    .popup-contact h4{
+    	margin-bottom: 0;
+    }
+    .popup-contact input[type="text"], .popup-contact textarea{
+    	margin-bottom: 5px !important;
+    }
+}
