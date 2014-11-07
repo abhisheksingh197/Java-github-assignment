@@ -127,30 +127,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td><img src="assets/images/portfolio1.jpg" alt="portfolio" height="59" width="72"/></td>
-                                            <td><h5>Museum Quality Giclee Print on Dagueere Canvas</h5><h5>Limited Edition 100</h5></td>
-                                            <td><h6>12"x12</h6><h6>18"x18</h6><h6>24"x24</h6><h6>30"x30</h6></td>
-                                            <td><h6>1000</h6><h6>2500</h6><h6>3500</h6><h6>4500</h6></td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src="assets/images/portfolio2.jpg" alt="portfolio" height="59" width="72"/></td>
-                                            <td><h5>Museum Quality Giclee Print on Dagueere Canvas</h5><h5>Limited Edition 100</h5></td>
-                                            <td><h6>12"x12</h6><h6>18"x18</h6><h6>24"x24</h6><h6>30"x30</h6></td>
-                                            <td><h6>1000</h6><h6>2500</h6><h6>3500</h6><h6>4500</h6></td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src="assets/images/portfolio3.jpg" alt="portfolio" height="59" width="72"/></td>
-                                            <td><h5>Museum Quality Giclee Print on Dagueere Canvas</h5><h5>Limited Edition 100</h5></td>
-                                            <td><h6>12"x12</h6><h6>18"x18</h6><h6>24"x24</h6><h6>30"x30</h6></td>
-                                            <td><h6>1000</h6><h6>2500</h6><h6>3500</h6><h6>4500</h6></td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src="assets/images/portfolio4.jpg" alt="portfolio" height="59" width="72"/></td>
-                                            <td><h5>Museum Quality Giclee Print on Dagueere Canvas</h5><h5>Limited Edition 100</h5></td>
-                                            <td><h6>12"x12</h6><h6>18"x18</h6><h6>24"x24</h6><h6>30"x30</h6></td>
-                                            <td><h6>1000</h6><h6>2500</h6><h6>3500</h6><h6>4500</h6></td>
-                                        </tr>
+                                    	<#list artworks?keys as prop>
+                                    	<#assign artwork = (artworks[prop]).artwork />
+                                    	<#assign orderLineItems = (artworks[prop]).orderLineItems />
+	                                        <tr>
+	                                            <td><img src="assets/images/portfolio1.jpg" alt="portfolio" height="59" width="72"/></td>
+	                                            <td><h5>${artwork.title}</h5><h5>Limited Edition 100</h5></td>
+	                                            
+	                                            	<td><#list orderLineItems as lineItems><h6>${lineItems.price}</h6></#list></td>
+	                                            	<td><#list orderLineItems as lineItems><h6>${lineItems.price}</h6></#list></td>
+	                                            
+	                                        </tr>
+                                        </#list>
                                     </tbody>
                                 </table>
                             </div>

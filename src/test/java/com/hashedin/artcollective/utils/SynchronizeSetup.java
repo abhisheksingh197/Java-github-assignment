@@ -21,6 +21,7 @@ import com.hashedin.artcollective.repository.PriceBucketRepository;
 import com.hashedin.artcollective.repository.SynchronizeLogRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
+import com.hashedin.artcollective.service.OrdersService;
 import com.hashedin.artcollective.service.PriceAndSizeBucketService;
 import com.hashedin.artcollective.service.ShopifyService;
 
@@ -40,7 +41,10 @@ public class SynchronizeSetup extends BaseUnitTest {
 	private RestTemplate rest;
 
 	@Autowired
-	private ArtWorksService service;
+	private ArtWorksService artworksService;
+	
+	@Autowired
+	private OrdersService ordersService;
 
 	@Autowired
 	private ShopifyService shopifyService;
@@ -64,7 +68,7 @@ public class SynchronizeSetup extends BaseUnitTest {
 	private SynchronizeLogRepository syncLogRepository;
 	
 	
-	public void setup() {
+	public void artworksSynchronizeSetup() {
 		if(isInitialized) {
 			return;
 		}
@@ -304,7 +308,35 @@ public class SynchronizeSetup extends BaseUnitTest {
 		priceBucketService.addSizeBucket(sizeBucketObj1);
 
 
-		service.synchronize(null);
+		artworksService.synchronize(null);
+	}
+
+
+	public void ordersSynchronizeSetup() {
+		MockRestServiceServer mockArtWorksService = MockRestServiceServer
+				.createServer(rest);
+		
+		String queryString = "";
+		String lastUpdatedAt = "";
+		DateTime lastModified = syncLogRepository.getLastSynchronizeDate("orders");
+		if (lastModified != null) {
+			queryString = "&updated_at_min=";
+			lastUpdatedAt = lastModified.toString();
+		}
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "orders/count.json?fulfillment_status=shipped"
+				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))))
+		.andExpect(method(HttpMethod.GET))
+		.andRespond(shopifyOrdersCount(5));
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "orders.json?fulfillment_status=shipped"
+				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))
+				.concat("&limit=100&page=1")))
+		.andExpect(method(HttpMethod.GET))
+		.andRespond(withJson("orders.json"));
+		
+		ordersService.synchronize(null);
+		
 	}
 
 }
