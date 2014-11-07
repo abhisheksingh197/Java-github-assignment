@@ -57,9 +57,6 @@ public class ProductsAPITest extends BaseIntegrationTest {
 		mockMvc.perform(get("/manage/priceRange/getall"))
         .andExpect(status().isOk());
 		
-		mockMvc.perform(get("/manage/shopify/synchronize?type=orders"))
-        .andExpect(status().isOk());
-		
     }
 	
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hashedin.artcollective.entity.ArtWork;
-import com.hashedin.artcollective.entity.Artist;
+//import com.hashedin.artcollective.entity.Artist;
 
 @Controller
 public final class WebApplicationController {
@@ -33,7 +33,7 @@ public final class WebApplicationController {
 		
 		List<ArtWork> artworks = new ArrayList<>(); 
 		
-		model.put("artist", new Artist("Amit", "Bhar", "amit-bhar", 32L));
+		//model.put("artist", new Artist("Amit", "Bhar", "amit-bhar", 32L));
 		model.put("artworks", artworks);
 		
 		return new ModelAndView("artist-dashboard", model);

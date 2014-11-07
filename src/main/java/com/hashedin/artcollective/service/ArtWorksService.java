@@ -361,7 +361,7 @@ public class ArtWorksService {
 					+ "least one style");
 			isValid = false;
 		}
-		if (artwork.getArtist() == null) {
+		if (artwork.getArtist() == null || artwork.getArtist().getHandle() == null) {
 			artworkLogger = artworkLogger.concat("-- Missing Artist: The Artwork must have an artist");
 			isValid = false;
 		}

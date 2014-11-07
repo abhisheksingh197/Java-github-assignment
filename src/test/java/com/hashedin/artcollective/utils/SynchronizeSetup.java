@@ -172,12 +172,6 @@ public class SynchronizeSetup extends BaseUnitTest {
 						+ "products/504096747/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_504096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/504096747/images.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("image_upload_response_504096747.json"));
 		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl

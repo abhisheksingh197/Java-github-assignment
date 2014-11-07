@@ -31,7 +31,7 @@ public class Main extends WebMvcConfigurerAdapter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String args[]) {
-		System.setProperty("spring.profiles.active", "dev");
+		//System.setProperty("spring.profiles.active", "dev");
 		SpringApplication.run(Main.class, args);
 		LOGGER.info("Started Application Art Collective");
 	}
