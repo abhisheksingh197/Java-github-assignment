@@ -1,14 +1,17 @@
 package com.hashedin.artcollective.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.hashedin.artcollective.entity.ArtWork;
+//import com.hashedin.artcollective.entity.Artist;
 
 @Controller
 public final class WebApplicationController {
@@ -22,22 +25,17 @@ public final class WebApplicationController {
 		return new ModelAndView("index", model);
 	}
 	
-	@RequestMapping("/secure/dashboard")
-	public ModelAndView dashboard() {
+	@RequestMapping("/dashboard")
+	public ModelAndView search() {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("time", new Date());
-		model.put("message", "Hello to Secure World!");
 		
-		return new ModelAndView("index", model);
-	}
-	
-	@RequestMapping("/proxy/search")
-	public ModelAndView search(HttpServletResponse response) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("time", new Date());
-		model.put("message", "Hello to Secure World!");
+		String artistId = "magic";
 		
-		response.setContentType("application/liquid");
-		return new ModelAndView("index", model);
+		List<ArtWork> artworks = new ArrayList<>(); 
+		
+		//model.put("artist", new Artist("Amit", "Bhar", "amit-bhar", 32L));
+		model.put("artworks", artworks);
+		
+		return new ModelAndView("artist-dashboard", model);
 	}
 }

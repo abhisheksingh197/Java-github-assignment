@@ -8,24 +8,34 @@ import javax.persistence.Id;
 @Entity
 public class Artist {
 
-	public Artist(long id, String firstName, String lastName, String handle) {
+	public Artist(String firstName, String lastName, String handle, Long collectionId) {
 		super();
-		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.handle = handle;
+		this.collectionId = collectionId;
 	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
+	private Long collectionId;
 	private String firstName;
 	private String lastName;
 	private String handle;
-	
+	public long getId() {
+		return id;
+	}
 	public String getHandle() {
 		return handle;
 	}
+	public Long getCollectionId() {
+		return collectionId;
+	}
 
+	public void setCollectionId(Long collectionId) {
+		this.collectionId = collectionId;
+	}
 	public void setHandle(String handle) {
 		this.handle = handle;
 	}

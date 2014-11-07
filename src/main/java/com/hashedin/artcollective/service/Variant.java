@@ -20,12 +20,13 @@ public class Variant implements Comparable<Variant> {
 	private double price;
 	private String productId;
 	private boolean requiresShipping;
-	private String sku;
-	private boolean taxable;
-	private String title;
-	private String updatedAt;
-	private int inventoryQuantity;
-	private int oldInventoryQuantity;
+	// commenting out since we do not use these fields currently, can revert them back whenever required
+//	private String sku;
+//	private boolean taxable;
+//	private String title;
+//	private String updatedAt;
+//	private int inventoryQuantity;
+//	private int oldInventoryQuantity;
 	public String getBarcode() {
 		return barcode;
 	}
@@ -116,42 +117,42 @@ public class Variant implements Comparable<Variant> {
 	public void setRequiresShipping(boolean requiresShipping) {
 		this.requiresShipping = requiresShipping;
 	}
-	public String getSku() {
-		return sku;
-	}
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
-	public boolean isTaxable() {
-		return taxable;
-	}
-	public void setTaxable(boolean taxable) {
-		this.taxable = taxable;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getUpdatedAt() {
-		return updatedAt;
-	}
-	public void setUpdatedAt(String updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-	public int getInventoryQuantity() {
-		return inventoryQuantity;
-	}
-	public void setInventoryQuantity(int inventoryQuantity) {
-		this.inventoryQuantity = inventoryQuantity;
-	}
-	public int getOldInventoryQuantity() {
-		return oldInventoryQuantity;
-	}
-	public void setOldInventoryQuantity(int oldInventoryQuantity) {
-		this.oldInventoryQuantity = oldInventoryQuantity;
-	}
+//	public String getSku() {
+//		return sku;
+//	}
+//	public void setSku(String sku) {
+//		this.sku = sku;
+//	}
+//	public boolean isTaxable() {
+//		return taxable;
+//	}
+//	public void setTaxable(boolean taxable) {
+//		this.taxable = taxable;
+//	}
+//	public String getTitle() {
+//		return title;
+//	}
+//	public void setTitle(String title) {
+//		this.title = title;
+//	}
+//	public String getUpdatedAt() {
+//		return updatedAt;
+//	}
+//	public void setUpdatedAt(String updatedAt) {
+//		this.updatedAt = updatedAt;
+//	}
+//	public int getInventoryQuantity() {
+//		return inventoryQuantity;
+//	}
+//	public void setInventoryQuantity(int inventoryQuantity) {
+//		this.inventoryQuantity = inventoryQuantity;
+//	}
+//	public int getOldInventoryQuantity() {
+//		return oldInventoryQuantity;
+//	}
+//	public void setOldInventoryQuantity(int oldInventoryQuantity) {
+//		this.oldInventoryQuantity = oldInventoryQuantity;
+//	}
 	
 	@Override
 	public int compareTo(Variant v) {

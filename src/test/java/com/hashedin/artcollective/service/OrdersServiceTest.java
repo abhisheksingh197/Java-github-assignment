@@ -16,7 +16,13 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
+import com.hashedin.artcollective.entity.FulfilledOrder;
+import com.hashedin.artcollective.entity.OrderLineItem;
+import com.hashedin.artcollective.entity.SynchronizeLog;
+import com.hashedin.artcollective.repository.FulfilledOrderRepository;
+import com.hashedin.artcollective.repository.OrderLineItemRepository;
 import com.hashedin.artcollective.repository.SynchronizeLogRepository;
+import com.hashedin.artcollective.utils.SynchronizeSetup;
 
 public class OrdersServiceTest extends BaseUnitTest{
 	
@@ -37,15 +43,25 @@ public class OrdersServiceTest extends BaseUnitTest{
 	@Autowired
 	private SynchronizeLogRepository syncLogRepository;
 	
+	@Autowired
+	private OrderLineItemRepository orderLineItemRepository;
+	
+	@Autowired
+	private FulfilledOrderRepository fulfilledOrderRepository;
+	
+	@Autowired
+	private SynchronizeSetup synchronizeSetup;
+	
 	@Before
 	public void setup() {
 		if(isInitialized) {
 			return;
 		}
+		
+		synchronizeSetup.setup();
+		
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
-		
-		
 
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "orders/count.json?fulfillment_status=shipped"))
 		.andExpect(method(HttpMethod.GET))
@@ -55,14 +71,13 @@ public class OrdersServiceTest extends BaseUnitTest{
 		.andExpect(method(HttpMethod.GET))
 		.andRespond(withJson("orders.json"));
 		
-		
 		ordersService.synchronize(null);
 		
 		isInitialized = true;
 		
 	}
 	
-	@Ignore
+	
 	@Test
 	public void testForModifiedDateFromSyncLog() {
 		
@@ -72,26 +87,33 @@ public class OrdersServiceTest extends BaseUnitTest{
 		String lastModified = syncLogRepository.getLastSynchronizeDate("orders").toString();
 		
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "orders/count.json?fulfillment_status=shipped&updated_at_min="
-				.concat(lastModified)))
+				.concat(lastModified.replace("+", "%2B"))))
 		.andExpect(method(HttpMethod.GET))
 		.andRespond(shopifyOrdersCount(5));
 		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "orders.json?fulfillment_status=shipped"
-				.concat(lastModified).concat("&limit=100&page=1")))
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "orders.json?fulfillment_status=shipped&updated_at_min="
+				.concat(lastModified.replace("+", "%2B")).concat("&limit=100&page=1")))
 		.andExpect(method(HttpMethod.GET))
 		.andRespond(withJson("orders.json"));
 		
-		List<Order> orders = ordersService.synchronize(null);
+		ordersService.synchronize(null);
 		
-		assertEquals(orders.size(), 3);
+		assertEquals(fulfilledOrderRepository.count(), 3);
+		assertEquals(orderLineItemRepository.count(), 6);
+			
+	}
+	
+	@Test
+	public void testToVerifyLineItemHasValidOrderAndArtist() {
+		OrderLineItem orderLineItem = orderLineItemRepository.findOne(494138839L);
+		long lineItemOrderId = orderLineItem.getOrder().getId();
+		assertEquals(lineItemOrderId, 274636103L);
 		
-		List<OrderFulfillment> fulfillments = orders.get(0).getFulfillments();
-		long fulfillmentId = fulfillments.get(0).getId();
-		assertEquals(fulfillmentId, 172462467);
+		long lineItemOrderProductId = orderLineItem.getProductId();
+		assertEquals(lineItemOrderProductId, 504096747L);
 		
-		List<LineItem> lineItems = fulfillments.get(0).getOrderLineItems();
-		String lineItemVariantTitle = lineItems.get(1).getVariantTitle();
-		assertEquals(lineItemVariantTitle, "15x11 / 1 / 1");
+		long artistId = orderLineItem.getArtistId();
+		assertEquals(artistId, 2L);
 		
 	}
 }

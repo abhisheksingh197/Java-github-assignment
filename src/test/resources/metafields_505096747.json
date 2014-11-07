@@ -35,6 +35,42 @@
             "value": "landscape",
             "value_type": "string",
             "owner_resource": "product"
+        },
+        {
+            "created_at": "2014-08-21T07:02:25-04:00",
+            "description": null,
+            "id": 4273456,
+            "key": "original_art_medium",
+            "namespace": "c_f",
+            "owner_id": 503096747,
+            "updated_at": "2014-08-21T07:02:25-04:00",
+            "value": "false",
+            "value_type": "string",
+            "owner_resource": "product"
+        },
+        {
+            "created_at": "2014-08-21T07:02:25-04:00",
+            "description": null,
+            "id": 42734556,
+            "key": "original_art_size",
+            "namespace": "c_f",
+            "owner_id": 503096747,
+            "updated_at": "2014-08-21T07:02:25-04:00",
+            "value": "false",
+            "value_type": "string",
+            "owner_resource": "product"
+        },
+        {
+            "created_at": "2014-08-21T07:02:25-04:00",
+            "description": null,
+            "id": 42367456,
+            "key": "original_art_price",
+            "namespace": "c_f",
+            "owner_id": 503096747,
+            "updated_at": "2014-08-21T07:02:25-04:00",
+            "value": "false",
+            "value_type": "string",
+            "owner_resource": "product"
         }
     ]
 }

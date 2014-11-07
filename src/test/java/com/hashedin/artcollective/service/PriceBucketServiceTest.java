@@ -20,6 +20,8 @@ import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
+import com.hashedin.artcollective.repository.SynchronizeLogRepository;
+import com.hashedin.artcollective.utils.SynchronizeSetup;
 
 
 public class PriceBucketServiceTest extends BaseUnitTest {
@@ -44,23 +46,19 @@ public class PriceBucketServiceTest extends BaseUnitTest {
 	@Autowired
 	private ShopifyService shopifyService;
 	
+	@Autowired
+	private SynchronizeLogRepository syncLogRepository;
+	
+	@Autowired
+	private SynchronizeSetup synchronizeSetup;
 	
 	@Before
 	public void setup() {
 		if(isInitialized) {
 			return;
 		}
-		
-		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500.00,5000.00);
-		priceAndSizeBucketService.addPriceBucket(priceBucketObj1);
-		SizeBucket sizeBucketObj1 = new SizeBucket(1L,"small",0.0,400.0);
-		priceAndSizeBucketService.addSizeBucket(sizeBucketObj1);
-		sizeBucketObj1 = new SizeBucket(2L,"medium",401.0,900.0);
-		priceAndSizeBucketService.addSizeBucket(sizeBucketObj1);
-		sizeBucketObj1 = new SizeBucket(3L,"large",901.0,100000.0);
-		priceAndSizeBucketService.addSizeBucket(sizeBucketObj1);
+		synchronizeSetup.setup();
 		isInitialized = true;
-		
 	}
 	
 	@Test
@@ -73,16 +71,26 @@ public class PriceBucketServiceTest extends BaseUnitTest {
 	public void testForFindingProductPriceBuckets() {
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
-
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products/count.json?product_type=artworks"))
-		.andExpect(method(HttpMethod.GET))
-		.andRespond(shopifyArtworksCount(1));
+		String queryString = "";
+		String lastUpdatedAt = "";
+		DateTime lastModified = syncLogRepository.getLastSynchronizeDate("artworks");
+		if (lastModified != null) {
+			queryString = "&updated_at_min=";
+			lastUpdatedAt = lastModified.toString();
+		}
 		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks&limit=100&page=1"))
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products/count.json?product_type=artworks"
+				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(shopifyArtworksCount(1));
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks"
+				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))
+				.concat("&limit=100&page=1")))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artworks.json"));
 		
-		DateTime lastModified = new DateTime();
+		
 		List<Product> p = shopifyService.getArtWorkProductsSinceLastModified(lastModified);
 		PriceAndSizeBucket priceAndSizeBucket = priceAndSizeBucketService.getPriceAndSizeBuckets(p.get(0));
 		List<PriceBucket> priceBuckets = priceAndSizeBucket.getPriceBuckets();

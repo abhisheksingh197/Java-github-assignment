@@ -1,15 +1,23 @@
 package com.hashedin.artcollective.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class OrderLineItem {
 	
 	@Id
 	private Long id;
-	private Long orderId;
+	@ManyToOne(cascade = CascadeType.ALL)
+	private FulfilledOrder order;
 	private Long productId;
+	private Long artistId;
 	private String fulfillmentService;
 	private String fulfillmentStatus;
 	private Boolean giftCard;
@@ -27,39 +35,50 @@ public class OrderLineItem {
 	private String variantInventoryManagement;
 	private Boolean productExits;
 	private Long fulfillableQuantity;
+	
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getOrderId() {
-		return orderId;
+	public FulfilledOrder getOrder() {
+		return order;
 	}
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
+	public void setOrder(FulfilledOrder order) {
+		this.order = order;
 	}
 	public Long getProductId() {
 		return productId;
 	}
+	@JsonSetter("product_id")
 	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
-	public String getFulfillmentService() {
-		return fulfillmentService;
+	public Long getArtistId() {
+		return artistId;
 	}
-	public void setFulfillmentService(String fulfillmentService) {
-		this.fulfillmentService = fulfillmentService;
+	public void setArtistId(Long artistId) {
+		this.artistId = artistId;
 	}
 	public String getFulfillmentStatus() {
 		return fulfillmentStatus;
 	}
+	@JsonSetter("fulfillment_status")
 	public void setFulfillmentStatus(String fulfillmentStatus) {
 		this.fulfillmentStatus = fulfillmentStatus;
+	}
+	public String getFulfillmentService() {
+		return fulfillmentService;
+	}
+	@JsonSetter("fulfillment_service")
+	public void setFulfillmentService(String fulfillmentService) {
+		this.fulfillmentService = fulfillmentService;
 	}
 	public Boolean getGiftCard() {
 		return giftCard;
 	}
+	@JsonSetter("gift_card")
 	public void setGiftCard(Boolean giftCard) {
 		this.giftCard = giftCard;
 	}
@@ -84,6 +103,7 @@ public class OrderLineItem {
 	public Boolean getRequiresShipping() {
 		return requiresShipping;
 	}
+	@JsonSetter("requires_shipping")
 	public void setRequiresShipping(Boolean requiresShipping) {
 		this.requiresShipping = requiresShipping;
 	}
@@ -108,12 +128,14 @@ public class OrderLineItem {
 	public Long getVariantId() {
 		return variantId;
 	}
+	@JsonSetter("variant_id")
 	public void setVariantId(Long variantId) {
 		this.variantId = variantId;
 	}
 	public String getVariantTitle() {
 		return variantTitle;
 	}
+	@JsonSetter("variant_title")
 	public void setVariantTitle(String variantTitle) {
 		this.variantTitle = variantTitle;
 	}
@@ -132,18 +154,21 @@ public class OrderLineItem {
 	public String getVariantInventoryManagement() {
 		return variantInventoryManagement;
 	}
+	@JsonSetter("variant_inventory_management")
 	public void setVariantInventoryManagement(String variantInventoryManagement) {
 		this.variantInventoryManagement = variantInventoryManagement;
 	}
 	public Boolean getProductExits() {
 		return productExits;
 	}
+	@JsonSetter("product_exists")
 	public void setProductExits(Boolean productExits) {
 		this.productExits = productExits;
 	}
 	public Long getFulfillableQuantity() {
 		return fulfillableQuantity;
 	}
+	@JsonSetter("fulfillable_quantity")
 	public void setFulfillableQuantity(Long fulfillableQuantity) {
 		this.fulfillableQuantity = fulfillableQuantity;
 	}
