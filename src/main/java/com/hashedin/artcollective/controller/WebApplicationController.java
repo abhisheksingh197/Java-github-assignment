@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.hashedin.artcollective.service.ArtWorksService;
 import com.hashedin.artcollective.service.ArtistPortfolioService;
 
 
@@ -40,8 +39,6 @@ public final class WebApplicationController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Long artistId = Long.parseLong(auth.getName()); //get logged in username/Id
 		ModelAndView model = artistPortfolioService.getPortfolio(artistId);
-		LOGGER.info(model.toString());
-		LOGGER.info("reading --------------------");
 		return model;
 		
 	}

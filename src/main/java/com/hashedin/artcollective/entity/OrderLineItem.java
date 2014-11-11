@@ -35,6 +35,7 @@ public class OrderLineItem {
 	private String variantInventoryManagement;
 	private Boolean productExits;
 	private Long fulfillableQuantity;
+	private Double earning;
 	
 	public Long getId() {
 		return id;
@@ -171,6 +172,12 @@ public class OrderLineItem {
 	@JsonSetter("fulfillable_quantity")
 	public void setFulfillableQuantity(Long fulfillableQuantity) {
 		this.fulfillableQuantity = fulfillableQuantity;
+	}
+	public Double getEarning() {
+		return earning;
+	}
+	public void setEarning(Double earnings) {
+		this.earning = earnings;
 	}
 	
 }

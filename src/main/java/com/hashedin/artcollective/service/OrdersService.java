@@ -13,6 +13,7 @@ import com.hashedin.artcollective.entity.FulfilledOrder;
 import com.hashedin.artcollective.entity.OrderLineItem;
 import com.hashedin.artcollective.entity.SynchronizeLog;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
+import com.hashedin.artcollective.repository.ArtworkVariantRepository;
 import com.hashedin.artcollective.repository.FulfilledOrderRepository;
 import com.hashedin.artcollective.repository.OrderLineItemRepository;
 import com.hashedin.artcollective.repository.SynchronizeLogRepository;
@@ -34,6 +35,9 @@ public class OrdersService {
 	
 	@Autowired
 	private FulfilledOrderRepository fulfillOrderRepository;
+	
+	@Autowired
+	private ArtworkVariantRepository artworkVariantRepository;
 	
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(OrdersService.class);
@@ -88,10 +92,16 @@ public class OrdersService {
 		for (OrderLineItem lineItem : orderLineItems) {
 			lineItem.setOrder(fulfilledOrder); 
 			lineItem.setArtistId(getArtistId(lineItem.getProductId()));
+			lineItem.setEarning(getEarningsForVariant(lineItem.getVariantId()));
 		}
 		return orderLineItems;
 	}
 	
+	private Double getEarningsForVariant(Long variantId) {
+
+		return artworkVariantRepository.getEarningForVariant(variantId);
+	}
+
 	// Fetching Artist Id based on Product Id
 	private Long getArtistId(Long productId) {
 		ArtWork artwork = artworkRepository.findOne(productId);

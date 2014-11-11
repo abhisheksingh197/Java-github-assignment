@@ -179,6 +179,12 @@ public class SynchronizeSetup extends BaseUnitTest {
 		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
+						+ "variants/79643453611812/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("variant_metafields.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
 						+ "products/504096747/images.json"))
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("image_upload_response_504096747.json"));
@@ -197,6 +203,12 @@ public class SynchronizeSetup extends BaseUnitTest {
 		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
+						+ "variants/7964345234234/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("variant_metafields.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
 						+ "products/505096747/images.json"))
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("image_upload_response_505096747.json"));
@@ -212,6 +224,12 @@ public class SynchronizeSetup extends BaseUnitTest {
 						+ "products/506096747/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_506096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "variants/12312334234/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("variant_metafields.json"));
 		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl

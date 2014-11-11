@@ -127,16 +127,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<#list artworks?keys as prop>
-                                    	<#assign artwork = (artworks[prop]).artwork />
-                                    	<#assign orderLineItems = (artworks[prop]).orderLineItems />
+                                    <#assign artworksLength = artworks?size>
+                                    	<#list 0..(artworksLength - 1) as artIterator>
+                                    		<#assign artwork = (artworks[artIterator]) />
+                                    		<#assign variantList = artwork.variants />
 	                                        <tr>
-	                                            <td><img src="assets/images/portfolio1.jpg" alt="portfolio" height="59" width="72"/></td>
+	                                        	<#assign imageSrc = artwork.images[0].imgSrc />
+	                                        	<#assign croppedImgSrc = imageSrc?split("_") />
+	                                        	<#assign croppedImgSrc = croppedImgSrc[0] + "_O_150x150_cropped.jpg?50632" />
+	                                            <td><img src="${croppedImgSrc}" alt="portfolio" height="59" width="72"/></td>
 	                                            <td><h5>${artwork.title}</h5><h5>Limited Edition 100</h5></td>
-	                                            
-	                                            	<td><#list orderLineItems as lineItems><h6>${lineItems.price}</h6></#list></td>
-	                                            	<td><#list orderLineItems as lineItems><h6>${lineItems.price}</h6></#list></td>
-	                                            
+                                            	<td>
+                                            		<#list variantList as variant>
+                                        				<h6>${variant.option1}</h6>
+                                            		</#list>
+                                            	</td>
+                                            	<td>
+                                            		<#list variantList as variant>
+                                            			<#assign li = (lineitems[variant.id?c])!0.0 />
+                                        				<h6>${li?string("0.00")}</h6>
+                                            		</#list>
+                                            	</td>
 	                                        </tr>
                                         </#list>
                                     </tbody>

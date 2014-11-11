@@ -63,6 +63,15 @@ public class ArtWork {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Image> images;
 	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<ArtworkVariant> variants;
+	
+	public List<ArtworkVariant> getVariants() {
+		return variants;
+	}
+	public void setVariants(List<ArtworkVariant> variants) {
+		this.variants = variants;
+	}
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Artist artist;
 	private String title;

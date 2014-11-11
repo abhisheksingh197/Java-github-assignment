@@ -161,4 +161,11 @@ public class ShopifyServiceImpl implements ShopifyService {
 		return ordersList;
 	}
 
+	@Override
+	public List<MetaField> getMetafieldsForVariant(Long variantId) {
+		ArtWorkMetafields metafields = rest.getForObject(
+				baseUri + "variants/" + variantId + "/metafields.json", ArtWorkMetafields.class);
+		return metafields.getMetafields();
+	}
+
 }

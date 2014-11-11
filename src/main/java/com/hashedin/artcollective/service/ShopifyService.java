@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
+
 import com.hashedin.artcollective.entity.Image;
 
 @Service
@@ -25,5 +26,7 @@ public interface ShopifyService {
 	public Image uploadImage(Product product, InputStream image, String format) throws IOException;
 	
 	public List<Order> getOrderSinceLastModified(DateTime lastModified);
+
+	public List<MetaField> getMetafieldsForVariant(Long variantId);
 	
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.OrderLineItem;
@@ -41,22 +42,14 @@ public class ArtistPortfolioServiceTest extends BaseUnitTest{
 	
 	@Test
 	public void testForFetchingOrderLineItemsByArtistId() {
-		List<OrderLineItem> orderLineItems = orderLineItemRepository.getOrderLineItemsByArtistId(2L);
-		assertEquals(orderLineItems.size(),3);
+		Map<String, Double> orderLineItems = artistPortfolioService.getLineItemsForPortfoilio(2L);
+		assertEquals(orderLineItems.size(),2);
 	}
 	
 	@Test
 	public void testForCreatingPortfolioLineItems() {
-		Map<Long, PortfolioLineItem> portfolioItems = artistPortfolioService.getArtworksForPortfoilio(2L);
-		assertEquals(portfolioItems.size(),1);
-		PortfolioLineItem portfolioLineItem = portfolioItems.get(504096747L);
-		assertEquals(portfolioLineItem.getOrderLineItems().size(), 3);
-		portfolioItems = artistPortfolioService.getArtworksForPortfoilio(1L);
-		portfolioLineItem = portfolioItems.get(505096747L);
-		assertEquals(portfolioLineItem.getOrderLineItems().size(), 1);
-		portfolioLineItem = portfolioItems.get(506096747L);
-		assertEquals(portfolioLineItem.getOrderLineItems().size(), 1);
-		assertEquals(portfolioItems.size(),2);
+		ModelAndView model = artistPortfolioService.getPortfolio(2L);
+		assertEquals(model.getViewName(), "artist-dashboard");
 	}
 	
 }
