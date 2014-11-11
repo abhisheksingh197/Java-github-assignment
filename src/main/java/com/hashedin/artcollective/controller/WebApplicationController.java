@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,13 +11,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hashedin.artcollective.entity.Artist;
+import com.hashedin.artcollective.repository.ArtWorkRepository;
+import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.service.ArtistPortfolioService;
 
 
 @Controller
 public final class WebApplicationController {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(WebApplicationController.class);
+	@Autowired
+	private ArtistRepository artistRepository;
+	
+	@Autowired
+	private ArtWorkRepository artworkRepository;
 	
 	@Autowired
 	private ArtistPortfolioService artistPortfolioService;
@@ -37,9 +42,23 @@ public final class WebApplicationController {
 	public ModelAndView search() {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Long artistId = Long.parseLong(auth.getName()); //get logged in username/Id
-		ModelAndView model = artistPortfolioService.getPortfolio(artistId);
+		Artist artist = (Artist) auth.getPrincipal();
+		Long artistId = artist.getId();
+		ModelAndView model = getPortfolio(artistId);
 		return model;
 		
+	}
+	
+	private ModelAndView getPortfolio(Long artistId) {
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		Artist artist = artistRepository.findOne(artistId);
+		if (artist != null) {
+			model.put("artist", artist);
+			model.put("lineitems", artistPortfolioService.getLineItemsForPortfoilio(artistId));
+			model.put("artworks", artworkRepository.getArtworksByArtist(artistId));
+			return new ModelAndView("artist-dashboard", model);
+		}
+		return null;
 	}
 }

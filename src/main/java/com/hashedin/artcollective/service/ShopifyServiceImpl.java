@@ -73,13 +73,6 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 	
 	@Override
-	public List<MetaField> getMetaFieldsForProduct(long productId) {
-		ArtWorkMetafields metafields = rest.getForObject(
-				baseUri + "products/" + productId + "/metafields.json", ArtWorkMetafields.class);
-		return metafields.getMetafields();
-	}
-
-	@Override
 	public List<Product> getFrameProductsSinceLastModified(DateTime lastRunTime) {
 		ShopifyProducts products = rest.getForObject(
 				baseUri + "products.json?product_type=frames", ShopifyProducts.class);
@@ -162,9 +155,9 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 
 	@Override
-	public List<MetaField> getMetafieldsForVariant(Long variantId) {
-		ArtWorkMetafields metafields = rest.getForObject(
-				baseUri + "variants/" + variantId + "/metafields.json", ArtWorkMetafields.class);
+	public List<MetaField> getMetaFields(String type, Long typeId) {
+		final String url = baseUri + type + "/" + typeId.toString() + "/metafields.json";
+		ArtWorkMetafields metafields = rest.getForObject(url, ArtWorkMetafields.class);
 		return metafields.getMetafields();
 	}
 

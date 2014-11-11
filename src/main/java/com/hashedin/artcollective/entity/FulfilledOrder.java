@@ -42,13 +42,15 @@ public class FulfilledOrder {
 	private Double totalDiscounts;
 	private Double totalLineItemsPrice;
 	private Double totalPrice;
-	private Double totalPriceUSD;
-	private Double totalTax;
-	private Double totalWeight;
-	private Long userId;
-	private String browserIp;
 	private Long orderNo;
 	private Long checkoutId;
+	//Commenting these fields since they are not used can be reverted when required
+//	private Double totalPriceUSD;
+//	private Double totalTax;
+//	private Double totalWeight;
+//	private Long userId;
+//	private String browserIp;
+
 	public Long getId() {
 		return id;
 	}
@@ -187,36 +189,6 @@ public class FulfilledOrder {
 	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-	public Double getTotalPriceUSD() {
-		return totalPriceUSD;
-	}
-	public void setTotalPriceUSD(Double totalPriceUSD) {
-		this.totalPriceUSD = totalPriceUSD;
-	}
-	public Double getTotalTax() {
-		return totalTax;
-	}
-	public void setTotalTax(Double totalTax) {
-		this.totalTax = totalTax;
-	}
-	public Double getTotalWeight() {
-		return totalWeight;
-	}
-	public void setTotalWeight(Double totalWeight) {
-		this.totalWeight = totalWeight;
-	}
-	public Long getUserId() {
-		return userId;
-	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-	public String getBrowserIp() {
-		return browserIp;
-	}
-	public void setBrowserIp(String browserIp) {
-		this.browserIp = browserIp;
-	}
 	public Long getOrderNo() {
 		return orderNo;
 	}
@@ -229,5 +201,36 @@ public class FulfilledOrder {
 	public void setCheckoutId(Long checkoutId) {
 		this.checkoutId = checkoutId;
 	}
+//	public Double getTotalPriceUSD() {
+//		return totalPriceUSD;
+//	}
+//	public void setTotalPriceUSD(Double totalPriceUSD) {
+//		this.totalPriceUSD = totalPriceUSD;
+//	}
+//	public Double getTotalTax() {
+//		return totalTax;
+//	}
+//	public void setTotalTax(Double totalTax) {
+//		this.totalTax = totalTax;
+//	}
+//	public Double getTotalWeight() {
+//		return totalWeight;
+//	}
+//	public void setTotalWeight(Double totalWeight) {
+//		this.totalWeight = totalWeight;
+//	}
+//	public Long getUserId() {
+//		return userId;
+//	}
+//	public void setUserId(Long userId) {
+//		this.userId = userId;
+//	}
+//	public String getBrowserIp() {
+//		return browserIp;
+//	}
+//	public void setBrowserIp(String browserIp) {
+//		this.browserIp = browserIp;
+//	}
+
 
 }

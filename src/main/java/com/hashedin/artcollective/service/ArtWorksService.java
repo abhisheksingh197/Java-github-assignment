@@ -171,7 +171,7 @@ public class ArtWorksService {
 		List<Product> products = shopify.getArtWorkProductsSinceLastModified(lastRunTime);
 		for (Product p : products) {
 			List<Collection> collections = shopify.getCollectionsForProduct(p.getId());
-			List<MetaField> metafields = shopify.getMetaFieldsForProduct(p.getId());
+			List<MetaField> metafields = shopify.getMetaFields("products", p.getId());
 			ArtWork art = createArtWork(p, collections, metafields);
 			if (art != null) {
 				arts.add(art);
@@ -213,7 +213,7 @@ public class ArtWorksService {
 				String[] artistTitle = collection.getTitle().split("_");
 				artist = artistWithCollectionId(collection.getId());
 				if (artist == null) {
-					artist = new Artist(artistTitle[1], artistTitle.length 
+					artist = getArtistObject(artistTitle[1], artistTitle.length 
 							== TITLE_SIZE ? artistTitle[2] : "", collection.getHandle(), 
 							collection.getId());
 					artistRepository.save(artist);
@@ -287,6 +287,7 @@ public class ArtWorksService {
 			artwork.setId(p.getId());
 			artwork.setSkuId(p.getId());
 			artwork.setHandle(p.getHandle());
+			artwork.setDescription(p.getBodyHtml());
 			artwork.setCreatedAt(p.getCreatedAt());
 			PriceAndSizeBucket priceAndSizeBucket = priceAndSizeBucketService.getPriceAndSizeBuckets(p);
 			artwork.setPriceBuckets(priceAndSizeBucket.getPriceBuckets());
@@ -318,6 +319,32 @@ public class ArtWorksService {
 	}
 	
 	
+	private Artist getArtistObject(String firstName, String lastName,
+			String handle, Long collectionId) {
+		Artist artist = new Artist(firstName, lastName, handle, collectionId);
+		List<MetaField> artistMetafields = shopify.getMetaFields("custom_collections", collectionId);
+		for (MetaField metafield : artistMetafields) {
+			switch (metafield.getKey()) {
+			case "artist_email":
+				artist.setEmail(metafield.getValue());
+				break;
+			case "artist_contact_no":
+				artist.setContactNumber(metafield.getValue());
+				break;
+			case "artist_account_username":
+				artist.setUsername(metafield.getValue());
+				break;
+			case "artist_account_password":
+				artist.setPassword(metafield.getValue());
+				break;
+			default:
+				break;
+			}
+		}
+		
+		return artist;
+	}
+
 	private List<ArtworkVariant> getArtworkVariants(ArtWork artwork, List<Variant> variants) {
 		List<ArtworkVariant> artworkVariants = new ArrayList<>();
 		for (Variant variant : variants) {
@@ -337,7 +364,7 @@ public class ArtWorksService {
 	}
 	
 	private Double getEarningsForVariant(Long variantId) {
-		List<MetaField> variantMetafields = shopify.getMetafieldsForVariant(variantId);
+		List<MetaField> variantMetafields = shopify.getMetaFields("variants", variantId);
 		for (MetaField metafield : variantMetafields) {
 			if (metafield.getKey().equalsIgnoreCase("artist_earning")) {
 				return Double.valueOf(metafield.getValue());

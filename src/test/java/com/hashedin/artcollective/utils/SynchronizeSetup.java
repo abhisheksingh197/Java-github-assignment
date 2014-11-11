@@ -17,6 +17,7 @@ import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
+import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 import com.hashedin.artcollective.repository.SynchronizeLogRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
@@ -67,6 +68,9 @@ public class SynchronizeSetup extends BaseUnitTest {
 	@Autowired
 	private SynchronizeLogRepository syncLogRepository;
 	
+	@Autowired
+	private ArtistRepository artistRepository;
+	
 	
 	public void artworksSynchronizeSetup() {
 		if(isInitialized) {
@@ -105,6 +109,14 @@ public class SynchronizeSetup extends BaseUnitTest {
 						+ "products/343096747/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_343096747.json"));
+		
+		if (artistRepository.findArtistByCollectionID(26109781L) == null) {
+			mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections/26109781/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("artist_26109781_metafields.json"));
+		}
 
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
@@ -176,6 +188,14 @@ public class SynchronizeSetup extends BaseUnitTest {
 						+ "products/504096747/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_504096747.json"));
+		
+		if (artistRepository.findArtistByCollectionID(26209781L) == null) {
+			mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections/26209781/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("artist_26209781_metafields.json"));
+		}
 		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl

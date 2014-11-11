@@ -107,16 +107,17 @@
                                     <img src="assets/images/admin-pic-contact.png" alt="artist" height="72" width="72" />
                                     <div class="contact-info">
                                         <h4>${artist.firstName} ${artist.lastName}</h4>
-                                        <a href="mailto:clark@artcollective.com?Subject=Contact%20Artist" target="_top" title="mail to artist">clark@artcollective.com</a>
-                                        <span>+971 456 23419</span>
+                                        <a href="mailto:${artist.email!}?Subject=Contact%20Artist" target="_top" title="mail to artist">${artist.email!}</a>
+                                        <span>${artist.contactNumber!}</span>
                                     </div>
                                 </div>
                                 <div class="add-work-block clearfix">
                                     <a href="#" class="more-work">add more works</a>
                                 </div>
                             </div>
+                            <#assign artworksLength = artworks?size>
                             <div class="portfolio-block clearfix">
-                                <h4>There are 15 works of your portfolio</h4>
+                                <h4>There are ${artworksLength} works of your portfolio</h4>
                                 <table>
                                     <thead>
                                         <tr>
@@ -127,16 +128,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <#assign artworksLength = artworks?size>
+                                    
                                     	<#list 0..(artworksLength - 1) as artIterator>
                                     		<#assign artwork = (artworks[artIterator]) />
                                     		<#assign variantList = artwork.variants />
 	                                        <tr>
 	                                        	<#assign imageSrc = artwork.images[0].imgSrc />
 	                                        	<#assign croppedImgSrc = imageSrc?split("_") />
-	                                        	<#assign croppedImgSrc = croppedImgSrc[0] + "_O_150x150_cropped.jpg?50632" />
+	                                        	<#assign croppedImgSrc = croppedImgSrc[0] + "_O_small.jpg" />
 	                                            <td><img src="${croppedImgSrc}" alt="portfolio" height="59" width="72"/></td>
-	                                            <td><h5>${artwork.title}</h5><h5>Limited Edition 100</h5></td>
+	                                            <td>
+	                                            	<h5>${artwork.title}</h5>
+	                                            	<#if artwork.isLimitedEdition() >
+	                                            		<h5>Limited Edition ${artwork.description!}</h5>
+	                                            	</#if>
+	                                            </td>
                                             	<td>
                                             		<#list variantList as variant>
                                         				<h6>${variant.option1}</h6>

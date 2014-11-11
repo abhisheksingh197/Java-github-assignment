@@ -99,7 +99,7 @@ public class ShopifyServiceTest extends BaseUnitTest {
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_343096747.json"));
 		
-		List<MetaField> metafields = service.getMetaFieldsForProduct(343096747L);
+		List<MetaField> metafields = service.getMetaFields("products", 343096747L);
 		assertEquals(metafields.size(), 2);
 		MetaField metafield = metafields.get(0);
 		assertEquals(metafield.getKey(), "is_canvas_available");

@@ -12,6 +12,9 @@ public interface ArtistRepository extends CrudRepository<Artist, Long> {
 	
 	@Query("SELECT artist FROM Artist artist WHERE "
 			+ "artist.collectionId = LOWER(:collectionId)")
-		public Artist findArtistByCollectionID(@Param("collectionId")Long collectionId);
+	public Artist findArtistByCollectionID(@Param("collectionId")Long collectionId);
 
+	@Query("SELECT artist FROM Artist artist WHERE "
+			+ "artist.username = LOWER(:username)")
+	public Artist findByUsername(@Param("username") String username);
 }

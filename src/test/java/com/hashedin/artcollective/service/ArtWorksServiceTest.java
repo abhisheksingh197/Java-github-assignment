@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.ArtWork;
+import com.hashedin.artcollective.entity.Artist;
 import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.entity.SizeBucket;
@@ -89,14 +90,20 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	public void testThatArtistFirstAndLastNameIsAdded() {
 		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
 		ArtWork artwork = artList.get(0);
-		assertEquals(artwork.getArtist().getFirstName(), "Amit");
-		assertEquals(artwork.getArtist().getLastName(), "Bhar");
+		Artist artist = artwork.getArtist();
+		assertEquals(artist.getFirstName(), "Sunil");
+		assertEquals(artist.getLastName(), "Sarkar");
+		assertEquals(artist.getEmail(), "sunil.sarkar@example.com");
+		assertEquals(artist.getContactNumber(), "080 - 2123432");
+		assertEquals(artist.getUsername(), "sunil.sarkar");
+		assertEquals(artist.getPassword(), "sunil.sarkar@123");
+		
 	}
 	
 	@Test
 	public void testForSearchByArtist() {
 		List<ArtWork> artWorkList = searchService.findArtworksByArtist("Amit");
-		assertEquals(artWorkList.size(), 3);
+		assertEquals(artWorkList.size(), 1);
 	}
 	
 	@Test

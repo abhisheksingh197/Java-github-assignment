@@ -3,19 +3,18 @@ package com.hashedin.artcollective.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.hashedin.artcollective.entity.Artist;
-import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.OrderLineItemRepository;
 import com.hashedin.artcollective.utils.Pair;
 
 @Service
-public class ArtistPortfolioService {
+public class ArtistPortfolioService implements UserDetailsService {
 	
 	@Autowired
 	private ArtistRepository artistRepository;
@@ -23,21 +22,6 @@ public class ArtistPortfolioService {
 	@Autowired
 	private OrderLineItemRepository orderLineItemRepository;
 	
-	@Autowired
-	private ArtWorkRepository artworkRepository;
-	
-	public ModelAndView getPortfolio(Long artistId) {
-		
-		Map<String, Object> model = new HashMap<String, Object>();
-		Artist artist = artistRepository.findOne(artistId);
-		if (artist != null) {
-			model.put("artist", artist);
-			model.put("lineitems", getLineItemsForPortfoilio(artistId));
-			model.put("artworks", artworkRepository.getArtworksByArtist(artistId));
-			return new ModelAndView("artist-dashboard", model);
-		}
-		return null;
-	}
 
 	/**
 	 * a
@@ -57,6 +41,16 @@ public class ArtistPortfolioService {
 		}
 		
 		return earningsByVariant;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) {
+		Artist artist = artistRepository.findByUsername(username);
+		
+		if (artist == null) {
+			throw new UsernameNotFoundException("Username " + username + " not found");
+		}
+		return artist;
 	}
 
 }
