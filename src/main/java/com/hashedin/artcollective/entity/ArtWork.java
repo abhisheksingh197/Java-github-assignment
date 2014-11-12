@@ -23,13 +23,8 @@ public class ArtWork {
 	private Long id;
 	private Long skuId;
 	private String handle;
+	private String description;
 	
-	public String getHandle() {
-		return handle;
-	}
-	public void setHandle(String handle) {
-		this.handle = handle;
-	}
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<ArtStyle> styles;
 	
@@ -42,36 +37,19 @@ public class ArtWork {
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<PriceBucket> priceBuckets;
 	
-	public List<PriceBucket> getPriceBuckets() {
-		return priceBuckets;
-	}
-	public void setPriceBuckets(List<PriceBucket> priceBuckets) {
-		this.priceBuckets = priceBuckets;
-	}
-	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<SizeBucket> sizeBuckets;
-	
-	public List<SizeBucket> getSizeBuckets() {
-		return sizeBuckets;
-	}
-	public void setSizeBuckets(List<SizeBucket> sizeBuckets) {
-		this.sizeBuckets = sizeBuckets;
-	}
 	
 	// Adding fetch type eager so that we can access images of an artwork for the Test case
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Image> images;
 	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<ArtworkVariant> variants;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Artist artist;
 	private String title;
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
 	private String medium;
 	private String orientation;
 	private Boolean isCanvasAvailable;
@@ -84,6 +62,50 @@ public class ArtWork {
 	@Column(name = "created_at")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime createdAt;
+	private double minPrice;
+	private double maxPrice;
+	private int variantCount;
+	
+	public ArtWork() {
+		this.isCanvasAvailable = false;
+		this.isOriginalAvailable = false;
+		this.isLimitedEdition = false;
+		this.isFrameAvailable = false;
+		this.isCertified = false;
+		this.medium = "";
+		this.orientation = "";
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public List<ArtworkVariant> getVariants() {
+		return variants;
+	}
+	public void setVariants(List<ArtworkVariant> variants) {
+		this.variants = variants;
+	}
+	public List<SizeBucket> getSizeBuckets() {
+		return sizeBuckets;
+	}
+	public void setSizeBuckets(List<SizeBucket> sizeBuckets) {
+		this.sizeBuckets = sizeBuckets;
+	}
+	public List<PriceBucket> getPriceBuckets() {
+		return priceBuckets;
+	}
+	public void setPriceBuckets(List<PriceBucket> priceBuckets) {
+		this.priceBuckets = priceBuckets;
+	}
+	public String getHandle() {
+		return handle;
+	}
+	public void setHandle(String handle) {
+		this.handle = handle;
+	}
 	public DateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -120,19 +142,6 @@ public class ArtWork {
 	public void setVariantCount(int variantCount) {
 		this.variantCount = variantCount;
 	}
-	private double minPrice;
-	private double maxPrice;
-	private int variantCount;
-	
-	public ArtWork() {
-		this.isCanvasAvailable = false;
-		this.isOriginalAvailable = false;
-		this.isLimitedEdition = false;
-		this.isFrameAvailable = false;
-		this.isCertified = false;
-		this.medium = "";
-		this.orientation = "";
-	}
 	public Long getId() {
 		return id;
 	}
@@ -145,7 +154,13 @@ public class ArtWork {
 	public void setSkuId(Long skuId) {
 		this.skuId = skuId;
 	}
+	public String getDescription() {
+		return description;
+	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public List<ArtStyle> getStyle() {
 		return Collections.unmodifiableList(styles);
 	}
@@ -170,7 +185,6 @@ public class ArtWork {
 	public void setArtist(Artist artist) {
 		this.artist = artist;
 	}
-	
 	public List<Image> getImages() {
 		return images;
 	}

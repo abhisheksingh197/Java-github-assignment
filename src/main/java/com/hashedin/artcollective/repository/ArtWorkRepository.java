@@ -78,4 +78,8 @@ JpaSpecificationExecutor<ArtWork> {
 			@Param("sizeBucketRangeList") List<String> sizeBucketRangeList,
 			@Param("idList") List<Long> idList);
 	
+	@Query("SELECT art FROM ArtWork art WHERE "
+			+ "art.artist.id = :artistId")
+	public List<ArtWork> getArtworksByArtist(@Param("artistId")Long artistId);
+	
 }

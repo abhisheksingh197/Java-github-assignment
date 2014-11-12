@@ -57,7 +57,7 @@ public class PriceBucketServiceTest extends BaseUnitTest {
 		if(isInitialized) {
 			return;
 		}
-		synchronizeSetup.setup();
+		synchronizeSetup.artworksSynchronizeSetup();
 		isInitialized = true;
 	}
 	

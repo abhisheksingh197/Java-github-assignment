@@ -17,10 +17,12 @@ import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
+import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 import com.hashedin.artcollective.repository.SynchronizeLogRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
+import com.hashedin.artcollective.service.OrdersService;
 import com.hashedin.artcollective.service.PriceAndSizeBucketService;
 import com.hashedin.artcollective.service.ShopifyService;
 
@@ -40,7 +42,10 @@ public class SynchronizeSetup extends BaseUnitTest {
 	private RestTemplate rest;
 
 	@Autowired
-	private ArtWorksService service;
+	private ArtWorksService artworksService;
+	
+	@Autowired
+	private OrdersService ordersService;
 
 	@Autowired
 	private ShopifyService shopifyService;
@@ -63,8 +68,11 @@ public class SynchronizeSetup extends BaseUnitTest {
 	@Autowired
 	private SynchronizeLogRepository syncLogRepository;
 	
+	@Autowired
+	private ArtistRepository artistRepository;
 	
-	public void setup() {
+	
+	public void artworksSynchronizeSetup() {
 		if(isInitialized) {
 			return;
 		}
@@ -101,6 +109,14 @@ public class SynchronizeSetup extends BaseUnitTest {
 						+ "products/343096747/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_343096747.json"));
+		
+		if (artistRepository.findArtistByCollectionID(26109781L) == null) {
+			mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections/26109781/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("artist_26109781_metafields.json"));
+		}
 
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
@@ -173,6 +189,20 @@ public class SynchronizeSetup extends BaseUnitTest {
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_504096747.json"));
 		
+		if (artistRepository.findArtistByCollectionID(26209781L) == null) {
+			mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections/26209781/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("artist_26209781_metafields.json"));
+		}
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "variants/79643453611812/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("variant_metafields.json"));
+		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
 						+ "products/504096747/images.json"))
@@ -193,6 +223,12 @@ public class SynchronizeSetup extends BaseUnitTest {
 		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
+						+ "variants/7964345234234/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("variant_metafields.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
 						+ "products/505096747/images.json"))
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("image_upload_response_505096747.json"));
@@ -208,6 +244,12 @@ public class SynchronizeSetup extends BaseUnitTest {
 						+ "products/506096747/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("metafields_506096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "variants/12312334234/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("variant_metafields.json"));
 		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
@@ -304,7 +346,35 @@ public class SynchronizeSetup extends BaseUnitTest {
 		priceBucketService.addSizeBucket(sizeBucketObj1);
 
 
-		service.synchronize(null);
+		artworksService.synchronize(null);
+	}
+
+
+	public void ordersSynchronizeSetup() {
+		MockRestServiceServer mockArtWorksService = MockRestServiceServer
+				.createServer(rest);
+		
+		String queryString = "";
+		String lastUpdatedAt = "";
+		DateTime lastModified = syncLogRepository.getLastSynchronizeDate("orders");
+		if (lastModified != null) {
+			queryString = "&updated_at_min=";
+			lastUpdatedAt = lastModified.toString();
+		}
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "orders/count.json?fulfillment_status=shipped"
+				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))))
+		.andExpect(method(HttpMethod.GET))
+		.andRespond(shopifyOrdersCount(5));
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "orders.json?fulfillment_status=shipped"
+				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))
+				.concat("&limit=100&page=1")))
+		.andExpect(method(HttpMethod.GET))
+		.andRespond(withJson("orders.json"));
+		
+		ordersService.synchronize(null);
+		
 	}
 
 }

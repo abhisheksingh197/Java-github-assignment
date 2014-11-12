@@ -9,6 +9,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -20,6 +21,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import com.hashedin.artcollective.service.ArtistPortfolioService;
 
 
 @EnableWebSecurity
@@ -52,6 +55,10 @@ public class Main extends WebMvcConfigurerAdapter {
 	
 	@Value("${tinEye.authurl}")
 	private String tinEyeAuthUrl;
+	
+	@Autowired
+	private ArtistPortfolioService userDetailsService;
+	
 	
 	@Bean
 	public RestTemplate getRestTemplate() {
@@ -125,7 +132,7 @@ public class Main extends WebMvcConfigurerAdapter {
 	
 	@Bean
 	public AuthenticationSecurity authenticationSecurity() {
-		return new AuthenticationSecurity();
+		return new AuthenticationSecurity(userDetailsService);
 	}
 
 }

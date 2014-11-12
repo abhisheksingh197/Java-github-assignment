@@ -1,0 +1,17 @@
+{
+    "metafields": [
+      {
+		    "created_at": "2014-11-10T14:52:26+05:30",
+		    "description": null,
+		    "id": 875166595,
+		    "key": "artist_earning",
+		    "namespace": "c_f",
+		    "owner_id": 917504987,
+		    "updated_at": "2014-11-10T14:52:26+05:30",
+		    "value": "800",
+		    "value_type": "string",
+		    "owner_resource": "variant"
+		}
+
+    ]
+}

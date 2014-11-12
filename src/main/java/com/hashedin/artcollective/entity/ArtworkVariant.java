@@ -1,17 +1,20 @@
-package com.hashedin.artcollective.service;
+package com.hashedin.artcollective.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Variant implements Comparable<Variant> {
 
+
+@Entity
+public class ArtworkVariant {
+	
+	@Id
+	private Long id;
 	private String barcode;
 	private String compareAtPrice;
 	private String createdAt;
 	private String fulfillmentService;
 	private int grams;
-	private Long id;
 	private String inventoryManagement;
 	private String inventoryPolicy;
 	private String option1;
@@ -21,6 +24,7 @@ public class Variant implements Comparable<Variant> {
 	private Double price;
 	private Long productId;
 	private boolean requiresShipping;
+	private Double earning;
 	// commenting out since we do not use these fields currently, can revert them back whenever required
 //	private String sku;
 //	private boolean taxable;
@@ -61,8 +65,8 @@ public class Variant implements Comparable<Variant> {
 	public Long getId() {
 		return id;
 	}
-	public void setId(String id) {
-		this.id = Long.parseLong(id);
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public String getInventoryManagement() {
 		return inventoryManagement;
@@ -109,9 +113,8 @@ public class Variant implements Comparable<Variant> {
 	public Long getProductId() {
 		return productId;
 	}
-	@JsonSetter("product_id")
-	public void setProductId(String productId) {
-		this.productId = Long.valueOf(productId);
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 	public boolean isRequiresShipping() {
 		return requiresShipping;
@@ -119,74 +122,11 @@ public class Variant implements Comparable<Variant> {
 	public void setRequiresShipping(boolean requiresShipping) {
 		this.requiresShipping = requiresShipping;
 	}
-//	public String getSku() {
-//		return sku;
-//	}
-//	public void setSku(String sku) {
-//		this.sku = sku;
-//	}
-//	public boolean isTaxable() {
-//		return taxable;
-//	}
-//	public void setTaxable(boolean taxable) {
-//		this.taxable = taxable;
-//	}
-//	public String getTitle() {
-//		return title;
-//	}
-//	public void setTitle(String title) {
-//		this.title = title;
-//	}
-//	public String getUpdatedAt() {
-//		return updatedAt;
-//	}
-//	public void setUpdatedAt(String updatedAt) {
-//		this.updatedAt = updatedAt;
-//	}
-//	public int getInventoryQuantity() {
-//		return inventoryQuantity;
-//	}
-//	public void setInventoryQuantity(int inventoryQuantity) {
-//		this.inventoryQuantity = inventoryQuantity;
-//	}
-//	public int getOldInventoryQuantity() {
-//		return oldInventoryQuantity;
-//	}
-//	public void setOldInventoryQuantity(int oldInventoryQuantity) {
-//		this.oldInventoryQuantity = oldInventoryQuantity;
-//	}
-	
-	@Override
-	public int compareTo(Variant v) {
-		return Double.valueOf(this.price - v.price).intValue();
-    }
-	
-	//CHECKSTYLE:OFF
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+	public Double getEarning() {
+		return earning;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Variant other = (Variant) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+	public void setEarning(Double earnings) {
+		this.earning = earnings;
 	}
-	//CHECKSTYLE:ON
 
-	
-	
 }

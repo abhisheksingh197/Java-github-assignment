@@ -2,10 +2,17 @@ package com.hashedin.artcollective;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 class AuthenticationSecurity extends
 		GlobalAuthenticationConfigurerAdapter {
 
+	private final UserDetailsService userDetailsService;
+	
+	public AuthenticationSecurity(UserDetailsService service) {
+		userDetailsService = service;
+	}
+	
 	@Override
 	public void init(AuthenticationManagerBuilder auth) throws Exception {
 		
@@ -15,10 +22,8 @@ class AuthenticationSecurity extends
 		 * /quick-tip-spring-security-role-based-authorization-and-permissions/
 		 */
 		auth.inMemoryAuthentication()
-				.withUser("superadmin").password("superadmin").roles("SUPERADMIN").and()
-				.withUser("artist").password("artist")
-					.authorities("PERM_READ_ARTIST_DASHBOARD").and()
-				.withUser("shopper").password("shopper")
-					.authorities("PERM_READ_CUSTOMER_ORDERS").and();
+				.withUser("superadmin").password("superadmin").roles("SUPERADMIN");
+		
+		auth.userDetailsService(userDetailsService);
 	}
 }

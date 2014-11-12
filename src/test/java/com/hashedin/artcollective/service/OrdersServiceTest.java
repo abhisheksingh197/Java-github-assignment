@@ -58,7 +58,7 @@ public class OrdersServiceTest extends BaseUnitTest{
 			return;
 		}
 		
-		synchronizeSetup.setup();
+		synchronizeSetup.artworksSynchronizeSetup();
 		
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
@@ -81,22 +81,7 @@ public class OrdersServiceTest extends BaseUnitTest{
 	@Test
 	public void testForModifiedDateFromSyncLog() {
 		
-		MockRestServiceServer mockArtWorksService = MockRestServiceServer
-				.createServer(rest);
 		
-		String lastModified = syncLogRepository.getLastSynchronizeDate("orders").toString();
-		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "orders/count.json?fulfillment_status=shipped&updated_at_min="
-				.concat(lastModified.replace("+", "%2B"))))
-		.andExpect(method(HttpMethod.GET))
-		.andRespond(shopifyOrdersCount(5));
-		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "orders.json?fulfillment_status=shipped&updated_at_min="
-				.concat(lastModified.replace("+", "%2B")).concat("&limit=100&page=1")))
-		.andExpect(method(HttpMethod.GET))
-		.andRespond(withJson("orders.json"));
-		
-		ordersService.synchronize(null);
 		
 		assertEquals(fulfilledOrderRepository.count(), 3);
 		assertEquals(orderLineItemRepository.count(), 6);
