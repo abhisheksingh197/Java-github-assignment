@@ -117,15 +117,15 @@ public class ArtWorksService {
 	
 	//Fetches frames from shopify and verifies whether they have Mount and Frame Thickness
 	public void saveFramesModifiedSince(DateTime lastRunTime) {
-		List<Product> products = shopify.getFrameProductsSinceLastModified(lastRunTime);
-		for (Product product : products) {
+		List<CustomCollection> products = shopify.getFrameProductsSinceLastModified(lastRunTime);
+		for (CustomCollection product : products) {
 				List<FrameVariant> frameVariants = getFrameVariants(product);
 				frameRepository.save(frameVariants);	
 		}
 		
 	}
 	
-	private List<FrameVariant> getFrameVariants(Product product) {
+	private List<FrameVariant> getFrameVariants(CustomCollection product) {
 		List<FrameVariant> frameVariants = new ArrayList<>();
 		for (Variant variant : product.getVariants()) {
 			if (!variantHasFrameableValues(variant)) {
@@ -168,8 +168,8 @@ public class ArtWorksService {
 	List<ArtWork> getArtWorksModifiedSince(DateTime lastRunTime) {
 		List<ArtWork> arts = new ArrayList<>();
 		// Fetches Artworks from Shopify and then updates them into internal DB.
-		List<Product> products = shopify.getArtWorkProductsSinceLastModified(lastRunTime);
-		for (Product p : products) {
+		List<CustomCollection> products = shopify.getArtWorkProductsSinceLastModified(lastRunTime);
+		for (CustomCollection p : products) {
 			List<Collection> collections = shopify.getCollectionsForProduct(p.getId());
 			List<MetaField> metafields = shopify.getMetaFields("products", p.getId());
 			ArtWork art = createArtWork(p, collections, metafields);
@@ -180,7 +180,7 @@ public class ArtWorksService {
 		return arts;
 	}
 
-	private ArtWork createArtWork(Product p, List<Collection> collections, List<MetaField> metafields) {
+	private ArtWork createArtWork(CustomCollection p, List<Collection> collections, List<MetaField> metafields) {
 		boolean origMedium = false, origSize = false, origPrice = false;
 		ArtWork artwork = new ArtWork();
 		List<ArtSubject> subject = new ArrayList<>();
@@ -342,7 +342,19 @@ public class ArtWorksService {
 			}
 		}
 		
+		artist.setImgSrc(getImageForArtist(collectionId));
+		
 		return artist;
+	}
+
+	private String getImageForArtist(Long collectionId) {
+		
+		CustomCollection artistProduct = shopify.getArtistCollection(collectionId);
+		Image image = artistProduct.getImage();
+		if (image != null) {
+			return image.getImgSrc();
+		}
+		return null;
 	}
 
 	private List<ArtworkVariant> getArtworkVariants(ArtWork artwork, List<Variant> variants) {
@@ -378,7 +390,7 @@ public class ArtWorksService {
 	}
 
 	private boolean validateArtwork(ArtWork artwork, 
-			Product p, boolean origMedium, boolean origPrice, boolean origSize) {
+			CustomCollection p, boolean origMedium, boolean origPrice, boolean origSize) {
 		String artworkLogger = String.format("Artwork Id:%d - Handle:%s :", 
 				p.getId(), p.getHandle());
 		boolean isValid = true;
@@ -453,7 +465,7 @@ public class ArtWorksService {
 		return true;
 	}
 
-	private Image resizeFeaturedImage(Product p, List<MetaField> metafields,
+	private Image resizeFeaturedImage(CustomCollection p, List<MetaField> metafields,
 			List<Image> images, Image image) {
 		try {
 			Image resizedimage = maybeResizeImage(p, metafields, p.getImages(), p.getImage());
@@ -476,7 +488,7 @@ public class ArtWorksService {
 	 * 3.3 Upload the resized image
 	 * 3.4 Store the id of the resized image in a meta-field
 	 */
-	private Image maybeResizeImage(Product p, List<MetaField> metafields,
+	private Image maybeResizeImage(CustomCollection p, List<MetaField> metafields,
 			List<Image> images, Image featuredImage) throws IOException {
 		
 		String format = determineFormat(featuredImage);

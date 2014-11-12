@@ -44,14 +44,14 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 
 	@Override
-	public List<Product> getArtWorkProductsSinceLastModified(DateTime lastModified) {
+	public List<CustomCollection> getArtWorkProductsSinceLastModified(DateTime lastModified) {
 		String queryString = "?product_type=artworks";
 		if (lastModified != null) {
 			queryString = "?product_type=artworks&updated_at_min=".concat(lastModified.toString());
 		}
 		int count = rest.getForObject(baseUri + "products/count.json" + queryString,
 				ShopifyProductsCount.class).getCount();
-		List<Product> productsList = new ArrayList<>();
+		List<CustomCollection> productsList = new ArrayList<>();
 		
 		int numPages = (count / MAX_PAGE_SIZE) + 1;
 		for (int page = 1; page <= numPages; page++) {
@@ -73,7 +73,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 	
 	@Override
-	public List<Product> getFrameProductsSinceLastModified(DateTime lastRunTime) {
+	public List<CustomCollection> getFrameProductsSinceLastModified(DateTime lastRunTime) {
 		ShopifyProducts products = rest.getForObject(
 				baseUri + "products.json?product_type=frames", ShopifyProducts.class);
 		return products.getProducts();
@@ -103,7 +103,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 
 	@Override
-	public Image uploadImage(Product p, InputStream image, String imageName) throws IOException {
+	public Image uploadImage(CustomCollection p, InputStream image, String imageName) throws IOException {
 
 		String imageUploadUrl = String.format("%sproducts/%s/images.json", baseUri, p.getId());
 		
@@ -159,6 +159,16 @@ public class ShopifyServiceImpl implements ShopifyService {
 		final String url = baseUri + type + "/" + typeId.toString() + "/metafields.json";
 		ArtWorkMetafields metafields = rest.getForObject(url, ArtWorkMetafields.class);
 		return metafields.getMetafields();
+	}
+	
+	@Override
+	public CustomCollection getArtistCollection(Long artistCollectionId) {
+		
+		CustomCollectionWrapper artistCollection = rest.getForObject(baseUri + "custom_collections/" 
+				+ artistCollectionId.toString() + ".json", 
+				CustomCollectionWrapper.class);
+		CustomCollection artistProduct = artistCollection.getCustomCollection();
+		return artistProduct;
 	}
 
 }

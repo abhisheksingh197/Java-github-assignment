@@ -116,6 +116,11 @@ public class SynchronizeSetup extends BaseUnitTest {
 						+ "custom_collections/26109781/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artist_26109781_metafields.json"));
+			mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections/26109781.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("artist_collection.json"));
 		}
 
 		mockArtWorksService
@@ -195,6 +200,11 @@ public class SynchronizeSetup extends BaseUnitTest {
 						+ "custom_collections/26209781/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("artist_26209781_metafields.json"));
+			mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections/26209781.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("artist_collection.json"));
 		}
 		
 		mockArtWorksService

@@ -17,6 +17,7 @@ import com.hashedin.artcollective.entity.Artist;
 import com.hashedin.artcollective.entity.OrderLineItem;
 import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.OrderLineItemRepository;
+import com.hashedin.artcollective.repository.PortfolioEarnings;
 import com.hashedin.artcollective.utils.SynchronizeSetup;
 
 public class ArtistPortfolioServiceTest extends BaseUnitTest{
@@ -74,6 +75,37 @@ public class ArtistPortfolioServiceTest extends BaseUnitTest{
 	@Test(expected = UsernameNotFoundException.class)
 	public void testFindByUsernameThatDoesNotExist() {
 		artistPortfolioService.loadUserByUsername("smartalec");		
+	}
+	
+	@Test
+	public void testForFetchinEarningsForPortfolio() {
+		List<PortfolioEarnings> earnings = artistPortfolioService.getEarningsForArtist(2L);
+		assertEquals(earnings.size(), 4);
+		PortfolioEarnings earning = earnings.get(0);
+		assertEquals(earning.getOrderName(), "AC-WOD1011");
+		double commission = earning.getCommission();
+		assertEquals(commission, 800, 0.1);
+		long orderId = earning.getOrderId();
+		assertEquals(orderId, 274636103L);
+		long quantity = earning.getQuantity();
+		assertEquals(quantity, 1L);
+		assertEquals(earning.getVariantSize(), "12\" x 16\"");
+		
+	}
+	
+	@Test
+	public void testForFetchingDashboardValuesForPortfolio() {
+		Map<String, Double> dashboardValues = artistPortfolioService.getDashboardValues(2L);
+		double totalEarningsAsCommission = dashboardValues.get("totalEarningsAsCommission");
+		assertEquals(totalEarningsAsCommission, 5600, 0.1);
+		double totalDeductions = dashboardValues.get("totalDeductions");
+		assertEquals(totalDeductions, 0.0, 0.1);
+		double netCommission = dashboardValues.get("netCommission");
+		assertEquals(netCommission, 5600.0, 0.1);
+		double payouts = dashboardValues.get("payouts");
+		assertEquals(payouts, 0.0, 0.1);
+		double pending = dashboardValues.get("pending");
+		assertEquals(pending, 5600.00, 0.1);
 	}
 	
 }

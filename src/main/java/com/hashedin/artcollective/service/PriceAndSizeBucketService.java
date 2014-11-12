@@ -32,7 +32,7 @@ public class PriceAndSizeBucketService {
 	}
 
 	
-	public PriceAndSizeBucket getPriceAndSizeBuckets(Product p) {
+	public PriceAndSizeBucket getPriceAndSizeBuckets(CustomCollection p) {
 		List<PriceBucket> priceBucketsForProduct = new ArrayList<>();
 		List<SizeBucket> sizeBucketsForProduct = new ArrayList<>();
  		List<PriceBucket> priceBucketsFromRepo = (List<PriceBucket>) priceBucketRepository.findAll();

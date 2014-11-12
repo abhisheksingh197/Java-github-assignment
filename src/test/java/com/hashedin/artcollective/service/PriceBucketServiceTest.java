@@ -91,7 +91,7 @@ public class PriceBucketServiceTest extends BaseUnitTest {
 				.andRespond(withJson("artworks.json"));
 		
 		
-		List<Product> p = shopifyService.getArtWorkProductsSinceLastModified(lastModified);
+		List<CustomCollection> p = shopifyService.getArtWorkProductsSinceLastModified(lastModified);
 		PriceAndSizeBucket priceAndSizeBucket = priceAndSizeBucketService.getPriceAndSizeBuckets(p.get(0));
 		List<PriceBucket> priceBuckets = priceAndSizeBucket.getPriceBuckets();
 		List<SizeBucket> sizeBuckets = priceAndSizeBucket.getSizeBuckets();

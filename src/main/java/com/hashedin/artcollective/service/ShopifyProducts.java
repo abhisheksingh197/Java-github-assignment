@@ -4,13 +4,13 @@ import java.util.List;
 
 class ShopifyProducts {
 
-	private List<Product> products;
+	private List<CustomCollection> products;
 
-	public List<Product> getProducts() {
+	public List<CustomCollection> getProducts() {
 		return products;
 	}
 
-	public void setProducts(List<Product> products) {
+	public void setProducts(List<CustomCollection> products) {
 		this.products = products;
 	}
 	

@@ -57,6 +57,8 @@ public final class WebApplicationController {
 			model.put("artist", artist);
 			model.put("lineitems", artistPortfolioService.getLineItemsForPortfoilio(artistId));
 			model.put("artworks", artworkRepository.getArtworksByArtist(artistId));
+			model.put("dashboardValues", artistPortfolioService.getDashboardValues(artistId));
+			model.put("earningsList", artistPortfolioService.getEarningsForArtist(artistId));
 			return new ModelAndView("artist-dashboard", model);
 		}
 		return null;

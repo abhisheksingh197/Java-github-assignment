@@ -104,7 +104,7 @@
                             <div>
                                 <h3>portfolio</h3>
                                 <div class="contact-info-block clearfix">
-                                    <img src="assets/images/admin-pic-contact.png" alt="artist" height="72" width="72" />
+                                    <img src="${artist.imgSrc}" alt="artist" height="72" width="72" />
                                     <div class="contact-info">
                                         <h4>${artist.firstName} ${artist.lastName}</h4>
                                         <a href="mailto:${artist.email!}?Subject=Contact%20Artist" target="_top" title="mail to artist">${artist.email!}</a>
@@ -139,9 +139,7 @@
 	                                            <td><img src="${croppedImgSrc}" alt="portfolio" height="59" width="72"/></td>
 	                                            <td>
 	                                            	<h5>${artwork.title}</h5>
-	                                            	<#if artwork.isLimitedEdition() >
-	                                            		<h5>Limited Edition ${artwork.description!}</h5>
-	                                            	</#if>
+	                                            	<h5>${artwork.description!}</h5>
 	                                            </td>
                                             	<td>
                                             		<#list variantList as variant>
@@ -165,11 +163,11 @@
                             <div>
                                 <h3>earnings</h3>
                                 <div class="contact-info-block clearfix">
-                                    <img src="assets/images/admin-pic-contact.png" alt="artist" height="72" width="72" />
+                                    <img src="${artist.imgSrc}" alt="artist" height="72" width="72" />
                                     <div class="contact-info">
                                         <h4>${artist.firstName} ${artist.lastName}</h4>
-                                        <a href="mailto:clark@artcollective.com?Subject=Contact%20Artist" target="_top" title="mail to artist">clark@artcollective.com</a>
-                                        <span>+971 456 23419</span>
+                                        <a href="mailto:${artist.email!}?Subject=Contact%20Artist" target="_top" title="mail to artist">${artist.email!}</a>
+                                        <span>${artist.contactNumber!}</span>
                                     </div>
                                 </div>
                             </div>
@@ -178,15 +176,15 @@
                                 <ul>
                                     <li class="button" rel="earning-tab2">
                                         earnings
-                                        <span class="earn-count">30000</span>
+                                        <span class="earn-count">${dashboardValues.netCommission}</span>
                                     </li>
                                     <li class="button" rel="payout-tab2">
                                         payouts
-                                        <span class="payout-count">50000</span>
+                                        <span class="payout-count">${dashboardValues.payouts}</span>
                                     </li>
                                     <li class="button" rel="pending-tab2">
                                         pending
-                                        <span class="pending-count">20000</span>
+                                        <span class="pending-count">${dashboardValues.pending}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -194,17 +192,17 @@
                                 <ul>
                                     <li rel="earn-table">
                                         <span class="earn-titles">total commission</span>
-                                        <span class="button">50000</span>
+                                        <span class="button">${dashboardValues.totalEarningsAsCommission}</span>
                                         <span class="earn-details">View details</span>
                                     </li>
                                     <li rel="deduction-table">
                                         <span class="earn-titles">total deductions</span>
-                                        <span class="button">20000</span>
+                                        <span class="button">${dashboardValues.totalDeductions}</span>
                                         <span class="earn-details">View details</span>
                                     </li>
                                     <li>
                                         <span class="earn-titles">net commission</span>
-                                        <span class="button">30000</span>
+                                        <span class="button">${dashboardValues.netCommission}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -221,38 +219,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    	<#list earningsList as earningLineItem>
                                         <tr>
-                                            <td>July 17,2014</td>
-                                            <td>#SVOT78</td>
-                                            <td class="align-center"><img src="assets/images/earnings1.jpg" alt="earnings" height="48" width="48"/></td>
-                                            <td class="align-center">12x24"</td>
-                                            <td>2</td>
-                                            <td>Rs. 3879</td>
+                                            <td>${earningLineItem.orderDate.toString('MMM dd, yyyy')!}</td>
+                                            <td>${earningLineItem.orderName!}</td>
+                                            <td class="align-center"><img src="${earningLineItem.productImageSrc!}!" alt="earnings" height="48" width="48"/></td>
+                                            <td class="align-center">${earningLineItem.variantSize!}</td>
+                                            <td>${earningLineItem.quantity!}</td>
+                                            <td>${earningLineItem.commission!}</td>
                                         </tr>
-                                        <tr>
-                                            <td>July 18,2014</td>
-                                            <td>#SVOT78</td>
-                                            <td class="align-center"><img src="assets/images/earnings2.jpg" alt="earnings" height="48" width="48"/></td>
-                                            <td class="align-center">16x8"</td>
-                                            <td>3</td>
-                                            <td>Rs.7342</td>
-                                        </tr>
-                                        <tr>
-                                            <td>July 19,2014</td>
-                                            <td>#SVOT78</td>
-                                            <td class="align-center"><img src="assets/images/earnings3.jpg" alt="earnings" height="48" width="48"/></td>
-                                            <td class="align-center">24x24"</td>
-                                            <td>4</td>
-                                            <td>Rs. 568</td>
-                                        </tr>
-                                        <tr>
-                                            <td>July 20,2014</td>
-                                            <td>#SVOT78</td>
-                                            <td class="align-center"><img src="assets/images/earnings4.jpg" alt="earnings" height="48" width="48"/></td>
-                                            <td class="align-center">12x24"</td>
-                                            <td>5</td>
-                                            <td>Rs. 4721</td>
-                                        </tr>
+                                        </#list>
                                     </tbody>
                                 </table>
                             </div>

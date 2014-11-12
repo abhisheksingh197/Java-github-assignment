@@ -92,7 +92,11 @@ public class OrdersService {
 		for (OrderLineItem lineItem : orderLineItems) {
 			lineItem.setOrder(fulfilledOrder); 
 			lineItem.setArtistId(getArtistId(lineItem.getProductId()));
-			lineItem.setEarning(getEarningsForVariant(lineItem.getVariantId()));
+			Double earning = getEarningsForVariant(lineItem.getVariantId());
+			if (earning != null) {
+				lineItem.setEarning(earning * lineItem.getQuantity());
+			}
+			
 		}
 		return orderLineItems;
 	}
@@ -115,6 +119,7 @@ public class OrdersService {
 	private FulfilledOrder createFulfilledOrder(Order order) {
 		FulfilledOrder fulfilledOrder = new FulfilledOrder();
 		fulfilledOrder.setId(order.getId());
+		fulfilledOrder.setName(order.getName());
 		fulfilledOrder.setCreatedAt(order.getCreatedAt());
 		fulfilledOrder.setOrderNo(order.getOrderNo());
 		fulfilledOrder.setTotalPrice(order.getTotalPrice());

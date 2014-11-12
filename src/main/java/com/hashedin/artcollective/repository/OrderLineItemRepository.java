@@ -17,5 +17,13 @@ public interface OrderLineItemRepository extends CrudRepository<OrderLineItem, L
 			+ "items.artistId = :artistId "
 			+ "group by items.variantId")
 	public List<Pair<Long, Double>> getOrderLineItemsByArtistAndArtwork(@Param("artistId")Long artistId);
+	
+	@Query("SELECT items FROM OrderLineItem items WHERE "
+			+ "items.artistId = :artistId order by items.order.createdAt desc")
+	public List<OrderLineItem> getOrderLineItemsByArtist(@Param("artistId")Long artistId);
+
+	@Query("SELECT SUM(earning) FROM OrderLineItem items WHERE "
+			+ "items.artistId = :artistId")
+	public Double getSumOfEarningsByArtist(@Param("artistId")Long artistId);
 
 }

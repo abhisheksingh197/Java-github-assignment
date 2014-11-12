@@ -87,7 +87,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	}
 	
 	@Test
-	public void testThatArtistFirstAndLastNameIsAdded() {
+	public void testForArtistDetails() {
 		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
 		ArtWork artwork = artList.get(0);
 		Artist artist = artwork.getArtist();
@@ -97,6 +97,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		assertEquals(artist.getContactNumber(), "080 - 2123432");
 		assertEquals(artist.getUsername(), "sunil.sarkar");
 		assertEquals(artist.getPassword(), "sunil.sarkar@123");
+		assertEquals(artist.getImgSrc(), "https://cdn.shopify.com/s/files/1/0608/8161/collections/Bharti_Prajapati.png?v=1411264259");
 		
 	}
 	

@@ -40,10 +40,10 @@ public class ShopifyServiceTest extends BaseUnitTest {
 			.andExpect(method(HttpMethod.GET))
 			.andRespond(withJson("single_product.json"));
 		
-		List<Product> products = service.getArtWorkProductsSinceLastModified(null);
+		List<CustomCollection> products = service.getArtWorkProductsSinceLastModified(null);
 		assertEquals(products.size(), 1);
 		
-		Product product = products.get(0);
+		CustomCollection product = products.get(0);
 		assertEquals(product.getId(), 331204149);
 		assertNotNull(product.getCreatedAt());
 		assertNotNull(product.getUpdatedAt());
@@ -60,10 +60,10 @@ public class ShopifyServiceTest extends BaseUnitTest {
 			.andExpect(method(HttpMethod.GET))
 			.andRespond(withJson("frames.json"));
 		
-		List<Product> products = service.getFrameProductsSinceLastModified(null);
+		List<CustomCollection> products = service.getFrameProductsSinceLastModified(null);
 		assertEquals(products.size(), 6);
 		
-		Product product = products.get(0);
+		CustomCollection product = products.get(0);
 		assertEquals(product.getId(), 343096747);
 		assertNotNull(product.getCreatedAt());
 		assertNotNull(product.getUpdatedAt());
