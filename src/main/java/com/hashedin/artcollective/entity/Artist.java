@@ -34,6 +34,7 @@ public class Artist implements UserDetails {
 	private String handle;
 	private String email;
 	private String contactNumber;
+	private String imgSrc;
 	private String username;
 	private String password;
 	public long getId() {
@@ -83,6 +84,12 @@ public class Artist implements UserDetails {
 	}
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
+	}
+	public String getImgSrc() {
+		return imgSrc;
+	}
+	public void setImgSrc(String imgSrc) {
+		this.imgSrc = imgSrc;
 	}
 	@Override
 	public String getUsername() {
