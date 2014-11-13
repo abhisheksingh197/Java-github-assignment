@@ -1,4 +1,4 @@
-package com.hashedin.artcollective.repository;
+package com.hashedin.artcollective.service;
 
 import org.joda.time.DateTime;
 

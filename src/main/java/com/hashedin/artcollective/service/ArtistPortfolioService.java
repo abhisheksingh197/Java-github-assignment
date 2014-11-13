@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,13 +14,16 @@ import org.springframework.stereotype.Service;
 import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.Artist;
 import com.hashedin.artcollective.entity.ArtworkVariant;
+import com.hashedin.artcollective.entity.Deduction;
 import com.hashedin.artcollective.entity.FulfilledOrder;
 import com.hashedin.artcollective.entity.OrderLineItem;
+import com.hashedin.artcollective.entity.Transaction;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.ArtworkVariantRepository;
+import com.hashedin.artcollective.repository.DeductionRepository;
 import com.hashedin.artcollective.repository.OrderLineItemRepository;
-import com.hashedin.artcollective.repository.PortfolioEarnings;
+import com.hashedin.artcollective.repository.TransactionRepository;
 import com.hashedin.artcollective.utils.Pair;
 
 @Service
@@ -37,6 +41,12 @@ public class ArtistPortfolioService implements UserDetailsService {
 	
 	@Autowired
 	private ArtworkVariantRepository artworkVariantRepository;
+	
+	@Autowired
+	private DeductionRepository deductionsRepository;
+	
+	@Autowired
+	private TransactionRepository transactionRepository;
 	
 
 	/**
@@ -69,7 +79,7 @@ public class ArtistPortfolioService implements UserDetailsService {
 		return artist;
 	}
 
-	public List<PortfolioEarnings> getEarningsForArtist(Long artistId) {
+	public List<PortfolioEarnings> getEarningsByArtist(Long artistId) {
 		List<OrderLineItem> earningsLineItems = orderLineItemRepository.getOrderLineItemsByArtist(artistId);
 		List<PortfolioEarnings> earningsForArtist = new ArrayList<>();
 		for (OrderLineItem lineItem : earningsLineItems) {
@@ -101,10 +111,14 @@ public class ArtistPortfolioService implements UserDetailsService {
 
 	public Map<String, Double> getDashboardValues(Long artistId) {
 		Map<String, Double> dashboardValues = new HashMap<>();
+		Double zero = 0.0;
 		Double totalEarningsAsCommission = orderLineItemRepository.getSumOfEarningsByArtist(artistId);
-		Double totalDeductions = 0.0;
+		totalEarningsAsCommission = totalEarningsAsCommission == null ? zero : totalEarningsAsCommission;
+		Double totalDeductions = deductionsRepository.getSumOfDeductionsByArtist(artistId);
+		totalDeductions = totalDeductions == null ? zero : totalDeductions;
 		Double netCommission = totalEarningsAsCommission - totalDeductions;
-		Double payouts = 0.0;
+		Double payouts = transactionRepository.getSumOfTransactionsByArtist(artistId);
+		payouts = payouts == null ? zero : payouts;
 		Double pending = netCommission - payouts;
 		
 		dashboardValues.put("totalEarningsAsCommission", totalEarningsAsCommission);
@@ -114,6 +128,28 @@ public class ArtistPortfolioService implements UserDetailsService {
 		dashboardValues.put("pending", pending);
 		
 		return dashboardValues;
+	}
+	
+	public Map<String, String> getArtworkImagesByArtist(Long artistId) {
+		Map<String, String> artworksImageMap = new HashMap<>();
+		List<ArtWork> artworks = artworkRepository.getArtworksByArtist(artistId);
+		for (ArtWork artwork : artworks) {
+			String artworkId = String.valueOf(artwork.getId());
+			String artworkImageSrc = artwork.getImages().get(0).getImgSrc();
+			artworksImageMap.put(artworkId, artworkImageSrc);
+		}
+		return artworksImageMap;
+		
+	}
+
+	public List<Transaction> getTransactionsByArtist(Long artistId) {
+		List<Transaction> transactions = transactionRepository.getTransactionsByArtist(artistId);
+		return transactions;
+	}
+
+	public List<Deduction> getDeductionsByArtist(Long artistId) {
+		List<Deduction> deductions = deductionsRepository.getDeductionsByArtist(artistId);
+		return deductions;
 	}
 
 }

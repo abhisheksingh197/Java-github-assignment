@@ -97,7 +97,7 @@
                                 <i class="icon-tab">&nbsp;</i>Contact Admin
                             </li>
                             <li>
-                                <i class="icon-tab">&nbsp;</i>Sign Out
+                                <a href="/logout" > <i class="icon-tab">&nbsp;</i>Sign Out </a>
                             </li>
                         </ul>
                         <div class="tab-content clearfix portfolio-tab">
@@ -243,24 +243,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1 July 2015</td>
-                                            <td><img src="assets/images/deduction1.jpg" alt="deduction" height="48" width="48"/></td>
-                                            <td>Photography</td>
-                                            <td class="align-center">250</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1 July 2015</td>
-                                            <td><img src="assets/images/deduction2.jpg" alt="deduction" height="48" width="48"/></td>
-                                            <td>Photography</td>
-                                            <td class="align-center">250</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1 July 2015</td>
-                                            <td><img src="assets/images/deduction3.jpg" alt="deduction" height="48" width="48"/></td>
-                                            <td>Photography</td>
-                                            <td class="align-center">250</td>
-                                        </tr>
+                                    	<#list deductionsList as deductionItem>
+                                    		<#assign li = (artworkImages[deductionItem.artworkId?c])!0.0 />
+	                                        <tr>
+	                                            <td>${deductionItem.createdAt.toString('MMM dd, yyyy')!}</td>
+	                                            <td><img src="${li}" alt="deduction" height="48" width="48"/></td>
+	                                            <td>${deductionItem.type!}</td>
+	                                            <td class="align-center">${deductionItem.totalDeduction!}</td>
+	                                        </tr>
+                                        </#list>
                                     </tbody>
                                 </table>
                             </div>
@@ -268,12 +259,12 @@
                                 <ul>
                                     <li rel="payment-table">
                                         <span class="earn-titles">total payment</span>
-                                        <span class="button">50000</span>
+                                        <span class="button">${dashboardValues.payouts}</span>
                                         <span class="earn-details">View details</span>
                                     </li>
                                     <li rel="payment-table">
                                         <span class="earn-titles">total pending</span>
-                                        <span class="button">20000</span>
+                                        <span class="button">${dashboardValues.pending}</span>
                                         <span class="earn-details">View details</span>
                                     </li>
                                 </ul>
@@ -288,21 +279,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1 July 2015</td>
-                                            <td class="payment-amt">Rs 15,000</td>
-                                            <td class="payment-dtls">NEFT #1234564567</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1 July 2015</td>
-                                            <td class="payment-amt">Rs 7,600</td>
-                                            <td class="payment-dtls">AQRS 789534889485</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1 July 2015</td>
-                                            <td class="payment-amt">Rs 33,678</td>
-                                            <td class="payment-dtls">NEFT #123456</td>
-                                        </tr>
+                                    	<#list transactionsList as transactionItem>
+	                                        <tr>
+	                                            <td>${transactionItem.createdAt.toString('MMM dd, yyyy')!}</td>
+	                                            <td class="payment-amt">${transactionItem.amount!}</td>
+	                                            <td class="payment-dtls">${transactionItem.remarks!}</td>
+	                                        </tr>
+	                                    </#list>
                                     </tbody>
                                 </table>
                             </div>
@@ -310,7 +293,7 @@
                                 <ul>
                                     <li class="active">
                                         <span class="earn-titles">total pending</span>
-                                        <span class="button">20000</span>
+                                        <span class="button">${dashboardValues.pending}</span>
                                     </li>
                                 </ul>
                             </div>
