@@ -24,6 +24,6 @@ public interface OrderLineItemRepository extends CrudRepository<OrderLineItem, L
 
 	@Query("SELECT SUM(earning) FROM OrderLineItem items WHERE "
 			+ "items.artistId = :artistId")
-	public Double getSumOfEarningsByArtist(@Param("artistId")Long artistId);
+	public Double getSumOfOrderLineItemsByArtist(@Param("artistId")Long artistId);
 
 }

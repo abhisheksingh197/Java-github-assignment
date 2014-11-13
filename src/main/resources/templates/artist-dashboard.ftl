@@ -148,8 +148,8 @@
                                             	</td>
                                             	<td>
                                             		<#list variantList as variant>
-                                            			<#assign li = (lineitems[variant.id?c])!0.0 />
-                                        				<h6>${li?string("0.00")}</h6>
+                                            			<#assign variantEarning = (lineitems[variant.id?c])!0.0 />
+                                        				<h6>${variantEarning?string("0.00")}</h6>
                                             		</#list>
                                             	</td>
 	                                        </tr>
@@ -223,7 +223,7 @@
                                         <tr>
                                             <td>${earningLineItem.orderDate.toString('MMM dd, yyyy')!}</td>
                                             <td>${earningLineItem.orderName!}</td>
-                                            <td class="align-center"><img src="${earningLineItem.productImageSrc!}!" alt="earnings" height="48" width="48"/></td>
+                                            <td class="align-center"><img src="${earningLineItem.productImageSrc!}" alt="earnings" height="48" width="48"/></td>
                                             <td class="align-center">${earningLineItem.variantSize!}</td>
                                             <td>${earningLineItem.quantity!}</td>
                                             <td>${earningLineItem.commission!}</td>
@@ -244,10 +244,10 @@
                                     </thead>
                                     <tbody>
                                     	<#list deductionsList as deductionItem>
-                                    		<#assign li = (artworkImages[deductionItem.artworkId?c])!0.0 />
+                                    		<#assign artworkImageSrc = (artworkImages[deductionItem.artworkId?c])!0.0 />
 	                                        <tr>
 	                                            <td>${deductionItem.createdAt.toString('MMM dd, yyyy')!}</td>
-	                                            <td><img src="${li}" alt="deduction" height="48" width="48"/></td>
+	                                            <td><img src="${artworkImageSrc}" alt="deduction" height="48" width="48"/></td>
 	                                            <td>${deductionItem.type!}</td>
 	                                            <td class="align-center">${deductionItem.totalDeduction!}</td>
 	                                        </tr>

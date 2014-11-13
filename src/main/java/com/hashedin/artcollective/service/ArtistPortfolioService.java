@@ -112,7 +112,7 @@ public class ArtistPortfolioService implements UserDetailsService {
 	public Map<String, Double> getDashboardValues(Long artistId) {
 		Map<String, Double> dashboardValues = new HashMap<>();
 		Double zero = 0.0;
-		Double totalEarningsAsCommission = orderLineItemRepository.getSumOfEarningsByArtist(artistId);
+		Double totalEarningsAsCommission = orderLineItemRepository.getSumOfOrderLineItemsByArtist(artistId);
 		totalEarningsAsCommission = totalEarningsAsCommission == null ? zero : totalEarningsAsCommission;
 		Double totalDeductions = deductionsRepository.getSumOfDeductionsByArtist(artistId);
 		totalDeductions = totalDeductions == null ? zero : totalDeductions;
