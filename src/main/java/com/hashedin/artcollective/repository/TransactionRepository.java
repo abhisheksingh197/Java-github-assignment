@@ -2,6 +2,7 @@ package com.hashedin.artcollective.repository;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -18,5 +19,9 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
 			+ "transactions.artistId = :artistId order by transactions.createdAt desc")
 	public List<Transaction> getTransactionsByArtist(@Param("artistId")Long artistId);
 	
+	@Query("SELECT t from Transaction t WHERE t.createdAt > :since")
+	public List<Transaction> getTransactionsSince(@Param("since") DateTime since);
+
+
 
 }

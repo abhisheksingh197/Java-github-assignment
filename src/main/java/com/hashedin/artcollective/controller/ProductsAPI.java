@@ -2,6 +2,8 @@ package com.hashedin.artcollective.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,14 +13,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.hashedin.artcollective.entity.ArtStyle;
 import com.hashedin.artcollective.entity.ArtSubject;
 import com.hashedin.artcollective.entity.ArtWork;
@@ -40,6 +40,7 @@ import com.hashedin.artcollective.service.PriceAndSizeBucketService;
 import com.hashedin.artcollective.service.Style;
 import com.hashedin.artcollective.service.Subject;
 import com.hashedin.artcollective.service.TinEyeService;
+import com.hashedin.artcollective.service.TransactionsService;
 
 @RestController
 public class ProductsAPI {
@@ -77,6 +78,9 @@ public class ProductsAPI {
 	@Autowired
 	private SizeBucketRepository sizeBucketRepository;
 	
+	@Autowired
+	private TransactionsService transactionService;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
 	//Add Price Range Bucket
@@ -91,6 +95,23 @@ public class ProductsAPI {
 		LOGGER.info("Price Bucket: " + priceBucket.getTitle() + " Successfully Added");
 	
 	}
+	
+	@RequestMapping(value = "/upload/transactions", method = RequestMethod.POST)
+    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                Reader csvReader = new InputStreamReader(file.getInputStream());
+				List<String> errors = transactionService.saveTransactionsInBulk(csvReader);
+                return errors.toString();
+            } 
+            catch (Exception e) {
+                return "You failed to upload ";
+            }
+        } 
+        else {
+            return "You failed to upload  because the file was empty.";
+        }
+    }
 	
 	//Add Size Range Bucket
 		@RequestMapping(value = "/manage/sizeRange/add", method = RequestMethod.GET)
