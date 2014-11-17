@@ -109,6 +109,7 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 		for (int artworkIterator = 0; artworkIterator < 1000; artworkIterator++ ) {
 			ArtWork art = new ArtWork();
 			art.setId(idCount);
+			art.setHandle("Artwork-" + idCount);
 			art.setTitle("Artwork-" + idCount);
 			art.setSubject(artSubjects);
 			art.setStyle(artStyles);
