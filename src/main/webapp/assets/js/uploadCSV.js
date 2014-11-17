@@ -6,7 +6,7 @@ var uploadCSV = function(uploadType) {
   if(TestFileType( fileName, ['.csv'] )) {
   	$.ajax({
       type:'POST',
-	    url: '/upload/' + uploadType,
+	    url: '/api/upload/' + uploadType,
 	    data:formData,
 	      cache:false,
 	      contentType: false,

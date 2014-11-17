@@ -19,6 +19,7 @@ class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 			.antMatchers("/api/**").permitAll()
 			.antMatchers("/proxy/**").permitAll()
 			.antMatchers("/api/uploadImage").permitAll()
+			.antMatchers("/leads").permitAll()
 			.anyRequest().fullyAuthenticated();
 		
 		http

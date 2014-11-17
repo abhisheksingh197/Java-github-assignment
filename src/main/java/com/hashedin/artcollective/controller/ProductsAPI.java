@@ -102,7 +102,7 @@ public class ProductsAPI {
 	
 	}
 	
-	@RequestMapping(value = "/upload/transactions", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/upload/transactions", method = RequestMethod.POST)
     public List<String> transactionsCSVUpload(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
             try {
@@ -119,7 +119,7 @@ public class ProductsAPI {
         }
     }
 	
-	@RequestMapping(value = "/upload/deductions", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/upload/deductions", method = RequestMethod.POST)
     public List<String> deductionsCSVUpload(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
             try {
