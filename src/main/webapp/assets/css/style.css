@@ -3476,6 +3476,7 @@ span.earn-details {
 .payment-table table {
 	width: 498px;
 }
+
 td.payment-amt {
 	font-family: 'helveticabold';
 	color: #666;
@@ -4335,3 +4336,24 @@ h3.accordian-up.no-gap span{
     margin-left: 35px;
     margin-top: 20px;
 }
+
+/* Artist Dashboard Upload page*/
+
+.errors-table table {
+	width: 800px;
+}
+
+.upload-container {
+	display:inline-block;
+}
+
+.upload-content, .upload-heading {
+	text-align:center;
+	padding-top: 10px;
+}
+
+.import-success {
+	color: green;
+	font-size: large;
+}
+

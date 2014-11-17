@@ -8,12 +8,14 @@ import com.hashedin.artcollective.integration.AuthorizationTests;
 import com.hashedin.artcollective.service.ArtWorksServiceMockitoTest;
 import com.hashedin.artcollective.service.ArtWorksServiceTest;
 import com.hashedin.artcollective.service.ArtistPortfolioServiceTest;
+import com.hashedin.artcollective.service.DeductionServiceTest;
 import com.hashedin.artcollective.service.FrameVariantServiceTest;
 import com.hashedin.artcollective.service.OrdersServiceTest;
 import com.hashedin.artcollective.service.PriceBucketServiceTest;
 import com.hashedin.artcollective.service.ProductsAPITest;
 import com.hashedin.artcollective.service.ShopifyServiceTest;
 import com.hashedin.artcollective.service.TinEyeServiceImpTest;
+import com.hashedin.artcollective.service.TransactionServiceTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
@@ -26,7 +28,9 @@ import com.hashedin.artcollective.service.TinEyeServiceImpTest;
 	ArtWorksServiceMockitoTest.class,
 	FrameVariantServiceTest.class,
 	OrdersServiceTest.class,
-	ArtistPortfolioServiceTest.class
+	ArtistPortfolioServiceTest.class,
+	TransactionServiceTest.class,
+	DeductionServiceTest.class
 })
 public class UnitTests {
 

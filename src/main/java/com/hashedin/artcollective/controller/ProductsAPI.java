@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.hashedin.artcollective.entity.ArtStyle;
 import com.hashedin.artcollective.entity.ArtSubject;
 import com.hashedin.artcollective.entity.ArtWork;
@@ -33,6 +35,7 @@ import com.hashedin.artcollective.repository.SizeBucketRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
 import com.hashedin.artcollective.service.CriteriaSearchResponse;
+import com.hashedin.artcollective.service.DeductionsService;
 import com.hashedin.artcollective.service.Frame;
 import com.hashedin.artcollective.service.FrameVariantService;
 import com.hashedin.artcollective.service.OrdersService;
@@ -81,6 +84,9 @@ public class ProductsAPI {
 	@Autowired
 	private TransactionsService transactionService;
 	
+	@Autowired
+	private DeductionsService deductionService;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
 	//Add Price Range Bucket
@@ -97,19 +103,36 @@ public class ProductsAPI {
 	}
 	
 	@RequestMapping(value = "/upload/transactions", method = RequestMethod.POST)
-    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+    public List<String> transactionsCSVUpload(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
             try {
-                Reader csvReader = new InputStreamReader(file.getInputStream());
+                Reader csvReader = new InputStreamReader(file.getInputStream(), Charset.forName("UTF-8"));
 				List<String> errors = transactionService.saveTransactionsInBulk(csvReader);
-                return errors.toString();
+                return errors;
             } 
             catch (Exception e) {
-                return "You failed to upload ";
+                return Arrays.asList("You failed to upload ");
             }
         } 
         else {
-            return "You failed to upload  because the file was empty.";
+            return Arrays.asList("You failed to upload  because the file was empty.");
+        }
+    }
+	
+	@RequestMapping(value = "/upload/deductions", method = RequestMethod.POST)
+    public List<String> deductionsCSVUpload(@RequestParam("file") MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                Reader csvReader = new InputStreamReader(file.getInputStream(), Charset.forName("UTF-8"));
+				List<String> errors = deductionService.saveDeductionsInBulk(csvReader);
+                return errors;
+            } 
+            catch (Exception e) {
+                return Arrays.asList("You failed to upload ");
+            }
+        } 
+        else {
+            return Arrays.asList("You failed to upload  because the file was empty.");
         }
     }
 	

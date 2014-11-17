@@ -56,12 +56,17 @@ public class TransactionsService {
 		List<Transaction> toAdd = new ArrayList<>();
 		List<Transaction> pastTransactions = transactionRepository.getTransactionsSince(
 				new DateTime().minusMonths(2));
+		
 		Map<String, Transaction> pastTransactionsById = getTransactionsByUniqueId(pastTransactions);
 		for (Transaction t : transactions) {
 			if (wasTransactionAddedPreviously(pastTransactionsById, t)) {
-				errors.add("Transaction " + t + " is a duplicate and will be ignored");
+				errors.add("Transaction " + t.getCreatedAt().toString() + t.getArtistId() 
+						+ t.getAmount() + " is a duplicate and will be ignored");
 			}
 			else {
+				for (String uniqueId : getTransactionUniqueKeys(t)) {
+					pastTransactionsById.put(uniqueId, t);
+				}
 				toAdd.add(t);
 			}
 		}
@@ -145,8 +150,8 @@ public class TransactionsService {
 					
 					Artist artist = artistByUniqueId.get(artistHandle);
 					if (artist == null) {
-						errors.add("Can't process row " + dateAsString 
-								+ artistHandle + amountAsString + remarks);
+						errors.add("Can't process row " + dateAsString + artistHandle 
+								+ amountAsString + remarks + "Invalid Artist");
 					}
 					else {
 						DateTime createdAt = DATE_FORMAT.parseDateTime(dateAsString);
@@ -171,9 +176,6 @@ public class TransactionsService {
 				}
 			}
 		}
-		
-		
-		
 		finally {
 			if (parser != null) {
 				parser.close();

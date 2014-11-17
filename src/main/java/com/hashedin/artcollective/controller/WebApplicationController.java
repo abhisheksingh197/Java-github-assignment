@@ -39,7 +39,7 @@ public final class WebApplicationController {
 	}
 	
 	@RequestMapping("/dashboard")
-	public ModelAndView search() {
+	public ModelAndView artistDashboard() {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Artist artist = (Artist) auth.getPrincipal();
@@ -47,6 +47,24 @@ public final class WebApplicationController {
 		ModelAndView model = getPortfolio(artistId);
 		return model;
 		
+	}
+	
+	@RequestMapping("/manage/upload/deductions")
+	public ModelAndView uploadDeductionsAsCSV() {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("time", new Date());
+		model.put("message", "Hello World!");
+
+		return new ModelAndView("deductions-upload", model);
+	}
+	
+	@RequestMapping("/manage/upload/transactions")
+	public ModelAndView uploadTransactionsAsCSV() {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("time", new Date());
+		model.put("message", "Hello World!");
+
+		return new ModelAndView("transactions-upload", model);
 	}
 	
 	private ModelAndView getPortfolio(Long artistId) {

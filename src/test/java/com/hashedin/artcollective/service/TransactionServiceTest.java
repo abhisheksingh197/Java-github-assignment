@@ -41,8 +41,8 @@ public class TransactionServiceTest extends BaseUnitTest{
 		List<String> errors = transactionService.saveTransactionsInBulk(csvReader);
 		csvReader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("transactions.csv"));
 		errors.addAll(transactionService.saveTransactionsInBulk(csvReader));
-		assertEquals(errors.size(), 7);
-		assertEquals(transactionRepository.count(), 1);
+		assertEquals(errors.size(), 9);
+		assertEquals(transactionRepository.count(), 4);
 	}
 
 }

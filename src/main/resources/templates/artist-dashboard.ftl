@@ -7,19 +7,19 @@
         <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Raleway:700,600,500,400' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="assets/css/ustm-radio-check.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="assets/css/jquery.selectbox.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="assets/css/global.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="assets/css/style.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/ustm-radio-check.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/assets/css/jquery.selectbox.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/assets/css/global.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="screen">
         <!--[if lt IE 9]>
-        <link rel="stylesheet" type="text/css" href="assets/css/ie8.css" media="screen">
-        <script src="assets/js/html5shiv.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/assets/css/ie8.css" media="screen">
+        <script src="/assets/js/html5shiv.min.js"></script>
         <![endif]-->
         <!--[if lt IE 8]>
-        <link rel="stylesheet" type="text/css" href="assets/css/ie7.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/assets/css/ie7.css" media="screen">
         <![endif]-->
-        <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="/assets/js/jquery-1.10.2.min.js"></script>
     </head>
     <body>
         <!--Page Wrapper Start-->
@@ -51,7 +51,7 @@
                 <div class="container clearfix">
                     <div class="header-sec-one">
                         <div class="logo">
-                            <a href="index.html"> <img src="assets/images/logo.png" alt="logo image" width="201" height="48" /> </a>
+                            <a href="index.html"> <img src="/assets/images/logo.png" alt="logo image" width="201" height="48" /> </a>
                         </div>
                         <nav>
                             <ul>
@@ -73,7 +73,7 @@
                     </div>
                     <div class="access-block">
                         <div class="login">
-                            <a class="profile-image" href="#"><img src="assets/images/artist-login-img.png" alt="login-img" width="38" height="38" /></a>
+                            <a class="profile-image" href="#"><img src="/assets/images/artist-login-img.png" alt="login-img" width="38" height="38" /></a>
                         </div>
                     </div>
                 </div>
@@ -548,12 +548,12 @@
         </div>
         <!--Page Wrapper End-->
 
-        <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
-        <script type="text/javascript" src="assets/js/jquery.screwdefaultbuttonsV2.js"></script>
-        <script type="text/javascript" src="assets/js/jquery.selectbox-0.2.js"></script>
-        <script type="text/javascript" src="assets/js/masonry.pkgd.js"></script>
-        <script type="text/javascript" src="assets/js/modernizr.js"></script>
-        <script type="text/javascript" src="assets/js/site.js"></script>
+        <script type="text/javascript" src="/assets/js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="/assets/js/jquery.screwdefaultbuttonsV2.js"></script>
+        <script type="text/javascript" src="/assets/js/jquery.selectbox-0.2.js"></script>
+        <script type="text/javascript" src="/assets/js/masonry.pkgd.js"></script>
+        <script type="text/javascript" src="/assets/js/modernizr.js"></script>
+        <script type="text/javascript" src="/assets/js/site.js"></script>
         <script type="text/javascript">
             $container = $('#gallery-search');
             // initialize
