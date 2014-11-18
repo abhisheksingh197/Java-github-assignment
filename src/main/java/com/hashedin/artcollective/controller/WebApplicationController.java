@@ -44,12 +44,8 @@ public final class WebApplicationController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			Artist artist = (Artist) auth.getPrincipal();
 			Long artistId = artist.getId();
-			if (artistId != null) {
-				ModelAndView model = getPortfolio(artistId);
-				return model;
-			}
-		return null;
-		
+			ModelAndView model = getPortfolio(artistId);
+			return model;
 	}
 	
 	@RequestMapping("/manage/upload/deductions")
