@@ -22,7 +22,8 @@ class AuthenticationSecurity extends
 		 * /quick-tip-spring-security-role-based-authorization-and-permissions/
 		 */
 		auth.inMemoryAuthentication()
-				.withUser("superadmin").password("superadmin").roles("SUPERADMIN");
+				.withUser("superadmin").password("superadmin").roles("SUPERADMIN").and()
+				.withUser("manager").password("manager").roles("MANAGER");
 		
 		auth.userDetailsService(userDetailsService);
 	}

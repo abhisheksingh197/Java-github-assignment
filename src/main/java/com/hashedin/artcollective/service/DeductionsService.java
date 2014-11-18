@@ -104,7 +104,15 @@ public class DeductionsService {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Parsing Deductions from CSV file and storing them if they the same deduction was not made
+	 * before 2 Months
+	 * @param csvReader
+	 * @param deductions
+	 * @param errors
+	 * @throws IOException
+	 */
 	private void parseDeductions(Reader csvReader, List<Deduction> deductions,
 			List<String> errors) throws IOException {
 		

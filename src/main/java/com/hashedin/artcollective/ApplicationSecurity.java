@@ -10,16 +10,16 @@ class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		
-		
 		http.authorizeRequests()
-			.antMatchers("/", "/home").permitAll()
+			.antMatchers("/").hasAuthority("ARTIST")
 			.antMatchers("/dashboard").authenticated()
 			.antMatchers("/assets/**").permitAll()
-			.antMatchers("/manage/**").hasRole("SUPERADMIN")
+			.antMatchers("/admin/**").hasRole("SUPERADMIN")
 			.antMatchers("/api/**").permitAll()
 			.antMatchers("/proxy/**").permitAll()
 			.antMatchers("/api/uploadImage").permitAll()
 			.antMatchers("/leads").permitAll()
+			.antMatchers("/manage/**").hasRole("MANAGER")
 			.anyRequest().fullyAuthenticated();
 		
 		http
@@ -27,7 +27,9 @@ class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 				.loginPage("/login").failureUrl("/login?error").permitAll()
 			.and()
 				.logout().logoutRequestMatcher(
-					new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
+					new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
+			.and()
+				.exceptionHandling().accessDeniedPage("/access-denied");
 		http.csrf().disable();
 	}
 }

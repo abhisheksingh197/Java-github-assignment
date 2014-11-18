@@ -4357,3 +4357,20 @@ h3.accordian-up.no-gap span{
 	font-size: large;
 }
 
+.access-denied {
+	font-size: large;
+}
+
+.click-for-login {
+	font-family: Arial, Helvetica, sans-serif;
+	line-height: 1.35;
+}
+
+.backend-footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+
+
+
