@@ -23,7 +23,7 @@ public class AuthorizationTests extends BaseIntegrationTest {
 		given()
 		.when().get("/api/artworks/search?limit=0&offset=10")
 		.then()
-			.body(not(containsString("Access Denied")));
+			.body(not(containsString("Login")));
 	}
 	
 // Commenting the following test cases since we have removed the _csrf token from login.ftl
