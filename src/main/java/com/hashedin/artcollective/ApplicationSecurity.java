@@ -67,8 +67,9 @@ class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 			.and()
 				.logout().logoutRequestMatcher(
 					new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
-	
+			.and()		
 				.exceptionHandling().accessDeniedPage("/access-denied");
+		
 		http.csrf().disable();
 		
 		addCorsFilter(http);
@@ -154,3 +155,4 @@ class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 			
 		}
 	}
+
