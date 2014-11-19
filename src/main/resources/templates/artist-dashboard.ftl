@@ -22,28 +22,37 @@
         <script type="text/javascript" src="/assets/js/jquery-1.10.2.min.js"></script>
     </head>
     <body>
+    	<#assign artistName = artist.firstName + ' ' + artist.lastName />
         <!--Page Wrapper Start-->
         <div id="wrapper" class="artist-dashboard">
             <div id="overlay" class="popup-overlay" >
                 <div class="popup-contact">
                     <i class="icon-close close-popup">&nbsp;</i>
                     <h4>contact admin</h4>
-                    <form method="get">
+                    <form id="contact-form" method="post">
                         <label>Name</label>
-                        <input type="text" name="name" value="" />
+                        
+                        <input type="text" name="name" value="${artistName!}" />
                         <label>Email</label>
-                        <input type="text" name="email" value="" />
+                        <input type="text" name="email" value="${artist.email!}" />
                         <label>Phone</label>
-                        <input type="text" name="phone" value="" class="second"/>
+                        <input type="text" name="phoneNumber" value="${artist.contactNumber!}" class="second"/>
                         <label>Message</label>
                         <textarea name="message"> </textarea>
-                        <input class="btn" type="submit" value="send message" />
+                        <input class="btn" type="submit" value="send message" onclick="contactAdmin();"/>
+                        <input type="hidden" name="source" value="Artist Dashboard" />
                     </form>
                 </div>
                 <div class="popup-addmore-work">
                     <i class="icon-close close-popup">&nbsp;</i>
+                    <div id="add-more-works">
                     <h2>I’m Interested to add more works</h2>
-                    <a href="#" class="button">please contact me</a>
+                    <a href="#" class="button" onclick="addLeadForArtist('${artistName}', 
+                    	'${artist.email!}', '${artist.contactNumber!}', 'Wish to Add more works')">please contact me</a>
+                    </div>
+                    <div class="contact-response">
+                    	
+                    </div>
                 </div>
             </div>
             <!--Header Section Start-->
@@ -86,7 +95,7 @@
                 <div class="container clearfix">
                     <div class="tab-container clearfix">
 
-                        <ul class="tab-links">
+                        <ul class="tab-links price">
                             <li class="active">
                                 <i class="icon-tab">&nbsp;</i>Portfolio
                             </li>
@@ -97,7 +106,7 @@
                                 <i class="icon-tab">&nbsp;</i>Contact Admin
                             </li>
                             <li>
-                                <a href="/logout" > <i class="icon-tab">&nbsp;</i>Sign Out </a>
+                                <a class="sign-out" href="/logout" > <i class="icon-tab">&nbsp;</i>Sign Out </a>
                             </li>
                         </ul>
                         <div class="tab-content clearfix portfolio-tab">
@@ -262,7 +271,7 @@
                                         <span class="button">${dashboardValues.payouts}</span>
                                         <span class="earn-details">View details</span>
                                     </li>
-                                    <li rel="payment-table">
+                                    <li >
                                         <span class="earn-titles">total pending</span>
                                         <span class="button">${dashboardValues.pending}</span>
                                         <span class="earn-details">View details</span>
@@ -381,6 +390,7 @@
         <script type="text/javascript" src="/assets/js/masonry.pkgd.js"></script>
         <script type="text/javascript" src="/assets/js/modernizr.js"></script>
         <script type="text/javascript" src="/assets/js/site.js"></script>
+        <script type="text/javascript" src="/assets/js/postLead.js"></script>
         <script type="text/javascript">
             $container = $('#gallery-search');
             // initialize

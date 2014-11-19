@@ -39,7 +39,7 @@ var generateErrorsList = function(errors) {
 	console.log(errors);
 	var errorsListBody = "";
 	for (error in errors) {
-		errorsListBody += "<tr><td> " + errors[error] + "</td></tr>";
+		errorsListBody += "<tr><td><pre> " + errors[error] + "<pre></td></tr>";
 	}
 	var ifErrors = "";
 	if (errors.length > 0) {

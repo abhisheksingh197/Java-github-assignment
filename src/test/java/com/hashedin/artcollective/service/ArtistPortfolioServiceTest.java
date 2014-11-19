@@ -9,6 +9,8 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.servlet.ModelAndView;
@@ -105,7 +107,8 @@ public class ArtistPortfolioServiceTest extends BaseUnitTest{
 	
 	@Test
 	public void testForFetchinEarningsForPortfolio() {
-		List<PortfolioEarnings> earnings = artistPortfolioService.getEarningsByArtist(2L);
+		Pageable page = new PageRequest(0, 5);
+		List<PortfolioEarnings> earnings = artistPortfolioService.getEarningsByArtist(2L, page);
 		assertEquals(earnings.size(), 4);
 		PortfolioEarnings earning = earnings.get(0);
 		assertEquals(earning.getOrderName(), "AC-WOD1011");
@@ -137,7 +140,8 @@ public class ArtistPortfolioServiceTest extends BaseUnitTest{
 	
 	@Test
 	public void testForFetchingDeductionsForPortfolio() {
-		List<Deduction> deductions = artistPortfolioService.getDeductionsByArtist(2L);
+		Pageable page = new PageRequest(0, 5);
+		List<Deduction> deductions = artistPortfolioService.getDeductionsByArtist(2L, page);
 		assertEquals(deductions.size(), 2);
 		double totalDeduction = deductions.get(0).getTotalDeduction(); 
 		assertEquals(totalDeduction, -200.00, 0.1);
@@ -145,7 +149,8 @@ public class ArtistPortfolioServiceTest extends BaseUnitTest{
 	
 	@Test
 	public void testForFetchingTransactionsForPortfolio() {
-		List<Transaction> transactions = artistPortfolioService.getTransactionsByArtist(1L);
+		Pageable page = new PageRequest(0, 5);
+		List<Transaction> transactions = artistPortfolioService.getTransactionsByArtist(1L, page);
 		assertEquals(transactions.size(), 2);
 		double amount = transactions.get(0).getAmount();
 		assertEquals(amount, 800.00, 0.1);
@@ -157,6 +162,17 @@ public class ArtistPortfolioServiceTest extends BaseUnitTest{
 		Map<String, String> artworksImageMap = artistPortfolioService.getArtworkImagesByArtist(2L);
 		assertEquals(artworksImageMap.size(), 2);
 		assertEquals(artworksImageMap.get("504096747"), "abc");
+	}
+	
+	@Test
+	public void testForPaging() {
+		Pageable page = new PageRequest(0, 1);
+		List<PortfolioEarnings> earnings = artistPortfolioService.getEarningsByArtist(2L, page);
+		assertEquals(earnings.size(), 1);
+		List<Deduction> deductions = artistPortfolioService.getDeductionsByArtist(2L, page);
+		assertEquals(deductions.size(), 1);
+		List<Transaction> transactions = artistPortfolioService.getTransactionsByArtist(1L, page);
+		assertEquals(transactions.size(), 1);
 	}
 	
 }

@@ -4337,7 +4337,7 @@ h3.accordian-up.no-gap span{
     margin-top: 20px;
 }
 
-/* Artist Dashboard Upload page*/
+/* Artist Dashboard and related Styles*/
 
 .errors-table table {
 	width: 800px;
@@ -4357,6 +4357,18 @@ h3.accordian-up.no-gap span{
 	font-size: large;
 }
 
+.contact-response h6{
+	margin-top: 5px;
+}
+
+.contact-success {
+	color: green;
+}
+
+.contact-failure {
+	color: red;
+}
+
 .access-denied {
 	font-size: large;
 }
@@ -4372,5 +4384,18 @@ h3.accordian-up.no-gap span{
 	width: 100%;
 }
 
+.leads-table {
+	padding-left: 0;
+	display: inline-block;
+	tex-align: center;
+}
+
+.leads-table table {
+	width: 1000px;
+}
+
+.sign-out {
+	color: #bbb;
+}
 
 

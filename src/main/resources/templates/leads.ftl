@@ -39,24 +39,36 @@
 			<!--Header Section End-->
 			<div class="container upload-container">
 				 <div class="upload-content">
-				 <h3 class="upload-heading"> Artist Payouts Upload </h3>
-					<div>
-						<input type="file" id="file-input" />
-						<a class="button" onclick="uploadCSV('transactions');"> Upload File </a>
-					</div>	
-					<div id="import-success">
-					</div>
-					<div class="payment-table intrl-tab errors-table ">
-	                    <table>
-	                        <thead>
-	                            <tr>
-	                                <td class="amt-paid">Error Message</td>
-	                            </tr>
-	                        </thead>
-	                        <tbody id="errors-list">
-	                        </tbody>
-	                    </table>
-	                 </div>
+				 <h3 class="upload-heading"> Leads </h3>
+					
+						<div class="payment-table intrl-tab leads-table ">
+		                    <table>
+		                        <thead>
+		                            <tr>
+		                                <td class="amt-paid">Date</td>
+		                                <td class="amt-paid">Source</td>
+		                                <td class="amt-paid">Name</td>
+		                                <td class="amt-paid">Email</td>
+		                                <td class="amt-paid">Phone Number</td>
+		                                <td class="amt-paid">Message</td>
+		                            </tr>
+		                        </thead>
+		                        <tbody id="errors-list">
+		                        <#list leads as lead>
+		                        	<tr>
+		                        		<td> ${lead.createdAt.toString('MMM dd, yyyy')!} </td>
+		                        		<td> ${lead.source!} </td>
+		                        		<td> ${lead.name!} </td>
+		                        		<td> ${lead.email!} </td>
+		                        		<td> ${lead.phoneNumber!} </td>
+		                        		
+		                        		<td><pre> ${lead.message!} </pre></td>
+		                        	</tr>
+		                        </#list>
+		                        </tbody>
+		                    </table>
+		                 </div>
+	                 
 		         </div>
 		     </div>
 
@@ -127,20 +139,5 @@
 				<!--Footer Section End-->
 
 		<script type="text/javascript" src="/assets/js/jquery-1.10.2.min.js"></script>
-		<script type="text/javascript" src="/assets/js/jquery.screwdefaultbuttonsV2.js"></script>
-		<script type="text/javascript" src="/assets/js/jquery.selectbox-0.2.js"></script>
-		<script type="text/javascript" src="/assets/js/masonry.pkgd.js"></script>
-		<script type="text/javascript" src="/assets/js/modernizr.js"></script>
-		<script type="text/javascript" src="/assets/js/site.js"></script>
-		<script type="text/javascript" src="/assets/js/uploadCSV.js"></script>
-		<script type="text/javascript">
-			$container = $('#gallery-search');
-			// initialize
-			$container.masonry({
-				//columnWidth: 38.5,
-				itemSelector : '.objects'
-			});
-
-		</script>
 	</body>
 </html>
