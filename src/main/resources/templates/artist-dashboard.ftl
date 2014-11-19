@@ -73,7 +73,7 @@
                     </div>
                     <div class="access-block">
                         <div class="login">
-                            <a class="profile-image" href="#"><img src="/assets/images/artist-login-img.png" alt="login-img" width="38" height="38" /></a>
+                            <a class="profile-image" href="#"><img src="${artist.imgSrc}" alt="login-img" width="38" height="38" /></a>
                         </div>
                     </div>
                 </div>
@@ -305,239 +305,66 @@
 
                 </div>
 
-                <!--Footer Section Start-->
-                <footer id="footer" class="clearfix share-art">
-                    <div class="page">
-                        <div class="footer-sec">
-                            <div class="footer-one clearfix">
-                                <div class="list collections">
-                                    <h4>COLLECTIONS</h4>
-                                    <ul>
+                 <!--Footer Section Start-->
+				<footer id="footer" class=" clearfix share-art">
+					<div class="page">
+						<div class="footer-sec">
+							<div class="footer-one clearfix">
+								
+							</div>
+							<div class="page">
+								<div class="follow-section">
+									<div class="footer-two clearfix">
 
-                                        <li>
-                                            <a href="#">OTW Artists (200)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Angles and Symmetry (415)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Portrait (1023)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Spotlight on Berlin (79)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">The Painted Nude (394)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Sleeping Beauty (13)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Really Real (153)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Nature (984)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Horses (361)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Deep Blue Sea (874)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Surrealism (201)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Cityscapes (812)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Nude Photography (645)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Green With Envy (78)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"><span>View all </span><i class="icon-view-all">&nbsp;</i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="list subject">
-                                    <h4>SUBJECT</h4>
-                                    <ul>
+										<div class="social-links">
+											<ul>
+												<li>
+													<a href="#"><i class="icon-fb">&nbsp;</i></a>
+												</li>
+												<li>
+													<a href="#"><i class="icon-gplus">&nbsp;</i></a>
+												</li>
+												<li>
+													<a href="#"><i class="icon-instagram">&nbsp;</i></a>
+												</li>
+												<li>
+													<a href="#"><i class="icon-pintrest">&nbsp;</i></a>
+												</li>
+												<li>
+													<a href="#"><i class="icon-twitter">&nbsp;</i></a>
+												</li>
+											</ul>
+										</div>
+										<nav class="footer-nav">
 
-                                        <li>
-                                            <a href="#">Abstract &amp; conceptual (78)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Animals &amp; birds (394)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Architecture &amp; cityscapes</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Flowers &amp; plants (153)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Landscapes, sea &amp; sky (1023)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Nudes &amp; erotic (415)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">People &amp; portraits (201)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Still life (79)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Transportation &amp; maps (504)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"><span>View all </span><i class="icon-view-all">&nbsp;</i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="list style">
-                                    <h4>STYLE</h4>
-                                    <ul>
+											<ul>
+												<li>
+													<a href="#">About</a>
+												</li>
+												<li>
+													<a href="#">Contact</a>
+												</li>
 
-                                        <li>
-                                            <a href="#">Abstract (645)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Geometric (812)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Organic (361)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Collage, composite</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Expressive &amp; gestural</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Graphic (153)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Typographic (394)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Illustrative (79)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Cartoon (645)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Impressionistic (13)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Naive (79)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Realistic &amp; photographic (812)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Surrealistic (78)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Unspecified (504)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Urban &amp; pop art (756)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"><span>View all </span><i class="icon-view-all">&nbsp;</i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="list photography">
-                                    <h4>PHOTOGRAPHY</h4>
-                                    <ul>
+												<li>
+													<a href="#">Terms of use</a>
+												</li>
 
-                                        <li>
-                                            <a href="#">Color Photography (415)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Black &amp; White (1023)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Manipulated (812)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Landscape (394)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Surreal Photography (415)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Abstract Photography (201)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Cities (834)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Portraits (876)</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"><span>View all </span><i class="icon-view-all">&nbsp;</i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="page">
-                                <div class="follow-section">
-                                    <div class="footer-two clearfix">
+												<li>
+													<a href="#">Privacy Policy</a>
+												</li>
+											</ul>
+										</nav>
+									</div>
+								</div>
+								<div class="copyright-section">
+									<span>&copy; 2014 Art Collective. All rights reserved.</span>
+								</div>
+							</div>
+						</div>
 
-                                        <div class="social-links">
-                                            <ul>
-                                                <li>
-                                                    <a href="#"><i class="icon-fb">&nbsp;</i></a>
-                                                </li>
-                                                <li>
-                                                    <a href="#"><i class="icon-gplus">&nbsp;</i></a>
-                                                </li>
-                                                <li>
-                                                    <a href="#"><i class="icon-instagram">&nbsp;</i></a>
-                                                </li>
-                                                <li>
-                                                    <a href="#"><i class="icon-pintrest">&nbsp;</i></a>
-                                                </li>
-                                                <li>
-                                                    <a href="#"><i class="icon-twitter">&nbsp;</i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <nav class="footer-nav">
-
-                                            <ul>
-                                                <li>
-                                                    <a href="#">About</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Contact</a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="#">Terms of use</a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="#">Privacy Policy</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                                <div class="copyright-section">
-                                    <span>&copy; 2014 Art Collective. All rights reserved.</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </footer>
-                <!--Footer Section End-->
+					</div>
+				</footer>
+				<!--Footer Section End-->
             </div>
 
         </div>

@@ -29,24 +29,23 @@ public final class WebApplicationController {
 	@Autowired
 	private ArtistPortfolioService artistPortfolioService;
 	
-	@RequestMapping("/")
-	public ModelAndView index() {
+	@RequestMapping("/access-denied")
+	public ModelAndView accessDenied() {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("time", new Date());
 		model.put("message", "Hello World!");
 
-		return new ModelAndView("index", model);
+		return new ModelAndView("access-denied", model);
 	}
 	
-	@RequestMapping("/dashboard")
+	@RequestMapping("/")
 	public ModelAndView artistDashboard() {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Artist artist = (Artist) auth.getPrincipal();
-		Long artistId = artist.getId();
-		ModelAndView model = getPortfolio(artistId);
-		return model;
-		
+			Artist artist = (Artist) auth.getPrincipal();
+			Long artistId = artist.getId();
+			ModelAndView model = getPortfolio(artistId);
+			return model;
 	}
 	
 	@RequestMapping("/manage/upload/deductions")
@@ -66,7 +65,7 @@ public final class WebApplicationController {
 
 		return new ModelAndView("transactions-upload", model);
 	}
-	
+
 	private ModelAndView getPortfolio(Long artistId) {
 		
 		Map<String, Object> model = new HashMap<String, Object>();

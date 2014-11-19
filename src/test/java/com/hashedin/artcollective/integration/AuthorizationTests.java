@@ -10,20 +10,20 @@ import com.hashedin.artcollective.BaseIntegrationTest;
 public class AuthorizationTests extends BaseIntegrationTest {
 	
 	@Test
-	public void testHomePageIsPublicallyAccessible() {
+	public void testAdminAPINotPublicallyAccessible() {
 		given()
-		.when().get("/")
+		.when().get("/admin/priceRange/getall")
 		.then()
 			.statusCode(200)
-			.body(not(containsString("Please Login")));
+			.body(containsString("Login"));
 	}
 	
 	@Test
-	public void securePageMustNotBeAccessibleAnnonymously() {
+	public void testGenericAPIPublicallyAccessible() {
 		given()
-		.when().get("/secure/artist")
+		.when().get("/api/artworks/search?limit=0&offset=10")
 		.then()
-			.body(containsString("Please Login"));
+			.body(not(containsString("Login")));
 	}
 	
 // Commenting the following test cases since we have removed the _csrf token from login.ftl

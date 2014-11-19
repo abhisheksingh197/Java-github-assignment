@@ -26,7 +26,7 @@ public class ProductsAPITest extends BaseIntegrationTest {
 		mockMvc.perform(get("/api/collections"))
         .andExpect(status().isOk());
 		
-		mockMvc.perform(get("/manage/priceRange/getall"))
+		mockMvc.perform(get("/admin/priceRange/getall"))
         .andExpect(status().isOk());
 		
 		mockMvc.perform(get("/api/artworks/search?limit=10&offset=0"))
@@ -39,22 +39,22 @@ public class ProductsAPITest extends BaseIntegrationTest {
 		mockMvc.perform(get("/api/frames?frameLength=12&frameBreadth=17.5&mountThickness=1&frameThickness=1"))
         .andExpect(status().isOk());
 		
-		mockMvc.perform(get("/manage/priceRange/add?id=1&title=low&lowerRange=2500&upperRange=5000"))
+		mockMvc.perform(get("/admin/priceRange/add?id=1&title=low&lowerRange=2500&upperRange=5000"))
         .andExpect(status().isOk());
 		
-		mockMvc.perform(get("/manage/sizeRange/add?id=1&title=small&lowerValue=2500&upperValue=5000"))
+		mockMvc.perform(get("/admin/sizeRange/add?id=1&title=small&lowerValue=2500&upperValue=5000"))
         .andExpect(status().isOk());
 		
-		mockMvc.perform(get("/manage/priceRange/add?id=1&title=low&lowerRange=2500"))
+		mockMvc.perform(get("/admin/priceRange/add?id=1&title=low&lowerRange=2500"))
         .andExpect(status().isOk());
 		
-		mockMvc.perform(get("/manage/sizeRange/add?id=1&title=small&lowerValue=2500"))
+		mockMvc.perform(get("/admin/sizeRange/add?id=1&title=small&lowerValue=2500"))
         .andExpect(status().isOk());
 		
-		mockMvc.perform(get("/manage/sizeRange/getall"))
+		mockMvc.perform(get("/admin/sizeRange/getall"))
         .andExpect(status().isOk());
 		
-		mockMvc.perform(get("/manage/priceRange/getall"))
+		mockMvc.perform(get("/admin/priceRange/getall"))
         .andExpect(status().isOk());
 		
     }

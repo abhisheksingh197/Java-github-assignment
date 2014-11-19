@@ -90,7 +90,7 @@ public class ProductsAPI {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
 	//Add Price Range Bucket
-	@RequestMapping(value = "/manage/priceRange/add", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/priceRange/add", method = RequestMethod.GET)
 	public void addPriceBucket(
 			@RequestParam(value = "id", required = true) Long id,
 			@RequestParam(value = "title", required = true) String title,
@@ -137,7 +137,7 @@ public class ProductsAPI {
     }
 	
 	//Add Size Range Bucket
-		@RequestMapping(value = "/manage/sizeRange/add", method = RequestMethod.GET)
+		@RequestMapping(value = "/admin/sizeRange/add", method = RequestMethod.GET)
 		public void addSizeBucket(
 				@RequestParam(value = "id", required = true) Long id,
 				@RequestParam(value = "title", required = true) String title,
@@ -150,13 +150,13 @@ public class ProductsAPI {
 		}
 	
 	
-	@RequestMapping(value = "/manage/priceRange/getall", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/priceRange/getall", method = RequestMethod.GET)
 	public List<PriceBucket> getAllPriceBuckets() {
 		
 		return (List<PriceBucket>) priceBucketRepository.findAll();
 	}
 	
-	@RequestMapping(value = "/manage/sizeRange/getall", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/sizeRange/getall", method = RequestMethod.GET)
 	public List<SizeBucket> getAllSizeBuckets() {
 		
 		return (List<SizeBucket>) sizeBucketRepository.findAll();

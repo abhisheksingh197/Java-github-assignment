@@ -32,11 +32,7 @@
 						</div>
 							
 					</div>
-					<div class="access-block">
-						<div class="login">
-							<a class="profile-image" href="#"><img src="/assets/images/artist-login-img.png" alt="login-img" width="38" height="38" /></a>
-						</div>
-					</div>
+					
 				</div>
 			</header>
 
@@ -72,6 +68,67 @@
 				
 
 		<!--Page Wrapper End-->
+		
+		<!--Footer Section Start-->
+				<footer id="footer" class="clearfix share-art">
+					<div class="page">
+						<div class="footer-sec">
+							<div class="footer-one clearfix">
+								
+							</div>
+							<div class="page">
+								<div class="follow-section">
+									<div class="footer-two clearfix">
+
+										<div class="social-links">
+											<ul>
+												<li>
+													<a href="#"><i class="icon-fb">&nbsp;</i></a>
+												</li>
+												<li>
+													<a href="#"><i class="icon-gplus">&nbsp;</i></a>
+												</li>
+												<li>
+													<a href="#"><i class="icon-instagram">&nbsp;</i></a>
+												</li>
+												<li>
+													<a href="#"><i class="icon-pintrest">&nbsp;</i></a>
+												</li>
+												<li>
+													<a href="#"><i class="icon-twitter">&nbsp;</i></a>
+												</li>
+											</ul>
+										</div>
+										<nav class="footer-nav">
+
+											<ul>
+												<li>
+													<a href="#">About</a>
+												</li>
+												<li>
+													<a href="#">Contact</a>
+												</li>
+
+												<li>
+													<a href="#">Terms of use</a>
+												</li>
+
+												<li>
+													<a href="#">Privacy Policy</a>
+												</li>
+											</ul>
+										</nav>
+									</div>
+								</div>
+								<div class="copyright-section">
+									<span>&copy; 2014 Art Collective. All rights reserved.</span>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</footer>
+				<!--Footer Section End-->
 
 		<script type="text/javascript" src="/assets/js/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="/assets/js/jquery.screwdefaultbuttonsV2.js"></script>

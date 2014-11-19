@@ -37,33 +37,16 @@
 			</header>
 
 			<!--Header Section End-->
-			<div class="container upload-container">
-				 <div class="upload-content">
-				 	<h3 class="upload-heading"> Artist Deduction Upload </h3>
-					<div>
-						<input type="file" id="file-input" />
-						<a class="button" onclick="uploadCSV('deductions');"> Upload File </a>
-					</div>	
-					<div id="import-success">
-						
-					</div>
-					<pre>
-						<div class="payment-table intrl-tab errors-table ">
-		                    <table>
-		                        <thead>
-		                            <tr>
-		                                <td class="amt-paid">Error Message</td>
-		                            </tr>
-		                        </thead>
-		                        <tbody id="errors-list">
-		                        </tbody>
-		                    </table>
-		                 </div>
-	                 </pre>
+			<section class="content-sec">
+			<div class="container">
+				 <div class=" popular-styles">
+				 	<h2 class="access-denied"> Access Denied ..! </h2>
+					<a class="click-for-login" href="/login" >Click here to Login as a different user</a>
 		         </div>
 		     </div>
-			  <!--Footer Section Start-->
-				<footer id="footer" class="clearfix share-art">
+		     </section>
+		     <!--Footer Section Start-->
+				<footer id="footer" class="backend-footer clearfix share-art">
 					<div class="page">
 						<div class="footer-sec">
 							<div class="footer-one clearfix">
@@ -121,9 +104,8 @@
 
 					</div>
 				</footer>
-				<!--Footer Section End-->
-
 				
+				<!--Footer Section End-->
 
 		<!--Page Wrapper End-->
 
