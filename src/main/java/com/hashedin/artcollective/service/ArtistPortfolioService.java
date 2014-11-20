@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -47,7 +48,6 @@ public class ArtistPortfolioService implements UserDetailsService {
 	
 	@Autowired
 	private TransactionRepository transactionRepository;
-	
 
 	/**
 	 * a
@@ -63,7 +63,9 @@ public class ArtistPortfolioService implements UserDetailsService {
 				.getOrderLineItemsByArtistAndArtwork(artistId);
 		
 		for (Pair<Long, Double> pair : earningsByOrder) {
-			earningsByVariant.put(pair.getKey().toString(), pair.getValue());
+			if (pair.getKey() != null && pair.getValue() != null) {
+				earningsByVariant.put(pair.getKey().toString(), pair.getValue());
+			}
 		}
 		
 		return earningsByVariant;
@@ -71,6 +73,7 @@ public class ArtistPortfolioService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
+		
 		Artist artist = artistRepository.findByUsername(username);
 		
 		if (artist == null) {
@@ -79,20 +82,23 @@ public class ArtistPortfolioService implements UserDetailsService {
 		return artist;
 	}
 
-	public List<PortfolioEarnings> getEarningsByArtist(Long artistId) {
-		List<OrderLineItem> earningsLineItems = orderLineItemRepository.getOrderLineItemsByArtist(artistId);
+	public List<PortfolioEarnings> getEarningsByArtist(Long artistId, Pageable page) {
+		List<OrderLineItem> earningsLineItems = orderLineItemRepository
+				.getOrderLineItemsByArtist(artistId, page);
 		List<PortfolioEarnings> earningsForArtist = new ArrayList<>();
 		for (OrderLineItem lineItem : earningsLineItems) {
-			PortfolioEarnings earningsObject = new PortfolioEarnings();
-			FulfilledOrder lineItemOrder = lineItem.getOrder();
-			earningsObject.setOrderId(lineItemOrder.getId());
-			earningsObject.setOrderName(lineItemOrder.getName());
-			earningsObject.setOrderDate(lineItemOrder.getCreatedAt());
-			earningsObject.setProductImageSrc(getProductImageSrc(lineItem.getProductId()));
-			earningsObject.setVariantSize(getVariantSize(lineItem.getVariantId()));
-			earningsObject.setQuantity(lineItem.getQuantity());
-			earningsObject.setCommission(lineItem.getEarning());
-			earningsForArtist.add(earningsObject);	
+			if (lineItem.getVariantId() != null) {
+				PortfolioEarnings earningsObject = new PortfolioEarnings();
+				FulfilledOrder lineItemOrder = lineItem.getOrder();
+				earningsObject.setOrderId(lineItemOrder.getId());
+				earningsObject.setOrderName(lineItemOrder.getName());
+				earningsObject.setOrderDate(lineItemOrder.getCreatedAt());
+				earningsObject.setProductImageSrc(getProductImageSrc(lineItem.getProductId()));
+				earningsObject.setVariantSize(getVariantSize(lineItem.getVariantId()));
+				earningsObject.setQuantity(lineItem.getQuantity());
+				earningsObject.setCommission(lineItem.getEarning());
+				earningsForArtist.add(earningsObject);
+			}
 		}
 		return earningsForArtist;
 	}
@@ -142,13 +148,13 @@ public class ArtistPortfolioService implements UserDetailsService {
 		
 	}
 
-	public List<Transaction> getTransactionsByArtist(Long artistId) {
-		List<Transaction> transactions = transactionRepository.getTransactionsByArtist(artistId);
+	public List<Transaction> getTransactionsByArtist(Long artistId, Pageable page) {
+		List<Transaction> transactions = transactionRepository.getTransactionsByArtist(artistId, page);
 		return transactions;
 	}
 
-	public List<Deduction> getDeductionsByArtist(Long artistId) {
-		List<Deduction> deductions = deductionsRepository.getDeductionsByArtist(artistId);
+	public List<Deduction> getDeductionsByArtist(Long artistId, Pageable page) {
+		List<Deduction> deductions = deductionsRepository.getDeductionsByArtist(artistId, page);
 		return deductions;
 	}
 
