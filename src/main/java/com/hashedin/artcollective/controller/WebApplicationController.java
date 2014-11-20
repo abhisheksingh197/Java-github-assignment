@@ -49,7 +49,9 @@ public final class WebApplicationController {
 	
 	@RequestMapping("/")
 	public ModelAndView artistDashboard(Pageable page) {
-		page = page != null ? page : new PageRequest(0, pageLimit);
+		if (page == null || page.getPageSize() != pageLimit) {
+			page = new PageRequest(0, pageLimit);
+		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Artist artist = (Artist) auth.getPrincipal();
 		Long artistId = artist.getId();
@@ -77,7 +79,9 @@ public final class WebApplicationController {
 	
 	@RequestMapping("/manage/leads")
 	public ModelAndView displayLeads(Pageable page) {
-		page = page != null ? page : new PageRequest(0, pageLimit);
+		if (page == null || page.getPageSize() != pageLimit) {
+			page = new PageRequest(0, pageLimit);
+		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("leads", leadRepository.getLeadsOrderByCreatedAt(page));
 		return new ModelAndView("leads", model);

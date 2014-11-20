@@ -145,7 +145,7 @@
 	                                        	<#assign imageSrc = artwork.images[0].imgSrc />
 	                                        	<#assign croppedImgSrc = imageSrc?split("_") />
 	                                        	<#assign croppedImgSrc = croppedImgSrc[0] + "_O_small.jpg" />
-	                                            <td><img src="${croppedImgSrc}" alt="portfolio" height="59" width="72"/></td>
+	                                            <td><img src="${imageSrc}" alt="portfolio" height="59" width="72"/></td>
 	                                            <td>
 	                                            	<h5>${artwork.title}</h5>
 	                                            	<h5>${artwork.description!}</h5>
