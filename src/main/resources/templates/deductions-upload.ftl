@@ -47,19 +47,17 @@
 					<div id="import-success">
 						
 					</div>
-					<pre>
-						<div class="payment-table intrl-tab errors-table ">
-		                    <table>
-		                        <thead>
-		                            <tr>
-		                                <td class="amt-paid">Error Message</td>
-		                            </tr>
-		                        </thead>
-		                        <tbody id="errors-list">
-		                        </tbody>
-		                    </table>
-		                 </div>
-	                 </pre>
+					<div class="payment-table intrl-tab errors-table ">
+	                    <table>
+	                        <thead>
+	                            <tr>
+	                                <td class="amt-paid">Error Message</td>
+	                            </tr>
+	                        </thead>
+	                        <tbody id="errors-list">
+	                        </tbody>
+	                    </table>
+	                 </div>
 		         </div>
 		     </div>
 			  <!--Footer Section Start-->

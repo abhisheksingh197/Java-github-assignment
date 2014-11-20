@@ -2,10 +2,15 @@ package com.hashedin.artcollective.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 @Entity
 public class Lead implements Serializable {
@@ -15,16 +20,28 @@ public class Lead implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	@Column(name = "created_at")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime createdAt;
 	private String name;
 	private String email;
 	private String phoneNumber;
 	private String message;
 	private String source;
+	
+	@PrePersist
+	void preInsert() {
+	   createdAt = new DateTime();
+	}
+	
 	public long getId() {
 		return id;
 	}
 	public void setId(long id) {
 		this.id = id;
+	}
+	public DateTime getCreatedAt() {
+		return createdAt;
 	}
 	public String getName() {
 		return name;
