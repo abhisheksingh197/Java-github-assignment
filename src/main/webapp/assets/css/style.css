@@ -4340,62 +4340,62 @@ h3.accordian-up.no-gap span{
 /* Artist Dashboard and related Styles*/
 
 .errors-table table {
-	width: 800px;
+  width: 800px;
 }
 
 .upload-container {
-	display:inline-block;
+  display:inline-block;
 }
 
 .upload-content, .upload-heading {
-	text-align:center;
-	padding-top: 10px;
+  text-align:center;
+  padding-top: 10px;
 }
 
 .import-success {
-	color: green;
-	font-size: large;
+  color: green;
+  font-size: large;
 }
 
 .contact-response h6{
-	margin-top: 5px;
+  margin-top: 5px;
 }
 
 .contact-success {
-	color: green;
+  color: green;
 }
 
 .contact-failure {
-	color: red;
+  color: red;
 }
 
 .access-denied {
-	font-size: large;
+  font-size: large;
 }
 
 .click-for-login {
-	font-family: Arial, Helvetica, sans-serif;
-	line-height: 1.35;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.35;
 }
 
 .backend-footer {
-	position: fixed;
-	bottom: 0;
-	width: 100%;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 .leads-table {
-	padding-left: 0;
-	display: inline-block;
-	tex-align: center;
+  padding-left: 0;
+  display: inline-block;
+  tex-align: center;
 }
 
 .leads-table table {
-	width: 1000px;
+  width: 1000px;
 }
 
 .sign-out {
-	color: #bbb;
+  color: #bbb;
 }
 
 

@@ -49,10 +49,6 @@ public class ArtistPortfolioService implements UserDetailsService {
 	
 	@Autowired
 	private TransactionRepository transactionRepository;
-	
-	@Value(value = "${artistdashboard.pagelimit}")
-	private Integer pageLimit;
-	
 
 	/**
 	 * a
