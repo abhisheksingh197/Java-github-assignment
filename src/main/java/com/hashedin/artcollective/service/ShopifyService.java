@@ -8,7 +8,9 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
+import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.Image;
+import com.hashedin.artcollective.utils.ProductSize;
 
 @Service
 public interface ShopifyService {
@@ -28,5 +30,8 @@ public interface ShopifyService {
 	public List<MetaField> getMetaFields(String string, Long collectionId);
 
 	public CustomCollection getArtistCollection(Long artistCollectionId);
+
+	public CustomCollection createDynamicProduct(FrameVariant frameVariant,
+			ProductSize productSize, Double framePrice);
 	
 }

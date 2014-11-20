@@ -23,7 +23,10 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
+
+import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.Image;
+import com.hashedin.artcollective.utils.ProductSize;
 
 
 @Service
@@ -170,5 +173,49 @@ public class ShopifyServiceImpl implements ShopifyService {
 		CustomCollection artistProduct = artistCollection.getCustomCollection();
 		return artistProduct;
 	}
+
+	@Override
+	public CustomCollection createDynamicProduct(FrameVariant frameVariant,
+			ProductSize productSize, Double productPrice) {
+		StringBuilder productData = new StringBuilder();
+		StringBuilder variantData = new StringBuilder();
+		
+		variantData.append("{\"option1\": \"")
+			.append(productSize.toString())
+			.append("\"").append(",")
+			.append("\"price\": \"")
+			.append(productPrice.toString())
+			.append("\"").append(",")
+			.append("\"sku\": \"")
+			.append("123")
+		.append("}");
+		
+		productData.append("{\"product\": {")
+			.append("\"title\": \"")
+			.append(frameVariant.getFrameTitle())
+			.append("\"").append(",")
+			.append("\"body_html\": \"")
+			.append("Dynamic Product")
+			.append("\"").append(",")
+			.append("\"vendor\": \"")
+			.append("Art Collective")
+			.append("\"").append(",")
+			.append("\"product_type\": \"")
+			.append("dynamic")
+			.append("\"").append(",")
+			.append("\"variants\": [").append(variantData).append("]")
+		.append("}}");
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> entity = new HttpEntity<String>(productData.toString(), headers);
+		
+		CustomCollection product = rest.postForObject(baseUri + "products.json", 
+				entity, CustomCollection.class);
+		
+		return product;
+	}
+
+	
 
 }

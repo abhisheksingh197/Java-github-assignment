@@ -35,6 +35,7 @@ import com.hashedin.artcollective.repository.SizeBucketRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
 import com.hashedin.artcollective.service.CriteriaSearchResponse;
+import com.hashedin.artcollective.service.CustomCollection;
 import com.hashedin.artcollective.service.DeductionsService;
 import com.hashedin.artcollective.service.Frame;
 import com.hashedin.artcollective.service.FrameVariantService;
@@ -260,10 +261,11 @@ public class ProductsAPI {
 			@RequestParam(value = "frameThickness", required = true) Double frameThickness
 			) {
 		List<Frame> tempFrames = new ArrayList<>();
-		List<FrameVariant> frameVariants = frameVariantService.getFrames(frameLength, 
-				frameBreadth, mountThickness, frameThickness);
+		List<FrameVariant> frameVariants = frameVariantService.getFrames(mountThickness, frameThickness);
 		for (FrameVariant frameVariant : frameVariants) {
-			tempFrames.add(new Frame(frameVariant));
+			Frame frame = new Frame(frameVariant);
+			frame.setFramePrice(frameVariantService.getFramePrice(frameLength, frameBreadth, frameVariant));
+			tempFrames.add(frame);
 		}
 		return tempFrames;
 	}
@@ -276,6 +278,17 @@ public class ProductsAPI {
 		return colors;
     }
 	
+	@RequestMapping(value = "/api/createProduct", method = RequestMethod.GET)
+	public CustomCollection createDynamicProduct(
+			@RequestParam(value = "productId", required = true)Long productId,
+			@RequestParam(value = "productVariantId", required = true)Long productVariantId,
+			@RequestParam(value = "typeVariantId", required = true)Long typeVariantId, 
+			@RequestParam(value = "type", required = true)String type) {
+		
+			return frameVariantService.createFrameProduct(productId, 
+					productVariantId, typeVariantId);
+		
+	}
 	
 	
 

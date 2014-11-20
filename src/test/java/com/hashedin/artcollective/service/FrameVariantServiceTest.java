@@ -52,11 +52,15 @@ public class FrameVariantServiceTest extends BaseUnitTest {
 	@Test
 	public void testForFramesSearch() {
 		List<Frame> tempFrames = new ArrayList<>();
-		List<FrameVariant> frameVariants = frameVariantService.getFrames(12.0, 16.0, 3.0, 4.0);
+		List<FrameVariant> frameVariants = frameVariantService.getFrames(3.0, 4.0);
 		for (FrameVariant frameVariant : frameVariants) {
-			tempFrames.add(new Frame(frameVariant));
+			Frame frame = new Frame(frameVariant);
+			frame.setFramePrice(frameVariantService.getFramePrice(12.00, 16.00, frameVariant));
+			tempFrames.add(frame);
 		}
 		assertEquals(tempFrames.size(), 1);
+		double framePrice = tempFrames.get(0).getFramePrice();
+		assertEquals(framePrice, 650.00, 0.1);
 	}
 	
 }
