@@ -75,84 +75,84 @@ class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		addCorsFilter(http);
 	}
 	
-		private Map<String, String> getCorsConfiguration() {
-			Map<String, String> config = new HashMap<String, String>();
-			
-			/*
-			 * because we are setting ServletContext to null, logging cannot be enabled
-			 * See CORSFilter.log method for more information
-			 */
-			config.put("cors.logging.enabled", "false");
-			
-			config.put("cors.allowed.origins", corsAllowedOrigins);
-			config.put("cors.allowed.methods", corsAllowedMethods);
-			config.put("cors.allowed.headers", corsAllowedHeaders);
-			config.put("cors.exposed.headers", corsExposedHeaders);
-			config.put("cors.support.credentials", corsSuportCredentials);
-			config.put("cors.preflight.maxage", corsPreflightMaxAge);
-			config.put("cors.decorate.request", corsDecorateRequest);
-			
-			return config;
+	private Map<String, String> getCorsConfiguration() {
+		Map<String, String> config = new HashMap<String, String>();
+		
+		/*
+		 * because we are setting ServletContext to null, logging cannot be enabled
+		 * See CORSFilter.log method for more information
+		 */
+		config.put("cors.logging.enabled", "false");
+		
+		config.put("cors.allowed.origins", corsAllowedOrigins);
+		config.put("cors.allowed.methods", corsAllowedMethods);
+		config.put("cors.allowed.headers", corsAllowedHeaders);
+		config.put("cors.exposed.headers", corsExposedHeaders);
+		config.put("cors.support.credentials", corsSuportCredentials);
+		config.put("cors.preflight.maxage", corsPreflightMaxAge);
+		config.put("cors.decorate.request", corsDecorateRequest);
+		
+		return config;
+	}
+	
+	private void addCorsFilter(HttpSecurity http) {
+		Filter corsFilter = new CORSFilter();
+		Map<String, String> configuration = getCorsConfiguration();
+		try {
+			corsFilter.init(new MapBasedFilterConfig("CORS Filter", configuration));
+		}
+		catch (ServletException e) {
+			LOGGER.error("Could not init CORSFilter. "
+					+ "Application will not work across cross-domains", e);
 		}
 		
-		private void addCorsFilter(HttpSecurity http) {
-			Filter corsFilter = new CORSFilter();
-			Map<String, String> configuration = getCorsConfiguration();
-			try {
-				corsFilter.init(new MapBasedFilterConfig("CORS Filter", configuration));
-			}
-			catch (ServletException e) {
-				LOGGER.error("Could not init CORSFilter. "
-						+ "Application will not work across cross-domains", e);
-			}
-			
-			/*
-			 * Add filter to spring security chain
-			 */
-			http.addFilterAfter(corsFilter, AbstractPreAuthenticatedProcessingFilter.class);
-			
-		}
+		/*
+		 * Add filter to spring security chain
+		 */
+		http.addFilterAfter(corsFilter, AbstractPreAuthenticatedProcessingFilter.class);
 		
-		class MapBasedFilterConfig implements FilterConfig {
+	}
+		
+}
+class MapBasedFilterConfig implements FilterConfig {
 
-			private final Map<String, String> initParams;
-			private final String filterName;
-			
-			public MapBasedFilterConfig(String filterName, Map<String, String> initParams) {
-				this.filterName = filterName;
-				if (initParams != null && !initParams.isEmpty()) {
-					this.initParams = Collections.unmodifiableMap(initParams);
-				}
-				else {
-					this.initParams = Collections.emptyMap();
-				}
-			}
-			
-			@Override
-			public String getFilterName() {
-				return this.filterName;
-			}
-
-			/*
-			 * We know that CORSFilter doesn't really use the ServletContext
-			 * .. except for logging
-			 * We don't really care about loggin in CORSFilter, so to hell with it
-			 */
-			@Override
-			public ServletContext getServletContext() {
-				return null;
-			}
-
-			@Override
-			public String getInitParameter(String name) {
-				return this.initParams.get(name);
-			}
-
-			@Override
-			public Enumeration<String> getInitParameterNames() {
-				return Collections.enumeration(this.initParams.keySet());
-			}
-			
+	private final Map<String, String> initParams;
+	private final String filterName;
+	
+	public MapBasedFilterConfig(String filterName, Map<String, String> initParams) {
+		this.filterName = filterName;
+		if (initParams != null && !initParams.isEmpty()) {
+			this.initParams = Collections.unmodifiableMap(initParams);
+		}
+		else {
+			this.initParams = Collections.emptyMap();
 		}
 	}
+	
+	@Override
+	public String getFilterName() {
+		return this.filterName;
+	}
+
+	/*
+	 * We know that CORSFilter doesn't really use the ServletContext
+	 * .. except for logging
+	 * We don't really care about loggin in CORSFilter, so to hell with it
+	 */
+	@Override
+	public ServletContext getServletContext() {
+		return null;
+	}
+
+	@Override
+	public String getInitParameter(String name) {
+		return this.initParams.get(name);
+	}
+
+	@Override
+	public Enumeration<String> getInitParameterNames() {
+		return Collections.enumeration(this.initParams.keySet());
+	}
+	
+}
 
