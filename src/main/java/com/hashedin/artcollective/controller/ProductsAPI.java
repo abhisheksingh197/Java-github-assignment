@@ -302,7 +302,6 @@ public class ProductsAPI {
 	
 	@RequestMapping(value = "/api/createProduct", method = RequestMethod.GET)
 	public CustomCollection createDynamicProduct(
-			@RequestParam(value = "productId", required = true)Long productId,
 			@RequestParam(value = "productVariantId", required = true)Long productVariantId,
 			@RequestParam(value = "typeVariantId", required = true)Long typeVariantId, 
 			@RequestParam(value = "type", required = true)String type) {

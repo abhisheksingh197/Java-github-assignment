@@ -223,10 +223,10 @@ public class ShopifyServiceImpl implements ShopifyService {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> entity = new HttpEntity<String>(productData.toString(), headers);
 		
-		DynamicProduct product = rest.postForObject(baseUri + "products.json", 
+		DynamicProduct productWrapper = rest.postForObject(baseUri + "products.json", 
 				entity, DynamicProduct.class);
 		
-		return product.getProduct();
+		return productWrapper.getProduct();
 	}
 
 	

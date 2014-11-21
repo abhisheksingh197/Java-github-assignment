@@ -19,7 +19,7 @@ public interface ShopifyService {
 	
 	public List<Collection> getCollectionsForProduct(long productId);
 	
-	public List<CustomCollection> getAddOnProductsSinceLastModified(DateTime lastRunTime, String string);
+	public List<CustomCollection> getAddOnProductsSinceLastModified(DateTime lastRunTime, String productType);
 
 	public void postImageColorsMetaField(Long id, String imageColors);
 
