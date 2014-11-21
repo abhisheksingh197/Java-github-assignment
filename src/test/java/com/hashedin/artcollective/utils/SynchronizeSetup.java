@@ -317,6 +317,10 @@ public class SynchronizeSetup extends BaseUnitTest {
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("frames.json"));
 		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=canvas"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("canvas.json"));
+		
 		
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks"
 				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))
@@ -340,6 +344,10 @@ public class SynchronizeSetup extends BaseUnitTest {
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=frames"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("frames.json"));
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=canvas"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("canvas.json"));
 		
 		
 		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500.00,5000.00);

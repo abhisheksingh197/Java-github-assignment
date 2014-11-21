@@ -4,24 +4,24 @@ import com.hashedin.artcollective.entity.ArtworkVariant;
 
 public class ProductSize {
 	
-	private Double productWidth;
-	private Double productHeight;
+	private Double productLength;
+	private Double productBreadth;
 	
 	public ProductSize(ArtworkVariant artworkVariant) {
-		this.productHeight = Double.valueOf(artworkVariant.getOption1().split("[Xx]")[0].split("\"")[0]);
-		this.productWidth = Double.valueOf(artworkVariant.getOption1().split("[Xx]")[1].split("\"")[0]);
+		this.productLength = Double.valueOf(artworkVariant.getOption1().split("[Xx]")[0].split("\"")[0]);
+		this.productBreadth = Double.valueOf(artworkVariant.getOption1().split("[Xx]")[1].split("\"")[0]);
 	}
 	
 	public Double getProductLength() {
-		return productWidth;
+		return productLength;
 	}
-	public void setProductWidth(Double productWidth) {
-		this.productWidth = productWidth;
+	public void setProductLength(Double productLength) {
+		this.productLength = productLength;
 	}
 	public Double getProductBreadth() {
-		return productHeight;
+		return productBreadth;
 	}
-	public void setProductHeight(Double productHeight) {
-		this.productHeight = productHeight;
+	public void setProductBreadth(Double productBreadth) {
+		this.productBreadth = productBreadth;
 	}
 }

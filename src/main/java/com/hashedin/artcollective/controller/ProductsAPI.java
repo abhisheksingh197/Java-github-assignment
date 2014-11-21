@@ -24,12 +24,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hashedin.artcollective.entity.ArtStyle;
 import com.hashedin.artcollective.entity.ArtSubject;
 import com.hashedin.artcollective.entity.ArtWork;
+import com.hashedin.artcollective.entity.ArtworkVariant;
 import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
+import com.hashedin.artcollective.repository.ArtworkVariantRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 import com.hashedin.artcollective.repository.SizeBucketRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
@@ -45,6 +47,7 @@ import com.hashedin.artcollective.service.Style;
 import com.hashedin.artcollective.service.Subject;
 import com.hashedin.artcollective.service.TinEyeService;
 import com.hashedin.artcollective.service.TransactionsService;
+import com.hashedin.artcollective.utils.ProductSize;
 
 @RestController
 public class ProductsAPI {
@@ -87,6 +90,9 @@ public class ProductsAPI {
 	
 	@Autowired
 	private DeductionsService deductionService;
+	
+	@Autowired
+	private ArtworkVariantRepository artworkVariantRepository;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
@@ -164,15 +170,17 @@ public class ProductsAPI {
 	}
 	
 	// Synchronize data from Shopify into internal Database and Tin Eye
-	@RequestMapping(value = "/manage/shopify/synchronize", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/shopify/synchronize", method = RequestMethod.GET)
 	public void synchronize(
 			@RequestParam(value = "type", required = true) String type,
 			@RequestParam(value = "mode", required = false) String mode) {
 		if (type.equalsIgnoreCase("artworks")) {
+			LOGGER.info("Artworks Synchrnozie Strated");
 			artworkService.synchronize(mode);
 			LOGGER.info("Artworks Successfully Synchronized");
 		}
 		else if (type.equalsIgnoreCase("orders")) {
+			LOGGER.info("Orders Synchrnozie Strated");
 			ordersService.synchronize(mode);
 			LOGGER.info("Orders Successfully Synchronized");
 		}
@@ -270,6 +278,20 @@ public class ProductsAPI {
 		return tempFrames;
 	}
 	
+	@RequestMapping(value = "/api/canvas/price", method = RequestMethod.GET)
+	public Double getCanvasPrice(
+			@RequestParam(value = "productVariantId", required = true)Long productVariantId,
+			@RequestParam(value = "canvasVariantId", required = true)Long canvasVariantId) {
+		ArtworkVariant artworkVariant = artworkVariantRepository.findOne(productVariantId);
+		if (artworkVariant != null) {
+			ProductSize productSize = new ProductSize(artworkVariant);
+			return frameVariantService.getCanvasPrice(productSize.getProductLength(), 
+					productSize.getProductBreadth(), canvasVariantId);
+		}
+		return null;
+		
+	}
+	
 	@RequestMapping(value = "/api/uploadImage", headers = "content-type=multipart/*", method = RequestMethod.POST)
 	@ResponseBody String extractColorsFromImage(@RequestParam("file") MultipartFile file) throws IOException {
 		File tempFile = File.createTempFile("uploadedfile", null);
@@ -285,11 +307,10 @@ public class ProductsAPI {
 			@RequestParam(value = "typeVariantId", required = true)Long typeVariantId, 
 			@RequestParam(value = "type", required = true)String type) {
 		
-			return frameVariantService.createFrameProduct(productId, 
-					productVariantId, typeVariantId);
+			return frameVariantService.createAddOnProduct(productVariantId, 
+					typeVariantId, type);
 		
 	}
-	
 	
 
 	// Wrap Artwork objects into a Map Helper Function

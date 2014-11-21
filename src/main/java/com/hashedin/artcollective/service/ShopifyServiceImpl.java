@@ -76,9 +76,9 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 	
 	@Override
-	public List<CustomCollection> getFrameProductsSinceLastModified(DateTime lastRunTime) {
+	public List<CustomCollection> getAddOnProductsSinceLastModified(DateTime lastRunTime, String productType) {
 		ShopifyProducts products = rest.getForObject(
-				baseUri + "products.json?product_type=frames", ShopifyProducts.class);
+				baseUri + "products.json?product_type=".concat(productType), ShopifyProducts.class);
 		return products.getProducts();
 	}
 	
@@ -176,18 +176,29 @@ public class ShopifyServiceImpl implements ShopifyService {
 
 	@Override
 	public CustomCollection createDynamicProduct(FrameVariant frameVariant,
-			ProductSize productSize, Double productPrice) {
+			ProductSize productSize, Double productPrice, String type) {
 		StringBuilder productData = new StringBuilder();
 		StringBuilder variantData = new StringBuilder();
+		String productDescription =  productSize.toString();
+		if (type.equalsIgnoreCase("frames")) {
+			productDescription = productSize.toString() 
+					+ frameVariant.getMountThickness() + frameVariant.getFrameThickness();
+		}
 		
 		variantData.append("{\"option1\": \"")
-			.append(productSize.toString())
+			.append(productDescription)
 			.append("\"").append(",")
 			.append("\"price\": \"")
 			.append(productPrice.toString())
 			.append("\"").append(",")
 			.append("\"sku\": \"")
-			.append("123")
+			.append("123\"")
+		.append("}");
+		
+		StringBuilder imageData = new StringBuilder();
+		imageData.append("{\"src\": \"")
+			.append(frameVariant.getImgSrc())
+			.append("\"")
 		.append("}");
 		
 		productData.append("{\"product\": {")
@@ -204,16 +215,18 @@ public class ShopifyServiceImpl implements ShopifyService {
 			.append("dynamic")
 			.append("\"").append(",")
 			.append("\"variants\": [").append(variantData).append("]")
+			.append(",")
+			.append("\"images\": [").append(imageData).append("]")
 		.append("}}");
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> entity = new HttpEntity<String>(productData.toString(), headers);
 		
-		CustomCollection product = rest.postForObject(baseUri + "products.json", 
-				entity, CustomCollection.class);
+		DynamicProduct product = rest.postForObject(baseUri + "products.json", 
+				entity, DynamicProduct.class);
 		
-		return product;
+		return product.getProduct();
 	}
 
 	

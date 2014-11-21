@@ -19,7 +19,7 @@ public interface ShopifyService {
 	
 	public List<Collection> getCollectionsForProduct(long productId);
 	
-	public List<CustomCollection> getFrameProductsSinceLastModified(DateTime lastRunTime);
+	public List<CustomCollection> getAddOnProductsSinceLastModified(DateTime lastRunTime, String string);
 
 	public void postImageColorsMetaField(Long id, String imageColors);
 
@@ -32,6 +32,6 @@ public interface ShopifyService {
 	public CustomCollection getArtistCollection(Long artistCollectionId);
 
 	public CustomCollection createDynamicProduct(FrameVariant frameVariant,
-			ProductSize productSize, Double framePrice);
+			ProductSize productSize, Double framePrice, String type);
 	
 }
