@@ -60,7 +60,7 @@ public class ShopifyServiceTest extends BaseUnitTest {
 			.andExpect(method(HttpMethod.GET))
 			.andRespond(withJson("frames.json"));
 		
-		List<CustomCollection> products = service.getFrameProductsSinceLastModified(null);
+		List<CustomCollection> products = service.getAddOnProductsSinceLastModified(null, "frames");
 		assertEquals(products.size(), 6);
 		
 		CustomCollection product = products.get(0);

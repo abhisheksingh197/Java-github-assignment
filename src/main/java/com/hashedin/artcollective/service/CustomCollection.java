@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.hashedin.artcollective.entity.Image;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class CustomCollection {
+public class CustomCollection {
 
 	private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
 

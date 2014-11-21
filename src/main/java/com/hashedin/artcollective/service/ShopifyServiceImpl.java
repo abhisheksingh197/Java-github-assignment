@@ -23,7 +23,10 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
+
+import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.Image;
+import com.hashedin.artcollective.utils.ProductSize;
 
 
 @Service
@@ -73,9 +76,9 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 	
 	@Override
-	public List<CustomCollection> getFrameProductsSinceLastModified(DateTime lastRunTime) {
+	public List<CustomCollection> getAddOnProductsSinceLastModified(DateTime lastRunTime, String productType) {
 		ShopifyProducts products = rest.getForObject(
-				baseUri + "products.json?product_type=frames", ShopifyProducts.class);
+				baseUri + "products.json?product_type=".concat(productType), ShopifyProducts.class);
 		return products.getProducts();
 	}
 	
@@ -170,5 +173,62 @@ public class ShopifyServiceImpl implements ShopifyService {
 		CustomCollection artistProduct = artistCollection.getCustomCollection();
 		return artistProduct;
 	}
+
+	@Override
+	public CustomCollection createDynamicProduct(FrameVariant frameVariant,
+			ProductSize productSize, Double productPrice, String type) {
+		StringBuilder productData = new StringBuilder();
+		StringBuilder variantData = new StringBuilder();
+		String productDescription =  productSize.toString();
+		if (type.equalsIgnoreCase("frames")) {
+			productDescription = productSize.toString() 
+					+ frameVariant.getMountThickness() + frameVariant.getFrameThickness();
+		}
+		
+		variantData.append("{\"option1\": \"")
+			.append(productDescription)
+			.append("\"").append(",")
+			.append("\"price\": \"")
+			.append(productPrice.toString())
+			.append("\"").append(",")
+			.append("\"sku\": \"")
+			.append("123\"")
+		.append("}");
+		
+		StringBuilder imageData = new StringBuilder();
+		imageData.append("{\"src\": \"")
+			.append(frameVariant.getImgSrc())
+			.append("\"")
+		.append("}");
+		
+		productData.append("{\"product\": {")
+			.append("\"title\": \"")
+			.append(frameVariant.getFrameTitle())
+			.append("\"").append(",")
+			.append("\"body_html\": \"")
+			.append("Dynamic Product")
+			.append("\"").append(",")
+			.append("\"vendor\": \"")
+			.append("Art Collective")
+			.append("\"").append(",")
+			.append("\"product_type\": \"")
+			.append("dynamic")
+			.append("\"").append(",")
+			.append("\"variants\": [").append(variantData).append("]")
+			.append(",")
+			.append("\"images\": [").append(imageData).append("]")
+		.append("}}");
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> entity = new HttpEntity<String>(productData.toString(), headers);
+		
+		DynamicProduct productWrapper = rest.postForObject(baseUri + "products.json", 
+				entity, DynamicProduct.class);
+		
+		return productWrapper.getProduct();
+	}
+
+	
 
 }

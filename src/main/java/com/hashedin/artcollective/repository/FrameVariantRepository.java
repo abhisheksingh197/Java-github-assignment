@@ -14,13 +14,10 @@ public interface FrameVariantRepository extends PagingAndSortingRepository<Frame
 JpaSpecificationExecutor<FrameVariant> {
 
 	@Query("SELECT frameVariant FROM FrameVariant frameVariant "
-			+ " WHERE ((frameVariant.frameLength = :frameLength)"
-			+ "AND (frameVariant.frameBreadth = :frameBreadth)"
-			+ "AND (frameVariant.mountThickness = :mountThickness)"
+			+ "WHERE (frameVariant.mountThickness = :mountThickness) "
 			+ "AND (frameVariant.frameThickness = :frameThickness)"
 			+ ")")
-	public List<FrameVariant> findVariants(@Param("frameLength")Double frameLength, 
-			@Param("frameBreadth")Double frameBreadth,
-			@Param("mountThickness")Double mountThickness, 
+	public List<FrameVariant> findVariants(@Param("mountThickness")Double mountThickness, 
 			@Param("frameThickness")Double frameThickness);
 }
+

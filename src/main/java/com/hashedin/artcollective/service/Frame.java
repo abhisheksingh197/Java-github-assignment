@@ -25,11 +25,18 @@ public class Frame {
 	private Double frameBreadth;
 	private Double unitPrice;
 	private String imgSrc;
+	private Double framePrice;
 	public String getImgSrc() {
 		return imgSrc;
 	}
 	public void setImgSrc(String imgSrc) {
 		this.imgSrc = imgSrc;
+	}
+	public Double getFramePrice() {
+		return framePrice;
+	}
+	public void setFramePrice(Double framePrice) {
+		this.framePrice = framePrice;
 	}
 	public Long getId() {
 		return id;

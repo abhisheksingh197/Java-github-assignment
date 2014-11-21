@@ -102,7 +102,7 @@ public class ArtWorksService {
 				saveArtToInternalDatabase(arts);
 				saveArtToTinEye(arts);
 			}
-			saveFramesModifiedSince(lastRunTime);
+			saveAddOnsModifiedSince(lastRunTime);
 			DateTime syncEndTime = new DateTime();
 			SynchronizeLog syncLog = new SynchronizeLog(syncStartTime, syncEndTime, "artworks",
 					"successfull", (long) arts.size());
@@ -116,9 +116,10 @@ public class ArtWorksService {
 	}
 	
 	//Fetches frames from shopify and verifies whether they have Mount and Frame Thickness
-	public void saveFramesModifiedSince(DateTime lastRunTime) {
-		List<CustomCollection> products = shopify.getFrameProductsSinceLastModified(lastRunTime);
-		for (CustomCollection product : products) {
+	public void saveAddOnsModifiedSince(DateTime lastRunTime) {
+		List<CustomCollection> addOnProducts = shopify.getAddOnProductsSinceLastModified(lastRunTime, "frames");
+		addOnProducts.addAll(shopify.getAddOnProductsSinceLastModified(lastRunTime, "canvas"));
+		for (CustomCollection product : addOnProducts) {
 				List<FrameVariant> frameVariants = getFrameVariants(product);
 				frameRepository.save(frameVariants);	
 		}
@@ -128,7 +129,8 @@ public class ArtWorksService {
 	private List<FrameVariant> getFrameVariants(CustomCollection product) {
 		List<FrameVariant> frameVariants = new ArrayList<>();
 		for (Variant variant : product.getVariants()) {
-			if (!variantHasFrameableValues(variant)) {
+			String productType = product.getProductType();
+			if (!variantHasFrameableValues(variant, productType)) {
 				LOGGER.info("No Frame or Mount Thickness: Frame {} Must have supportable Frame "
 						+ "and Mount thickness Rejecting Product ", product.getTitle());
 				
@@ -136,12 +138,10 @@ public class ArtWorksService {
 			else {
 				FrameVariant frameVariant = new FrameVariant();
 				frameVariant.setId(variant.getId());
-				frameVariant.setFrameLength(Double.parseDouble((variant.getOption1()
-						.split("[Xx]")[0].split("\"")[0])));
-				frameVariant.setFrameBreadth(Double.parseDouble((variant.getOption1()
-						.split("[Xx]")[1].split("\"")[0])));
-				frameVariant.setMountThickness(Double.parseDouble((variant.getOption2())));
-				frameVariant.setFrameThickness(Double.parseDouble((variant.getOption3())));
+				if (productType.equalsIgnoreCase("frames")) {
+					frameVariant.setMountThickness(Double.parseDouble((variant.getOption2())));
+					frameVariant.setFrameThickness(Double.parseDouble((variant.getOption3())));
+				}
 				frameVariant.setUnitPrice(variant.getPrice());
 				frameVariant.setImgSrc(product.getImage().getImgSrc());
 				frameVariant.setFrameTitle(product.getTitle());
@@ -397,7 +397,7 @@ public class ArtWorksService {
 		//If artwork is framable check if it has a mount thickness and a frame thickness
 		if (artwork.isFrameAvailable()) {
 			for (Variant variant : p.getVariants()) {
-				if (!variantHasFrameableValues(variant)) {
+				if (!variantHasFrameableValues(variant, "artwork")) {
 					artworkLogger = artworkLogger.concat("-- Missing Frame or Mount Thicness "
 							+ "in Variants:The Artwork variants do not have frame and "
 							+ "mount Thickness");
@@ -580,20 +580,30 @@ public class ArtWorksService {
 		
 	}
 	
-	private boolean variantHasFrameableValues(Variant variant) {
+	private boolean variantHasFrameableValues(Variant variant, String type) {
 		try {
-			if (variant.getOption2() == null || variant.getOption3() == null 
-					|| variant.getOption2().equalsIgnoreCase("") 
-					|| variant.getOption3().equalsIgnoreCase("")) {
-				return false;
-			}
-			else if ((Double.parseDouble((variant.getOption1().split("[Xx]")[0].split("\"")[0])) < 0)
-				|| (Double.parseDouble((variant.getOption1().split("[Xx]")[1].split("\"")[0])) < 0)
-				|| (Double.parseDouble((variant.getOption2())) < 0) 
-				|| (Double.parseDouble((variant.getOption3())) < 0)) {
-						return false;
+			if (!type.equalsIgnoreCase("canvas")) {
+				if (variant.getOption2() == null || variant.getOption3() == null 
+						|| variant.getOption2().equalsIgnoreCase("") 
+						|| variant.getOption3().equalsIgnoreCase("")) {
+					return false;
+				}
+				else {
+					if (!type.equalsIgnoreCase("frames")) {
+						if ((Double.parseDouble((variant.getOption1()
+								.split("[Xx]")[0].split("\"")[0])) < 0)
+						   || (Double.parseDouble((variant.getOption1()
+								.split("[Xx]")[1].split("\"")[0])) < 0)) {
+							return false;
+						}
 					}
-		return true;
+					if ((Double.parseDouble((variant.getOption2())) < 0) 
+							|| (Double.parseDouble((variant.getOption3())) < 0)) {
+							return false;
+					}
+				}
+			}
+			return true;
 		}
 		catch (NumberFormatException e) {
 			return false;
