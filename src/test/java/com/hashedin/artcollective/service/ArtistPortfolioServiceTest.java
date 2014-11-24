@@ -161,7 +161,7 @@ public class ArtistPortfolioServiceTest extends BaseUnitTest{
 	public void testForFetchingArtworkImagesMap() {
 		Map<String, String> artworksImageMap = artistPortfolioService.getArtworkImagesByArtist(2L);
 		assertEquals(artworksImageMap.size(), 2);
-		assertEquals(artworksImageMap.get("504096747"), "abc");
+		assertEquals(artworksImageMap.get("504096747"), "https://cdn.shopify.com/s/files/1/0608/8161/products/sakhi-artfinder.jpg?v=1414422580");
 	}
 	
 	@Test

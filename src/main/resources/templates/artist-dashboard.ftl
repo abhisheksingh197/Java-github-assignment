@@ -140,12 +140,12 @@
                                     
                                     	<#list 0..(artworksLength - 1) as artIterator>
                                     		<#assign artwork = (artworks[artIterator]) />
+                                    		<#assign imageSrc = (artworkImages[artwork.id?c])!0.0 />
                                     		<#assign variantList = artwork.variants />
 	                                        <tr>
-	                                        	<#assign imageSrc = artwork.images[0].imgSrc />
 	                                        	<#assign croppedImgSrc = imageSrc?split("_") />
 	                                        	<#assign croppedImgSrc = croppedImgSrc[0] + "_O_small.jpg" />
-	                                            <td><img src="${imageSrc}" alt="portfolio" height="59" width="72"/></td>
+	                                            <td><img src="${imageSrc!}" alt="portfolio" height="59" width="72"/></td>
 	                                            <td>
 	                                            	<h5>${artwork.title}</h5>
 	                                            	<h5>${artwork.description!}</h5>
@@ -230,9 +230,10 @@
                                     <tbody>
                                     	<#list earningsList as earningLineItem>
                                         <tr>
+                                        	<#assign earningImageSrc = (artworkImages[earningLineItem.productId?c])!0.0 />
                                             <td>${earningLineItem.orderDate.toString('MMM dd, yyyy')!}</td>
                                             <td>${earningLineItem.orderName!}</td>
-                                            <td class="align-center"><img src="${earningLineItem.productImageSrc!}" alt="earnings" height="48" width="48"/></td>
+                                            <td class="align-center"><img src="${earningImageSrc!}" alt="earnings" height="48" width="48"/></td>
                                             <td class="align-center">${earningLineItem.variantSize!}</td>
                                             <td>${earningLineItem.quantity!}</td>
                                             <td>${earningLineItem.commission!}</td>
