@@ -175,14 +175,24 @@ public class ProductsAPI {
 			@RequestParam(value = "type", required = true) String type,
 			@RequestParam(value = "mode", required = false) String mode) {
 		if (type.equalsIgnoreCase("artworks")) {
-			LOGGER.info("Artworks Synchrnozie Strated");
+			LOGGER.info("Artworks Synchronize Started");
 			artworkService.synchronize(mode);
 			LOGGER.info("Artworks Successfully Synchronized");
 		}
 		else if (type.equalsIgnoreCase("orders")) {
-			LOGGER.info("Orders Synchrnozie Strated");
+			LOGGER.info("Orders Synchronize Started");
 			ordersService.synchronize(mode);
 			LOGGER.info("Orders Successfully Synchronized");
+		}
+		/**
+		 * Addons - Additional products that are purchased along with an artwork
+		 * currently frames and canvas are considered as addons. In future if 
+		 * there are new miscellaneous products coming up we can categorize them under this.
+		 */
+		else if (type.equalsIgnoreCase("addons")) {
+			LOGGER.info("Add-Ons Synchronize Started");
+			artworkService.saveAddOnsModifiedSince(null);
+			LOGGER.info("Add-Ons Successfully Synchronized");
 		}
 		
 	}

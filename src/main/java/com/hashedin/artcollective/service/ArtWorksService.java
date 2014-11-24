@@ -128,6 +128,10 @@ public class ArtWorksService {
 	
 	private List<FrameVariant> getFrameVariants(CustomCollection product) {
 		List<FrameVariant> frameVariants = new ArrayList<>();
+		Image productImg = product.getImage();
+		if (productImg == null || productImg.getImgSrc() == null) {
+			return null;
+		}
 		for (Variant variant : product.getVariants()) {
 			String productType = product.getProductType();
 			if (!variantHasFrameableValues(variant, productType)) {
@@ -143,7 +147,7 @@ public class ArtWorksService {
 					frameVariant.setFrameThickness(Double.parseDouble((variant.getOption3())));
 				}
 				frameVariant.setUnitPrice(variant.getPrice());
-				frameVariant.setImgSrc(product.getImage().getImgSrc());
+				frameVariant.setImgSrc(productImg.getImgSrc());
 				frameVariant.setFrameTitle(product.getTitle());
 				frameVariants.add(frameVariant);
 			}

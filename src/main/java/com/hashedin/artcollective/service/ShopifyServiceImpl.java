@@ -179,10 +179,12 @@ public class ShopifyServiceImpl implements ShopifyService {
 			ProductSize productSize, Double productPrice, String type) {
 		StringBuilder productData = new StringBuilder();
 		StringBuilder variantData = new StringBuilder();
-		String productDescription =  productSize.toString();
+		String productDescription =  productSize.getProductLength().toString() + " X " 
+				+ productSize.getProductBreadth().toString();
 		if (type.equalsIgnoreCase("frames")) {
-			productDescription = productSize.toString() 
-					+ frameVariant.getMountThickness() + frameVariant.getFrameThickness();
+			productDescription = productDescription.concat(" - " 
+					+ frameVariant.getMountThickness().toString() + " - " 
+					+ frameVariant.getFrameThickness().toString());
 		}
 		
 		variantData.append("{\"option1\": \"")
