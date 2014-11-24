@@ -143,8 +143,8 @@ public class ArtWorksService {
 				FrameVariant frameVariant = new FrameVariant();
 				frameVariant.setId(variant.getId());
 				if (productType.equalsIgnoreCase("frames")) {
-					frameVariant.setMountThickness(Double.parseDouble((variant.getOption2())));
-					frameVariant.setFrameThickness(Double.parseDouble((variant.getOption3())));
+					frameVariant.setFrameThickness(Double.parseDouble((variant.getOption2())));
+					frameVariant.setMountThickness(Double.parseDouble((variant.getOption3())));
 				}
 				frameVariant.setUnitPrice(variant.getPrice());
 				frameVariant.setImgSrc(productImg.getImgSrc());

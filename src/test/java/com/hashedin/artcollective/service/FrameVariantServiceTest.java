@@ -51,7 +51,7 @@ public class FrameVariantServiceTest extends BaseUnitTest {
 	@Test
 	public void testForFramesSearch() {
 		List<Frame> tempFrames = new ArrayList<>();
-		List<FrameVariant> frameVariants = frameVariantService.getFrames(3.0, 4.0);
+		List<FrameVariant> frameVariants = frameVariantService.getFrames(4.0, 3.0);
 		for (FrameVariant frameVariant : frameVariants) {
 			Frame frame = new Frame(frameVariant);
 			frame.setFramePrice(frameVariantService.getFramePrice(12.00, 16.00, frameVariant));

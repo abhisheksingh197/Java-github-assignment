@@ -17,6 +17,7 @@ import com.hashedin.artcollective.entity.Artist;
 import com.hashedin.artcollective.entity.ArtworkVariant;
 import com.hashedin.artcollective.entity.Deduction;
 import com.hashedin.artcollective.entity.FulfilledOrder;
+import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.entity.OrderLineItem;
 import com.hashedin.artcollective.entity.Transaction;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
@@ -93,7 +94,7 @@ public class ArtistPortfolioService implements UserDetailsService {
 				earningsObject.setOrderId(lineItemOrder.getId());
 				earningsObject.setOrderName(lineItemOrder.getName());
 				earningsObject.setOrderDate(lineItemOrder.getCreatedAt());
-				earningsObject.setProductImageSrc(getProductImageSrc(lineItem.getProductId()));
+				earningsObject.setProductId(lineItem.getProductId());
 				earningsObject.setVariantSize(getVariantSize(lineItem.getVariantId()));
 				earningsObject.setQuantity(lineItem.getQuantity());
 				earningsObject.setCommission(lineItem.getEarning());
@@ -110,8 +111,13 @@ public class ArtistPortfolioService implements UserDetailsService {
 		return variant.getOption1();
 	}
 
-	private String getProductImageSrc(Long productId) {
+	private String getProductArtFinderImageSrc(Long productId) {
 		ArtWork artwork = artworkRepository.findOne(productId);
+		for (Image image : artwork.getImages()) {
+			if (image.getImgSrc().contains("-artfinder")) {
+				return image.getImgSrc();
+			}
+		}
 		return artwork.getImages().get(0).getImgSrc();
 	}
 
@@ -140,9 +146,9 @@ public class ArtistPortfolioService implements UserDetailsService {
 		Map<String, String> artworksImageMap = new HashMap<>();
 		List<ArtWork> artworks = artworkRepository.getArtworksByArtist(artistId);
 		for (ArtWork artwork : artworks) {
-			String artworkId = String.valueOf(artwork.getId());
-			String artworkImageSrc = artwork.getImages().get(0).getImgSrc();
-			artworksImageMap.put(artworkId, artworkImageSrc);
+			Long artworkId = artwork.getId();
+			String artworkImageSrc = getProductArtFinderImageSrc(artworkId);
+			artworksImageMap.put(String.valueOf(artworkId), artworkImageSrc);
 		}
 		return artworksImageMap;
 		

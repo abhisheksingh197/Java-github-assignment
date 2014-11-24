@@ -7,7 +7,7 @@ public class PortfolioEarnings {
 	private DateTime orderDate;
 	private Long orderId;
 	private String orderName;
-	private String productImageSrc;
+	private Long productId;
 	private String variantSize;
 	private Long quantity;
 	private double commission;
@@ -29,11 +29,11 @@ public class PortfolioEarnings {
 	public void setOrderName(String orderName) {
 		this.orderName = orderName;
 	}
-	public String getProductImageSrc() {
-		return productImageSrc;
+	public Long getProductId() {
+		return productId;
 	}
-	public void setProductImageSrc(String producImageSrc) {
-		this.productImageSrc = producImageSrc;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 	public String getVariantSize() {
 		return variantSize;
