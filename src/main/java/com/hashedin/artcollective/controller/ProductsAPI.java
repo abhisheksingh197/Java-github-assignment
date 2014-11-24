@@ -184,6 +184,11 @@ public class ProductsAPI {
 			ordersService.synchronize(mode);
 			LOGGER.info("Orders Successfully Synchronized");
 		}
+		/**
+		 * Addons - Additional products that are purchased along with an artwork
+		 * currently frames and canvas are considered as addons. In future if 
+		 * there are new miscellaneous products coming up we can categorize them under this.
+		 */
 		else if (type.equalsIgnoreCase("addons")) {
 			LOGGER.info("Add-Ons Synchronize Started");
 			artworkService.saveAddOnsModifiedSince(null);
