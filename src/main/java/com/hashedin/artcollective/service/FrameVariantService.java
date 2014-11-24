@@ -50,7 +50,7 @@ public class FrameVariantService {
 		if (artworkVariant != null && frameVariant != null) {
 			ProductSize productSize = new ProductSize(artworkVariant);
 			Double productPrice = 0.0;
-			if (type.equalsIgnoreCase("frame")) {
+			if (type.equalsIgnoreCase("frames")) {
 				productPrice = getFramePrice(productSize.getProductLength(), 
 						productSize.getProductBreadth(), 
 						frameVariant);
