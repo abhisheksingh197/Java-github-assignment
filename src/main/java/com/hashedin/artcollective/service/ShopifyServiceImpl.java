@@ -179,16 +179,18 @@ public class ShopifyServiceImpl implements ShopifyService {
 			ProductSize productSize, Double productPrice, String type) {
 		StringBuilder productData = new StringBuilder();
 		StringBuilder variantData = new StringBuilder();
-		String productDescription =  productSize.getProductLength().toString() + " X " 
+		String variantDescription =  productSize.getProductLength().toString() + " X " 
 				+ productSize.getProductBreadth().toString();
+		String productDescription = "Canvas for Artwork".concat(variantDescription);
 		if (type.equalsIgnoreCase("frames")) {
-			productDescription = productDescription.concat(" - " 
+			variantDescription = variantDescription.concat(" - " 
 					+ frameVariant.getMountThickness().toString() + " - " 
 					+ frameVariant.getFrameThickness().toString());
+			productDescription = "Frame for Artwork".concat(variantDescription);
 		}
 		
 		variantData.append("{\"option1\": \"")
-			.append(productDescription)
+			.append(variantDescription)
 			.append("\"").append(",")
 			.append("\"price\": \"")
 			.append(productPrice.toString())
@@ -208,7 +210,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 			.append(frameVariant.getFrameTitle())
 			.append("\"").append(",")
 			.append("\"body_html\": \"")
-			.append("Dynamic Product")
+			.append(productDescription)
 			.append("\"").append(",")
 			.append("\"vendor\": \"")
 			.append("Art Collective")

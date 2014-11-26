@@ -218,7 +218,7 @@ public class ArtWorksService {
 				artist = artistWithCollectionId(collection.getId());
 				if (artist == null) {
 					artist = getArtistObject(artistTitle[1], artistTitle.length 
-							== TITLE_SIZE ? artistTitle[2] : "", collection.getHandle(), 
+							>= TITLE_SIZE ? artistTitle[2] : "", collection.getHandle(), 
 							collection.getId());
 					artistRepository.save(artist);
 				} 
