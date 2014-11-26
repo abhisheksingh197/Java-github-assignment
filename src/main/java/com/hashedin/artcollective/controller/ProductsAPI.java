@@ -1,8 +1,10 @@
 package com.hashedin.artcollective.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -11,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -306,6 +310,24 @@ public class ProductsAPI {
 	@ResponseBody String extractColorsFromImage(@RequestParam("file") MultipartFile file) throws IOException {
 		File tempFile = File.createTempFile("uploadedfile", null);
 		file.transferTo(tempFile);
+		String colors = tinEyeService.extractColorUploadImage(tempFile);
+		return colors;
+    }
+	
+	@RequestMapping(value = "/api/uploadFileBase64", method = RequestMethod.POST)
+	@ResponseBody String extractColorsFromBase64Image(@RequestParam("fileBase64") String fileBase64)
+			throws IOException {
+		String temp = fileBase64.split(",")[1].trim();
+		byte imageBytes[] = Base64.decodeBase64(temp);
+		File tempFile = File.createTempFile("uploadedfile", null);
+		OutputStream output = null;
+		try {
+			output = new FileOutputStream(tempFile);
+			IOUtils.write(imageBytes, output);
+		}
+		finally {
+			IOUtils.closeQuietly(output);
+		}
 		String colors = tinEyeService.extractColorUploadImage(tempFile);
 		return colors;
     }
