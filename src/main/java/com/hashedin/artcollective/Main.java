@@ -2,6 +2,8 @@ package com.hashedin.artcollective;
 
 import javax.imageio.ImageIO;
 
+import net.sf.ehcache.config.CacheConfiguration;
+
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
@@ -13,6 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachingConfigurer;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +36,7 @@ import com.hashedin.artcollective.service.ArtistPortfolioService;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-public class Main extends WebMvcConfigurerAdapter {
+public class Main extends WebMvcConfigurerAdapter implements CachingConfigurer {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	
@@ -134,5 +141,31 @@ public class Main extends WebMvcConfigurerAdapter {
 	public AuthenticationSecurity authenticationSecurity() {
 		return new AuthenticationSecurity(userDetailsService);
 	}
+	
+    @Bean(destroyMethod="shutdown")
+    public net.sf.ehcache.CacheManager ehCacheManager() {
+        CacheConfiguration cacheConfiguration = new CacheConfiguration();
+        cacheConfiguration.setName("artcollective");
+        cacheConfiguration.setMemoryStoreEvictionPolicy("LRU");
+        cacheConfiguration.setMaxEntriesLocalHeap(100);
+        cacheConfiguration.setMaxEntriesLocalDisk(1000);
+        
+        net.sf.ehcache.config.Configuration config = new net.sf.ehcache.config.Configuration();
+        config.addCache(cacheConfiguration);
+
+        return net.sf.ehcache.CacheManager.newInstance(config);
+    }
+
+    @Bean
+    @Override
+    public CacheManager cacheManager() {
+        return new EhCacheCacheManager(ehCacheManager());
+    }
+
+    @Bean
+    @Override
+    public KeyGenerator keyGenerator() {
+        return new SimpleKeyGenerator();
+    }
 
 }

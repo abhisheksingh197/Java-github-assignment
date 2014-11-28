@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.hashedin.artcollective.entity.ArtWork;
@@ -45,6 +46,7 @@ public class ArtWorksSearchService {
 		return artWorkList;
 	}
 	
+	@Cacheable(value="artworksearch")
 	//CHECKSTYLE:OFF
 	public CriteriaSearchResponse findArtworksByCriteria(
 			List<String> subjectList, 
