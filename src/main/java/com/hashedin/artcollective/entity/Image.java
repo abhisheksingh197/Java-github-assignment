@@ -1,5 +1,6 @@
 package com.hashedin.artcollective.entity;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -9,8 +10,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Image {
+public class Image implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	@Id
 	private long id;
 	//private DateTime createdAt;

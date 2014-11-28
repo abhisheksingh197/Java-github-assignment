@@ -1,5 +1,6 @@
 package com.hashedin.artcollective.entity;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,8 +18,9 @@ import org.joda.time.DateTime;
 
 
 @Entity
-public class ArtWork {
+public class ArtWork implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	@Id
 	private Long id;
 	private Long skuId;
