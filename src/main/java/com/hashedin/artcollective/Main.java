@@ -21,6 +21,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.cache.interceptor.SimpleKeyGenerator;
@@ -42,10 +43,12 @@ import com.hashedin.artcollective.service.ArtistPortfolioService;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
+@EnableCaching
 public class Main extends WebMvcConfigurerAdapter implements CachingConfigurer {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	
+	private static final Integer SECONDS_PER_HOUR = (60 * 60);
 	public static void main(String args[]) {
 		//System.setProperty("spring.profiles.active", "dev");
 		SpringApplication.run(Main.class, args);
@@ -86,6 +89,15 @@ public class Main extends WebMvcConfigurerAdapter implements CachingConfigurer {
     @Value("${mail.password}")
     private String password;
     
+	@Value("${caching.maxHeapEntries}")
+	private Long maxHeapEntries;
+	
+	@Value("${caching.maxLocalDiskEntries}")
+	private Long maxLocalDiskEntries;
+	
+	@Value("${caching.maxTimeToLiveInHours}")
+	private Long maxTimeToLiveInHours;
+	
 	@Autowired
 	private ArtistPortfolioService userDetailsService;
 	
@@ -165,18 +177,19 @@ public class Main extends WebMvcConfigurerAdapter implements CachingConfigurer {
 		return new AuthenticationSecurity(userDetailsService);
 	}
 	
-    @Bean(destroyMethod="shutdown")
+    @Bean(destroyMethod = "shutdown")
     public net.sf.ehcache.CacheManager ehCacheManager() {
         CacheConfiguration cacheConfiguration = new CacheConfiguration();
-        cacheConfiguration.setName("artcollective");
+        cacheConfiguration.setName("artworksearch");
         cacheConfiguration.setMemoryStoreEvictionPolicy("LRU");
-        cacheConfiguration.setMaxEntriesLocalHeap(100);
-        cacheConfiguration.setMaxEntriesLocalDisk(1000);
-        
+
         PersistenceConfiguration persistenceConfiguration = new PersistenceConfiguration();
         persistenceConfiguration.strategy(Strategy.LOCALTEMPSWAP);
         cacheConfiguration.persistence(persistenceConfiguration);
-        
+        cacheConfiguration.setMaxEntriesLocalHeap(maxHeapEntries);
+        cacheConfiguration.setMaxEntriesLocalDisk(maxLocalDiskEntries);
+        cacheConfiguration.setTimeToLiveSeconds(maxTimeToLiveInHours * SECONDS_PER_HOUR);
+
         net.sf.ehcache.config.Configuration config = new net.sf.ehcache.config.Configuration();
         config.addCache(cacheConfiguration);
 

@@ -46,7 +46,7 @@ public class ArtWorksSearchService {
 		return artWorkList;
 	}
 	
-	@Cacheable(value="artworksearch")
+	@Cacheable(value = "artworksearch")
 	//CHECKSTYLE:OFF
 	public CriteriaSearchResponse findArtworksByCriteria(
 			List<String> subjectList, 
