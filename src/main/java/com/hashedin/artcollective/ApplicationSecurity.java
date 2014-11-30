@@ -48,6 +48,10 @@ class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
+		/*
+		 * Disable http headers, because it messes up caching completely
+		 */
+		http.headers().disable();
 		
 		http.authorizeRequests()
 			.antMatchers("/").hasAuthority("ARTIST")

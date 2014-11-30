@@ -1,5 +1,7 @@
 package com.hashedin.artcollective;
 
+import java.util.Properties;
+
 import javax.imageio.ImageIO;
 
 import net.sf.ehcache.config.CacheConfiguration;
@@ -29,8 +31,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.mvc.WebContentInterceptor;
 
 import com.hashedin.artcollective.service.ArtistPortfolioService;
 
@@ -43,7 +47,8 @@ import com.hashedin.artcollective.service.ArtistPortfolioService;
 public class Main extends WebMvcConfigurerAdapter implements CachingConfigurer {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
-	
+	private static final String ONE_DAY = Long.toString(24L * 60L * 60L);
+
 	private static final Integer SECONDS_PER_HOUR = (60 * 60);
 	public static void main(String args[]) {
 		//System.setProperty("spring.profiles.active", "dev");
@@ -144,6 +149,20 @@ public class Main extends WebMvcConfigurerAdapter implements CachingConfigurer {
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/login").setViewName("login");
+	}
+
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		super.addInterceptors(registry);
+		Properties cacheMappings = new Properties();
+		cacheMappings.put("/api/artworks/search", ONE_DAY);
+		cacheMappings.put("/api/artworks/search/color", ONE_DAY);
+		cacheMappings.put("/api/collections", ONE_DAY);
+		
+		WebContentInterceptor cacheInterceptor = new WebContentInterceptor();
+		cacheInterceptor.setCacheMappings(cacheMappings);
+		registry.addInterceptor(cacheInterceptor);
 	}
 
 	@Bean
