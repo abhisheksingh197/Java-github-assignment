@@ -1,7 +1,5 @@
 package com.hashedin.artcollective;
 
-import java.util.Properties;
-
 import javax.imageio.ImageIO;
 
 import net.sf.ehcache.config.CacheConfiguration;
@@ -29,8 +27,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -71,23 +67,6 @@ public class Main extends WebMvcConfigurerAdapter implements CachingConfigurer {
 	
 	@Value("${tinEye.authurl}")
 	private String tinEyeAuthUrl;
-	
-	@Value("${mail.protocol}")
-    private String protocol;
-    @Value("${mail.host}")
-    private String host;
-    @Value("${mail.port}")
-    private int port;
-    @Value("${mail.smtp.auth}")
-    private boolean auth;
-    @Value("${mail.smtp.starttls.enable}")
-    private boolean starttls;
-    @Value("${mail.from}")
-    private String from;
-    @Value("${mail.username}")
-    private String username;
-    @Value("${mail.password}")
-    private String password;
     
 	@Value("${caching.maxHeapEntries}")
 	private Long maxHeapEntries;
@@ -206,21 +185,6 @@ public class Main extends WebMvcConfigurerAdapter implements CachingConfigurer {
     @Override
     public KeyGenerator keyGenerator() {
         return new SimpleKeyGenerator();
-    }
-    
-    @Bean
-    public JavaMailSender javaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        Properties mailProperties = new Properties();
-        mailProperties.put("mail.smtp.auth", auth);
-        mailProperties.put("mail.smtp.starttls.enable", starttls);
-        mailSender.setJavaMailProperties(mailProperties);
-        mailSender.setHost(host);
-        mailSender.setPort(port);
-        mailSender.setProtocol(protocol);
-        mailSender.setUsername(username);
-        mailSender.setPassword(password);
-        return mailSender;
     }
 
 }
