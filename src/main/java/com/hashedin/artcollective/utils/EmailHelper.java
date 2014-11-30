@@ -93,7 +93,7 @@ public class EmailHelper implements InitializingBean {
 			
 			Transport.send(message);
 		}
-		catch(IOException ioe) {
+		catch (IOException ioe) {
 			throw new RuntimeException(ioe);
 		}
 		catch (TemplateException te) {
