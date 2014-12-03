@@ -234,5 +234,43 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 
 	
+	public void addProductToFavoriteCollection(Long customerId, Long productId) {
+		StringBuilder jsonData = new StringBuilder(); 
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
+				+ "custom_collections.json?title=customer_" + customerId, 
+				CustomCollectionWrapper.class);
+		
+		List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
+		
+		if (collection.size() == 0) {		
+			jsonData.append("{\"custom_collection\": {")
+			  	.append("\"title\": \" customer_" + customerId + "\",")
+			    .append("\"collects\": [ {")			     
+			    .append("\"product_id\":" + productId + "}") 
+			    .append("] } }");
+			
+			HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(), 
+				headers);			
+			@SuppressWarnings("unused")
+			CustomCollectionWrapper collectionWrapper = rest.postForObject(baseUri 
+					+ "custom_collections.json", entity, CustomCollectionWrapper.class);		
+		} 
+		else {
+			jsonData.append("{\"custom_collection\": {")
+		  	.append("\"id\": \" customer-" + collection.get(0).getId() + "\",")
+		    .append("\"collects\": [ {")			     
+		    .append("\"product_id\":" + productId + "}") 
+		    .append("] } }");			
+			
+			HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(),
+					headers);			
+			rest.put(baseUri + "custom_collections/" + collection.get(0).getId() + ".json", entity);	
+		}
 
+		return;
+	}
+	
 }

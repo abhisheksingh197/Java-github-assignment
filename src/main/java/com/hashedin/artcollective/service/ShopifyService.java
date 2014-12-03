@@ -34,4 +34,5 @@ public interface ShopifyService {
 	public CustomCollection createDynamicProduct(FrameVariant frameVariant,
 			ProductSize productSize, Double framePrice, String type);
 	
+	public void addProductToFavoriteCollection(Long customerId, Long productId);
 }

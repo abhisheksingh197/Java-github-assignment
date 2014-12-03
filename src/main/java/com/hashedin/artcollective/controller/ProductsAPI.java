@@ -47,6 +47,7 @@ import com.hashedin.artcollective.service.Frame;
 import com.hashedin.artcollective.service.FrameVariantService;
 import com.hashedin.artcollective.service.OrdersService;
 import com.hashedin.artcollective.service.PriceAndSizeBucketService;
+import com.hashedin.artcollective.service.ShopifyService;
 import com.hashedin.artcollective.service.Style;
 import com.hashedin.artcollective.service.Subject;
 import com.hashedin.artcollective.service.TinEyeService;
@@ -97,6 +98,9 @@ public class ProductsAPI {
 	
 	@Autowired
 	private ArtworkVariantRepository artworkVariantRepository;
+	
+	@Autowired
+	private ShopifyService shopifyService;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
@@ -343,7 +347,15 @@ public class ProductsAPI {
 		
 	}
 	
-
+	@RequestMapping(value = "/api/customCollection/customer", method = RequestMethod.POST)
+	public void customerCustomCollection(
+			@RequestParam(value = "customerId", required = true)Long customerId, 
+			@RequestParam(value = "productId", required = true)Long productId) {
+		
+		shopifyService.addProductToFavoriteCollection(customerId, productId);
+		return;
+	};
+						
 	// Wrap Artwork objects into a Map Helper Function
 	private Map<String, Object> wrapResponse(CriteriaSearchResponse searchResponse) {
 		Map<String, Object> map = new HashMap<String, Object>();

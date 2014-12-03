@@ -121,4 +121,25 @@ public class ShopifyServiceTest extends BaseUnitTest {
 		service.postImageColorsMetaField(productId, imageColors);
 	}
 	
+	@Test
+	public void testAddProductToFavoriteCollection() {
+		MockRestServiceServer mockShopifyServer = MockRestServiceServer.createServer(rest);
+
+		mockShopifyServer
+			.expect(requestTo(shopifyBaseUrl
+					+ "custom_collections.json?title=customer_1234567"))
+			.andExpect(method(HttpMethod.GET))
+		.andRespond(withJson("get_customer_collection.json"));
+				
+		mockShopifyServer
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections/12345678.json"))
+				.andExpect(method(HttpMethod.PUT))
+				.andRespond(withJson("get_customer_collection.json"));
+
+		long customerId = 1234567;
+		long productId = 987654;
+
+		service.addProductToFavoriteCollection(customerId, productId);	
+	}
 }
