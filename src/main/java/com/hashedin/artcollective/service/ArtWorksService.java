@@ -11,6 +11,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -174,11 +175,16 @@ public class ArtWorksService {
 		// Fetches Artworks from Shopify and then updates them into internal DB.
 		List<CustomCollection> products = shopify.getArtWorkProductsSinceLastModified(lastRunTime);
 		for (CustomCollection p : products) {
-			List<Collection> collections = shopify.getCollectionsForProduct(p.getId());
-			List<MetaField> metafields = shopify.getMetaFields("products", p.getId());
-			ArtWork art = createArtWork(p, collections, metafields);
-			if (art != null) {
-				arts.add(art);
+			try {
+				List<Collection> collections = shopify.getCollectionsForProduct(p.getId());
+				List<MetaField> metafields = shopify.getMetaFields("products", p.getId());
+				ArtWork art = createArtWork(p, collections, metafields);
+				if (art != null) {
+					arts.add(art);
+				}
+			}
+			catch (Exception e) {
+				LOGGER.error("Could not process Product " + p.getHandle() + ", skipping it", e);
 			}
 		}
 		return arts;
@@ -589,7 +595,7 @@ public class ArtWorksService {
 	}
 
 	private BufferedImage resizeImage(BufferedImage original, int widthOfImage) {
-		return Scalr.resize(original, Mode.FIT_TO_WIDTH, widthOfImage);
+		return Scalr.resize(original, Method.ULTRA_QUALITY, Mode.FIT_TO_WIDTH, widthOfImage);
 		
 	}
 	
