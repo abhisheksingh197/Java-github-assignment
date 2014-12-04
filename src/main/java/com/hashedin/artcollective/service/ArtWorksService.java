@@ -203,13 +203,13 @@ public class ArtWorksService {
 			switch(collectionType) {
 			case "subject":
 				ArtSubject artSubject = new ArtSubject(collection.getId(), 
-						collection.getTitle().split("_")[1]);
+						getCollectionTitle(collection.getTitle()));
 				subject.add(artSubject);
 				artSubjectRepository.save(artSubject);
 				break;
 			case "styles":
 				ArtStyle artStyle = new ArtStyle(collection.getId(), 
-						collection.getTitle().split("_")[1]);
+						getCollectionTitle(collection.getTitle()));
 				style.add(artStyle);
 				artStyleRepository.save(artStyle);
 				break;
@@ -225,7 +225,7 @@ public class ArtWorksService {
 				break;
 			case "coll":
 				ArtCollection artCollection = new ArtCollection(collection.getId(), 
-						collection.getTitle().split("_")[1]);
+						getCollectionTitle(collection.getTitle()));
 				artCollections.add(artCollection);
 				artCollectionsRepository.save(artCollection);
 				break;
@@ -323,6 +323,15 @@ public class ArtWorksService {
 	}
 	
 	
+	private String getCollectionTitle(String title) {
+		String[] splitByUnderscore = title.split("_");
+		String collectionTitle = "";
+		for (int titleIterator = 1; titleIterator < splitByUnderscore.length; titleIterator++) {
+			collectionTitle = collectionTitle.concat(splitByUnderscore[titleIterator]).concat(" ");
+		}
+		return collectionTitle;
+	}
+
 	private Artist getArtistObject(String firstName, String lastName,
 			String handle, Long collectionId) {
 		Artist artist = new Artist(firstName, lastName, handle, collectionId);
@@ -428,17 +437,17 @@ public class ArtWorksService {
 		if (artwork.getSubject().size() == 0) {
 			artworkLogger = artworkLogger.concat("-- Missing Subject List: The Artwork must "
 					+ "belong to at the least one subject");
-			isValid = false;
+			//4 Dec 2014 : Subjects no longer mandatory
 		}
 		if (artwork.getCollection().size() == 0) {
 			artworkLogger = artworkLogger.concat("-- Missing Collections List: The Artwork must belong "
 					+ "to at the least one collection");
-			isValid = false;
+			//4 Dec 2014 : Collections no longer mandatory
 		}
 		if (artwork.getStyle().size() == 0) {
 			artworkLogger = artworkLogger.concat("-- Missing Style List: The Artwork must belong to at the "
 					+ "least one style");
-			isValid = false;
+			//4 Dec 2014 : Styles no longer mandatory
 		}
 		if (artwork.getArtist() == null || artwork.getArtist().getHandle() == null) {
 			artworkLogger = artworkLogger.concat("-- Missing Artist: The Artwork must have an artist");
