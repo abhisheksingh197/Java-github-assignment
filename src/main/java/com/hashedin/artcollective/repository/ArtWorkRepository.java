@@ -11,18 +11,19 @@ import com.hashedin.artcollective.entity.ArtWork;
 public interface ArtWorkRepository extends PagingAndSortingRepository<ArtWork, Long>, 
 JpaSpecificationExecutor<ArtWork> {
 
-	@Query("SELECT art FROM ArtWork art WHERE "
-		+ "LOWER(art.artist.firstName) = LOWER(:firstName)")
-	public List<ArtWork> findByArtist(@Param("firstName")String firstName);
-	
-	//Writing a native SQL query for performance reasons. An exists sub query is a lot faster than join.
-	@Query(value = "select * from art_work art"
-			+ " where exists "
-			+ "(   select 'x' from art_work_styles" 
-			+ "    where art_work_id = art.id and (styles_id in (:styleList) or -1 in (:styleList)))"
-			+ " and exists "
+	String WHERE_CLAUSE = " where ( "
+			+ "exists (   select 'x' from art_work_styles" 
+			+ "    where art_work_id = art.id and (styles_id in (:styleList) or -1 in (:styleList))) "
+			+ "OR (not exists "
+			+ "(select 'x' from art_work_styles where art_work_id = art.id) and -1 in (:styleList))"
+			+ ") "
+			+ " and ("
+			+ "exists "
 			+ "(   select 'x' from art_work_subjects" 
-			+ "    where art_work_id = art.id and (subjects_id in (:subjectList) or -1 in (:subjectList)))"
+			+ "    where art_work_id = art.id and (subjects_id in (:subjectList) or -1 in (:subjectList))) "
+			+ "or (not exists "
+			+ "(select 'x' from art_work_subjects where art_work_id = art.id) and -1 in (:subjectList))"
+			+ ")"
 			+ " and exists "
 			+ "(   select 'x' from art_work_price_buckets" 
 			+ "    where art_work_id = art.id and (price_buckets_id in (:priceBucketRangeList) or -1 in "
@@ -33,7 +34,16 @@ JpaSpecificationExecutor<ArtWork> {
 			+ "(:sizeBucketRangeList)))"
 			+ "and (art.medium = :medium or :medium is null )"
 			+ "and (art.orientation = :orientation or :orientation is null )"
-			+ "and (art.id in (:idList) or -1 in (:idList)) order by art.created_at desc "
+			+ "and (art.id in (:idList) or -1 in (:idList)) ";
+	
+	@Query("SELECT art FROM ArtWork art WHERE "
+		+ "LOWER(art.artist.firstName) = LOWER(:firstName)")
+	public List<ArtWork> findByArtist(@Param("firstName")String firstName);
+	
+	//Writing a native SQL query for performance reasons. An exists sub query is a lot faster than join.
+	@Query(value = "select * from art_work art"
+			+ WHERE_CLAUSE
+			+ "order by art.created_at desc "
 			+ "limit :pageLimit offset :pageOffset " ,
 			nativeQuery = true)
 	
@@ -51,23 +61,7 @@ JpaSpecificationExecutor<ArtWork> {
 	
 	//Replicating the query above to get a count of the search result
 	@Query(value = "select count(*) from art_work art"
-			+ " where exists "
-			+ "(   select 'x' from art_work_styles" 
-			+ "    where art_work_id = art.id and (styles_id in (:styleList) or -1 in (:styleList)))"
-			+ " and exists "
-			+ "(   select 'x' from art_work_subjects" 
-			+ "    where art_work_id = art.id and (subjects_id in (:subjectList) or -1 in (:subjectList)))"
-			+ " and exists "
-			+ "(   select 'x' from art_work_price_buckets" 
-			+ "    where art_work_id = art.id and (price_buckets_id in (:priceBucketRangeList) or -1 in "
-			+ "(:priceBucketRangeList)))"
-			+ " and exists "
-			+ "(   select 'x' from art_work_size_buckets" 
-			+ "    where art_work_id = art.id and (size_buckets_id in (:sizeBucketRangeList) or -1 in "
-			+ "(:sizeBucketRangeList)))"
-			+ "and (art.medium = :medium or :medium is null )"
-			+ "and (art.orientation = :orientation or :orientation is null )"
-			+ "and (art.id in (:idList) or -1 in (:idList))",
+			+ WHERE_CLAUSE,
 			nativeQuery = true)
 	
 	public int findCountByCriteria(@Param("styleList") List<String> styleList,
