@@ -2,13 +2,13 @@
     "custom_collections": [
         {
             "body_html": "",
-            "handle": "customer_1234567",
+            "handle": "customer_1234567_favorite",
             "id": 12345678,
             "published_at": "2014-10-29T13:02:00+05:30",
             "published_scope": "global",
             "sort_order": "alpha-asc",
             "template_suffix": "",
-            "title": "customer_1234567",
+            "title": "customer_1234567_favorite",
             "updated_at": "2014-11-26T18:28:36+05:30"
         }
     ]

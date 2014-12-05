@@ -347,7 +347,7 @@ public class ProductsAPI {
 		
 	}
 	
-	@RequestMapping(value = "/api/customCollection/customer", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/custom-collection/customer", method = RequestMethod.POST)
 	public void customerCustomCollection(
 			@RequestParam(value = "customerId", required = true)Long customerId, 
 			@RequestParam(value = "productId", required = true)Long productId) {

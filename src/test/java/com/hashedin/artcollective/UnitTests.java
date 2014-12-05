@@ -16,6 +16,7 @@ import com.hashedin.artcollective.service.ProductsAPITest;
 import com.hashedin.artcollective.service.ShopifyServiceTest;
 import com.hashedin.artcollective.service.TinEyeServiceImpTest;
 import com.hashedin.artcollective.service.TransactionServiceTest;
+import com.hashedin.artcollective.utils.EmailHelperTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
@@ -30,7 +31,8 @@ import com.hashedin.artcollective.service.TransactionServiceTest;
 	OrdersServiceTest.class,
 	ArtistPortfolioServiceTest.class,
 	TransactionServiceTest.class,
-	DeductionServiceTest.class
+	DeductionServiceTest.class,
+	EmailHelperTest.class
 })
 public class UnitTests {
 

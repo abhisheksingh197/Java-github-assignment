@@ -247,7 +247,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 		
 		if (collection.size() == 0) {		
 			jsonData.append("{\"custom_collection\": {")
-			  	.append("\"title\": \" customer_" + customerId + "\",")
+			  	.append("\"title\": \" customer_" + customerId + "_favorite\",")
 			    .append("\"collects\": [ {")			     
 			    .append("\"product_id\":" + productId + "}") 
 			    .append("] } }");
