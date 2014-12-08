@@ -274,12 +274,11 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 	
 	@Override
-	public List<Long> getFavProductsList(Long customerId) {
+	public Map<Long, Boolean> getFavProductsMap(Long customerId) {
 		
-		List<Long> productId = new ArrayList<Long>(); 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		
+		Map<Long, Boolean> productMap = new HashMap<>();
 		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
 				+ "custom_collections.json?title=customer_" + customerId + "_favorite", 
 				CustomCollectionWrapper.class);
@@ -294,11 +293,11 @@ public class ShopifyServiceImpl implements ShopifyService {
 			List<Collect> collects = collectionWrapper.getCollectCollections();
 			
 			for (Collect collect : collects) {
-				productId.add(collect.getProductId());
+				productMap.put(collect.getProductId(), true);
 			}
 		}	
 		
-		return productId;
+		return productMap;
 	}
 	
 }

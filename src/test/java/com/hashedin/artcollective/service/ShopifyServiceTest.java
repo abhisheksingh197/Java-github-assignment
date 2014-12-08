@@ -6,6 +6,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,9 +162,9 @@ public class ShopifyServiceTest extends BaseUnitTest {
 		
 	long customerId = 1234567;
 	Long productID = (long) 38273302;
-	List<Long> productIdList = service.getFavProductsList(customerId);
+	Map<Long, Boolean> productIdList = service.getFavProductsMap(customerId);
 	
-	assertEquals(productID, productIdList.get(1));
+	assertEquals(true, productIdList.get(productID));
 	
 	}
 }
