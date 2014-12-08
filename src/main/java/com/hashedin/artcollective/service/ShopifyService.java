@@ -35,4 +35,6 @@ public interface ShopifyService {
 			ProductSize productSize, Double framePrice, String type);
 	
 	public void addProductToFavoriteCollection(Long customerId, Long productId);
+
+	public List<Long> getFavProductsList(Long customerId);
 }

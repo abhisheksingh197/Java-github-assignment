@@ -218,7 +218,8 @@ public class ProductsAPI {
 			@RequestParam(value = "orientation", required = false) String orientation,
 			@RequestParam(value = "sizeRange", required = false) String sizeRange,
 			@RequestParam(value = "limit", required = true) Integer limit,
-			@RequestParam(value = "offset", required = true) Integer offset) {
+			@RequestParam(value = "offset", required = true) Integer offset,
+			@RequestParam(value = "offset", required = false) Long customerId) {
 	//CHECKSTYLE:ON
 		List<String> subjectList = new ArrayList<>();
 		List<String> styleList = new ArrayList<>();
@@ -249,7 +250,14 @@ public class ProductsAPI {
 				sizeBucketRangeList,
 				limit,
 				offset);
-		return wrapResponse(searchResponse);
+		Map<String, Object> wrapResponse = wrapResponse(searchResponse);
+		
+		if (customerId != null) { 
+			Object	productID = shopifyService.getFavProductsList(customerId);
+			wrapResponse(searchResponse).put("favProductId", productID);
+		}
+		
+		return wrapResponse;
 	}
 	
 	// Search Tin Eye based on color Criteria

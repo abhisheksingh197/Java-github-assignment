@@ -233,14 +233,14 @@ public class ShopifyServiceImpl implements ShopifyService {
 		return productWrapper.getProduct();
 	}
 
-	
+	@Override
 	public void addProductToFavoriteCollection(Long customerId, Long productId) {
 		StringBuilder jsonData = new StringBuilder(); 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
 		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
-				+ "custom_collections.json?title=customer_" + customerId, 
+				+ "custom_collections.json?title=customer_" + customerId + "_favorite", 
 				CustomCollectionWrapper.class);
 		
 		List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
@@ -271,6 +271,34 @@ public class ShopifyServiceImpl implements ShopifyService {
 		}
 
 		return;
+	}
+	
+	@Override
+	public List<Long> getFavProductsList(Long customerId) {
+		
+		List<Long> productId = new ArrayList<Long>(); 
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
+				+ "custom_collections.json?title=customer_" + customerId + "_favorite", 
+				CustomCollectionWrapper.class);
+		
+		List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
+		
+		if (collection.size() != 0) {
+			CustomCollectionWrapper collectionWrapper = rest.getForObject(baseUri 
+					+ "/collects.json?collection_id=" + collection.get(0).getId(), 
+					CustomCollectionWrapper.class);
+			
+			List<Collect> collects = collectionWrapper.getCollectCollections();
+			
+			for (Collect collect : collects) {
+				productId.add(collect.getProductId());
+			}
+		}	
+		
+		return productId;
 	}
 	
 }
