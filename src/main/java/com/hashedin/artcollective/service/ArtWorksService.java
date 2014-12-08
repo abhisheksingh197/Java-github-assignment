@@ -332,8 +332,11 @@ public class ArtWorksService {
 	private String getCollectionTitle(String title) {
 		String[] splitByUnderscore = title.split("_");
 		String collectionTitle = "";
-		for (int titleIterator = 1; titleIterator < splitByUnderscore.length; titleIterator++) {
-			collectionTitle = collectionTitle.concat(splitByUnderscore[titleIterator]).concat(" ");
+		int subjectsLength = splitByUnderscore.length;
+		for (int titleIterator = 1; titleIterator < subjectsLength; titleIterator++) {
+			collectionTitle = collectionTitle.concat(splitByUnderscore[titleIterator]);
+			collectionTitle = titleIterator + 1 < subjectsLength ? collectionTitle.concat(" ") 
+					: collectionTitle;
 		}
 		return collectionTitle;
 	}

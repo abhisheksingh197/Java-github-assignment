@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hashedin.artcollective.entity.Artist;
@@ -19,6 +21,7 @@ import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.LeadRepository;
 import com.hashedin.artcollective.service.ArtistPortfolioService;
+import com.hashedin.artcollective.service.PreferenceService;
 
 
 @Controller
@@ -39,11 +42,18 @@ public final class WebApplicationController {
 	@Value(value = "${artistdashboard.pagelimit}")
 	private Integer pageLimit;
 	
+	@Value(value = "${env.homePageURL}")
+	private String homePageURL;
+	
+	@Autowired
+	private PreferenceService preferenceService;
+	
 	@RequestMapping("/access-denied")
 	public ModelAndView accessDenied() {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("time", new Date());
 		model.put("message", "Hello World!");
+		model.put("homePageURL", homePageURL);
 		return new ModelAndView("access-denied", model);
 	}
 	
@@ -64,7 +74,7 @@ public final class WebApplicationController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("time", new Date());
 		model.put("message", "Hello World!");
-
+		model.put("homePageURL", homePageURL);
 		return new ModelAndView("deductions-upload", model);
 	}
 	
@@ -73,7 +83,7 @@ public final class WebApplicationController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("time", new Date());
 		model.put("message", "Hello World!");
-
+		model.put("homePageURL", homePageURL);
 		return new ModelAndView("transactions-upload", model);
 	}
 	
@@ -84,7 +94,20 @@ public final class WebApplicationController {
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("leads", leadRepository.getLeadsOrderByCreatedAt(page));
+		model.put("homePageURL", homePageURL);
 		return new ModelAndView("leads", model);
+	}
+	
+	@RequestMapping(value = "/preferences", method = RequestMethod.GET)
+	public ModelAndView displayPreferences(
+			@RequestParam(value = "id", required = true) Long id) {
+		Map<String, Object> model = new HashMap<>();
+		Map<String, Object> userPreferences = preferenceService.getPreferencesForUser(id);
+		Map<String, Object> shopPreferences = preferenceService.getPreferencesForShop();
+		model.put("homePageURL", homePageURL);
+		model.put("shopPreferences", shopPreferences);
+		model.put("userPreferences", userPreferences);
+		return new ModelAndView("user-preferences", model);
 	}
 
 	private ModelAndView getPortfolio(Long artistId, Pageable page) {
@@ -99,6 +122,7 @@ public final class WebApplicationController {
 			model.put("transactionsList", artistPortfolioService.getTransactionsByArtist(artistId, page));
 			model.put("deductionsList", artistPortfolioService.getDeductionsByArtist(artistId, page));
 			model.put("artworkImages", artistPortfolioService.getArtworkImagesByArtist(artistId));
+			model.put("homePageURL", homePageURL);
 			return new ModelAndView("artist-dashboard", model);
 		}
 		return null;

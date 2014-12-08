@@ -46,13 +46,13 @@
         },
         {
             "body_html": null,
-            "handle": "coll_independence",
+            "handle": "coll_independence_day_special",
             "id": 678911,
             "published_at": "2014-08-08T05:48:02-04:00",
             "published_scope": "global",
             "sort_order": "alpha-asc",
             "template_suffix": null,
-            "title": "coll_independence",
+            "title": "coll_independence_day_special",
             "updated_at": "2014-08-25T02:24:33-04:00"
         }
         

@@ -16,6 +16,11 @@
  14.) Setting page
  15.) Static page
  ===============================================*/
+/* Style added for preferences page by Kousick */
+.camel-case {
+  text-transform:capitalize;
+}
+
 
 /*
  1.) Homepage
