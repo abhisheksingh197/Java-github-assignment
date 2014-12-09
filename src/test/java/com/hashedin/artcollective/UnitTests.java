@@ -11,6 +11,7 @@ import com.hashedin.artcollective.service.ArtistPortfolioServiceTest;
 import com.hashedin.artcollective.service.DeductionServiceTest;
 import com.hashedin.artcollective.service.FrameVariantServiceTest;
 import com.hashedin.artcollective.service.OrdersServiceTest;
+import com.hashedin.artcollective.service.PreferenceServiceTest;
 import com.hashedin.artcollective.service.PriceBucketServiceTest;
 import com.hashedin.artcollective.service.ProductsAPITest;
 import com.hashedin.artcollective.service.ShopifyServiceTest;
@@ -30,7 +31,8 @@ import com.hashedin.artcollective.service.TransactionServiceTest;
 	OrdersServiceTest.class,
 	ArtistPortfolioServiceTest.class,
 	TransactionServiceTest.class,
-	DeductionServiceTest.class
+	DeductionServiceTest.class,
+	PreferenceServiceTest.class
 })
 public class UnitTests {
 

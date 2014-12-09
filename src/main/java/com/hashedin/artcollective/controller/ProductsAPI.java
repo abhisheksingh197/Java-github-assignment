@@ -46,6 +46,7 @@ import com.hashedin.artcollective.service.DeductionsService;
 import com.hashedin.artcollective.service.Frame;
 import com.hashedin.artcollective.service.FrameVariantService;
 import com.hashedin.artcollective.service.OrdersService;
+import com.hashedin.artcollective.service.PreferenceService;
 import com.hashedin.artcollective.service.PriceAndSizeBucketService;
 import com.hashedin.artcollective.service.Style;
 import com.hashedin.artcollective.service.Subject;
@@ -97,6 +98,9 @@ public class ProductsAPI {
 	
 	@Autowired
 	private ArtworkVariantRepository artworkVariantRepository;
+	
+	@Autowired
+	private PreferenceService preferenceService;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
@@ -341,6 +345,39 @@ public class ProductsAPI {
 			return frameVariantService.createAddOnProduct(productVariantId, 
 					typeVariantId, type);
 		
+	}
+	
+	@RequestMapping(value = "/api/customer/preferences", method = RequestMethod.GET)
+	public Map<String, Object> getCustomerPreferences(
+			@RequestParam(value = "customerId", required = true)Long customerId) {
+		Map<String, Object> shopPreferences = preferenceService.getPreferencesForShop();
+		Map<String, Object> userPreferences = preferenceService.getPreferencesForUser(customerId);
+		Map<String, Object> preferences = new HashMap<>();
+		preferences.put("shopPreferences", shopPreferences);
+		preferences.put("userPreferences", userPreferences);
+		
+		return preferences;
+	}
+	
+	@RequestMapping(value = "/api/customer/preferences", method = RequestMethod.POST)
+	public void modifyCustomerPreferences(
+			@RequestParam(value = "customerId", required = true)Long customerId,
+			@RequestParam(value = "subjects", required = true)String[] subjects,
+			@RequestParam(value = "styles", required = true)String[] styles,
+			@RequestParam(value = "mediums", required = true)String[] mediums,
+			@RequestParam(value = "orientations", required = true)String[] orientations) {
+		preferenceService.updatePreferencesForUser(customerId, 
+				subjects, styles, mediums, orientations);
+	}
+	
+	@RequestMapping(value = "/api/customer/recomended", method = RequestMethod.GET)
+	public Map<String, Object> fetchArtworksRecomendedArtworks(
+			@RequestParam(value = "customerId", required = true)Long customerId,
+			@RequestParam(value = "limit", required = true) Integer limit,
+			@RequestParam(value = "offset", required = true) Integer offset) {
+		CriteriaSearchResponse searchResponse = preferenceService
+				.getRecomendedArtworksForCustomer(customerId, limit, offset);
+		return wrapResponse(searchResponse);
 	}
 	
 
