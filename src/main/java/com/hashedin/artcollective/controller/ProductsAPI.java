@@ -48,6 +48,7 @@ import com.hashedin.artcollective.service.FrameVariantService;
 import com.hashedin.artcollective.service.OrdersService;
 import com.hashedin.artcollective.service.PreferenceService;
 import com.hashedin.artcollective.service.PriceAndSizeBucketService;
+import com.hashedin.artcollective.service.ShopifyService;
 import com.hashedin.artcollective.service.Style;
 import com.hashedin.artcollective.service.Subject;
 import com.hashedin.artcollective.service.TinEyeService;
@@ -98,6 +99,9 @@ public class ProductsAPI {
 	
 	@Autowired
 	private ArtworkVariantRepository artworkVariantRepository;
+	
+	@Autowired
+	private ShopifyService shopifyService;
 	
 	@Autowired
 	private PreferenceService preferenceService;
@@ -218,7 +222,8 @@ public class ProductsAPI {
 			@RequestParam(value = "orientation", required = false) String orientation,
 			@RequestParam(value = "sizeRange", required = false) String sizeRange,
 			@RequestParam(value = "limit", required = true) Integer limit,
-			@RequestParam(value = "offset", required = true) Integer offset) {
+			@RequestParam(value = "offset", required = true) Integer offset,
+			@RequestParam(value = "customerId", required = false) Long customerId) {
 	//CHECKSTYLE:ON
 		List<String> subjectList = new ArrayList<>();
 		List<String> styleList = new ArrayList<>();
@@ -249,7 +254,14 @@ public class ProductsAPI {
 				sizeBucketRangeList,
 				limit,
 				offset);
-		return wrapResponse(searchResponse);
+		Map<String, Object> wrapResponse = wrapResponse(searchResponse);
+		
+		if (customerId != null) { 
+			Object	productID = shopifyService.getFavProductsMap(customerId);
+			wrapResponse(searchResponse).put("favProductIdMap", productID);
+		}
+		
+		return wrapResponse;
 	}
 	
 	// Search Tin Eye based on color Criteria
@@ -380,7 +392,16 @@ public class ProductsAPI {
 		return wrapResponse(searchResponse);
 	}
 	
-
+	@RequestMapping(value = "/api/customer/favorites", method = RequestMethod.POST)
+	public void customerCustomCollection(
+			@RequestParam(value = "customerId", required = true)Long customerId, 
+			@RequestParam(value = "productId", required = true)Long productId,
+			@RequestParam(value = "isLiked", required = true)Boolean isLiked) {
+		
+		shopifyService.updateFavoritesCollection(customerId, productId, isLiked);
+		return;
+	};
+						
 	// Wrap Artwork objects into a Map Helper Function
 	private Map<String, Object> wrapResponse(CriteriaSearchResponse searchResponse) {
 		Map<String, Object> map = new HashMap<String, Object>();

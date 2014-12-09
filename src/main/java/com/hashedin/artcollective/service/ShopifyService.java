@@ -4,6 +4,7 @@ package com.hashedin.artcollective.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
@@ -36,4 +37,7 @@ public interface ShopifyService {
 
 	public void updateMetafield(String type, String typeId, String[] value, String metafieldId);
 	
+	public void updateFavoritesCollection(Long customerId, Long productId, Boolean isLiked);
+
+	public Map<Long, Boolean> getFavProductsMap(Long customerId);
 }
