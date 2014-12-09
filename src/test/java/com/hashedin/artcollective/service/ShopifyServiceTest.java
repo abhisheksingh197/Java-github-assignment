@@ -6,6 +6,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,4 +122,48 @@ public class ShopifyServiceTest extends BaseUnitTest {
 		service.postImageColorsMetaField(productId, imageColors);
 	}
 	
+	@Test
+	public void testAddProductToFavoriteCollection() {
+		MockRestServiceServer mockShopifyServer = MockRestServiceServer.createServer(rest);
+
+		mockShopifyServer
+			.expect(requestTo(shopifyBaseUrl
+					+ "custom_collections.json?title=customer_1234567_favorites"))
+			.andExpect(method(HttpMethod.GET))
+		.andRespond(withJson("get_customer_collection.json"));
+				
+		mockShopifyServer
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections/12345678.json"))
+				.andExpect(method(HttpMethod.PUT))
+				.andRespond(withJson("get_customer_collection.json"));
+
+		long customerId = 1234567;
+		long productId = 987654;
+
+		service.updateFavoriteCollection(customerId, productId, false);	
+	}
+
+	@Test
+	public void testGetFavProDuctList() {
+		MockRestServiceServer mockShopifyServer = MockRestServiceServer.createServer(rest);
+
+		mockShopifyServer
+			.expect(requestTo(shopifyBaseUrl
+					+ "custom_collections.json?title=customer_1234567_favorites"))
+			.andExpect(method(HttpMethod.GET))
+			.andRespond(withJson("get_customer_collection.json"));
+		
+		mockShopifyServer
+			.expect(requestTo(shopifyBaseUrl
+					+ "collects.json?collection_id=12345678"))
+			.andExpect(method(HttpMethod.GET))
+			.andRespond(withJson("collect_collection.json"));
+		
+		long customerId = 1234567;
+		Long productID = (long) 38273302;
+		Map<Long, Boolean> productIdList = service.getFavProductsMap(customerId);
+		
+		assertEquals(true, productIdList.get(productID));
+	}
 }

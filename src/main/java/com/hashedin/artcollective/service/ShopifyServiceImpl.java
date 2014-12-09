@@ -233,6 +233,78 @@ public class ShopifyServiceImpl implements ShopifyService {
 		return productWrapper.getProduct();
 	}
 
+	@Override
+	public void updateFavoriteCollection(Long customerId, Long productId, Boolean isLiked) {
+		StringBuilder jsonData = new StringBuilder(); 
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);	
+		
+		if (!isLiked) {				
+			CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
+					+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
+					CustomCollectionWrapper.class);
+			
+			List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
+			
+			if (collection.size() == 0) {		
+				jsonData.append("{\"custom_collection\": {")
+				  	.append("\"title\": \" customer_" + customerId + "_favorites\",")
+				    .append("\"collects\": [ {")			     
+				    .append("\"product_id\":" + productId + "}") 
+				    .append("] } }");
+				
+				HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(), 
+					headers);			
+				@SuppressWarnings("unused")
+				CustomCollectionWrapper collectionWrapper = rest.postForObject(baseUri 
+						+ "custom_collections.json", entity,
+						CustomCollectionWrapper.class);		
+			} 
+			else {
+				jsonData.append("{\"custom_collection\": {")
+				  	.append("\"id\":" + collection.get(0).getId() + ",")
+					.append("\"collects\": [ {")			     
+					.append("\"product_id\":" + productId + "}") 
+					.append("] } }");			
+				
+				HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(),
+					headers);			
+				rest.put(baseUri + "custom_collections/" + collection.get(0).getId() 
+					+ ".json", entity);	
+			}
+		} 
+		else {
+			rest.delete(baseUri + "collects/" + productId + ".json");
+		}
 	
-
+		return;
+	}
+	
+	@Override
+	public Map<Long, Boolean> getFavProductsMap(Long customerId) {
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		Map<Long, Boolean> productMap = new HashMap<>();
+		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
+				+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
+				CustomCollectionWrapper.class);
+		
+		List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
+		
+		if (collection.size() != 0) {
+			CustomCollectionWrapper collectionWrapper = rest.getForObject(baseUri 
+					+ "/collects.json?collection_id=" + collection.get(0).getId(), 
+					CustomCollectionWrapper.class);
+			
+			List<Collect> collects = collectionWrapper.getCollectCollections();
+			
+			for (Collect collect : collects) {
+				productMap.put(collect.getProductId(), true);
+			}
+		}	
+		
+		return productMap;
+	}
+	
 }

@@ -4,6 +4,7 @@ package com.hashedin.artcollective.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
@@ -34,4 +35,7 @@ public interface ShopifyService {
 	public CustomCollection createDynamicProduct(FrameVariant frameVariant,
 			ProductSize productSize, Double framePrice, String type);
 	
+	public void updateFavoriteCollection(Long customerId, Long productId, Boolean isLiked);
+
+	public Map<Long, Boolean> getFavProductsMap(Long customerId);
 }
