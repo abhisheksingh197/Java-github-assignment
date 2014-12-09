@@ -262,15 +262,15 @@ public class ShopifyServiceImpl implements ShopifyService {
 			} 
 			else {
 				jsonData.append("{\"custom_collection\": {")
-			  	.append("\"id\": \" customer-" + collection.get(0).getId() + "\",")
-			    .append("\"collects\": [ {")			     
-			    .append("\"product_id\":" + productId + "}") 
-			    .append("] } }");			
+				  	.append("\"id\": \" customer-" + collection.get(0).getId() + "\",")
+					.append("\"collects\": [ {")			     
+					.append("\"product_id\":" + productId + "}") 
+					.append("] } }");			
 				
 				HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(),
-						headers);			
+					headers);			
 				rest.put(baseUri + "custom_collections/" + collection.get(0).getId() 
-						+ ".json", entity);	
+					+ ".json", entity);	
 			}
 		} 
 		else {
