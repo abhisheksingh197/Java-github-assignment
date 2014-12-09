@@ -262,7 +262,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 			} 
 			else {
 				jsonData.append("{\"custom_collection\": {")
-				  	.append("\"id\":" + collection.get(0).getId() + "\",")
+				  	.append("\"id\":" + collection.get(0).getId() + ",")
 					.append("\"collects\": [ {")			     
 					.append("\"product_id\":" + productId + "}") 
 					.append("] } }");			
