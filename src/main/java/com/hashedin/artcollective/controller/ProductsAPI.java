@@ -219,7 +219,7 @@ public class ProductsAPI {
 			@RequestParam(value = "sizeRange", required = false) String sizeRange,
 			@RequestParam(value = "limit", required = true) Integer limit,
 			@RequestParam(value = "offset", required = true) Integer offset,
-			@RequestParam(value = "offset", required = false) Long customerId) {
+			@RequestParam(value = "customerId", required = false) Long customerId) {
 	//CHECKSTYLE:ON
 		List<String> subjectList = new ArrayList<>();
 		List<String> styleList = new ArrayList<>();
@@ -358,9 +358,10 @@ public class ProductsAPI {
 	@RequestMapping(value = "/api/custom-collection/customer", method = RequestMethod.POST)
 	public void customerCustomCollection(
 			@RequestParam(value = "customerId", required = true)Long customerId, 
-			@RequestParam(value = "productId", required = true)Long productId) {
+			@RequestParam(value = "productId", required = true)Long productId,
+			@RequestParam(value = "isLiked", required = true)Boolean isLiked) {
 		
-		shopifyService.addProductToFavoriteCollection(customerId, productId);
+		shopifyService.updateFavoriteCollection(customerId, productId, isLiked);
 		return;
 	};
 						

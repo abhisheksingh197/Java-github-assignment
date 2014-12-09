@@ -141,7 +141,7 @@ public class ShopifyServiceTest extends BaseUnitTest {
 		long customerId = 1234567;
 		long productId = 987654;
 
-		service.addProductToFavoriteCollection(customerId, productId);	
+		service.updateFavoriteCollection(customerId, productId, false);	
 	}
 
 	@Test
