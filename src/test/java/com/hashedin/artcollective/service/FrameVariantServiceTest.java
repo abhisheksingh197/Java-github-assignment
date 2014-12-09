@@ -88,7 +88,7 @@ public class FrameVariantServiceTest extends BaseUnitTest {
 				.andRespond(withJson("create_dynamic_product_response.json"));
 			
 		CustomCollection frameProduct = frameVariantService.createAddOnProduct(7964345234234L, 
-					796611812L, "frame");
+					796611812L, "frames");
 		
 		CustomCollection canvasProduct = frameVariantService.createAddOnProduct(7964345234234L, 
 				934449115L, "canvas");

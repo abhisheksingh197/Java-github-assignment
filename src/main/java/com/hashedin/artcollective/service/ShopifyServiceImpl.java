@@ -311,4 +311,33 @@ public class ShopifyServiceImpl implements ShopifyService {
 		return productMap;
 	}
 	
+	@Override
+	public void updateMetafield(String type, String typeId, String[] values, String metafieldId) {
+		StringBuilder metafieldData = new StringBuilder();
+		String valueString = "";
+		for (String value : values) {
+			if (!valueString.isEmpty()) {
+				valueString = valueString.concat(",");
+			}
+			valueString = valueString.concat(value.toLowerCase());
+		}
+		metafieldData.append("{\"metafield\": {")
+		.append("\"id\": \"")
+		.append(metafieldId)
+		.append("\"").append(",")
+		.append("\"value\": \"")
+		.append(valueString)
+		.append("\"").append(",")
+		.append("\"value_type\": \"")
+		.append("string")
+		.append("\"")
+		.append("}}");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> entity = new HttpEntity<String>(metafieldData.toString(), headers);
+		final String url = baseUri + type + "/" + typeId.toString() + "/metafields/" 
+				+ metafieldId.toString() + ".json";
+		rest.put(url, entity);
+	}
+
 }

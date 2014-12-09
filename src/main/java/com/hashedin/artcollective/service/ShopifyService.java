@@ -34,6 +34,8 @@ public interface ShopifyService {
 
 	public CustomCollection createDynamicProduct(FrameVariant frameVariant,
 			ProductSize productSize, Double framePrice, String type);
+
+	public void updateMetafield(String type, String typeId, String[] value, String metafieldId);
 	
 	public void updateFavoritesCollection(Long customerId, Long productId, Boolean isLiked);
 
