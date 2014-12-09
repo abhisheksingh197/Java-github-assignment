@@ -355,13 +355,13 @@ public class ProductsAPI {
 		
 	}
 	
-	@RequestMapping(value = "/api/custom-collection/customer", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/customer/favorites", method = RequestMethod.POST)
 	public void customerCustomCollection(
 			@RequestParam(value = "customerId", required = true)Long customerId, 
 			@RequestParam(value = "productId", required = true)Long productId,
 			@RequestParam(value = "isLiked", required = true)Boolean isLiked) {
 		
-		shopifyService.updateFavoriteCollection(customerId, productId, isLiked);
+		shopifyService.updateFavoritesCollection(customerId, productId, isLiked);
 		return;
 	};
 						

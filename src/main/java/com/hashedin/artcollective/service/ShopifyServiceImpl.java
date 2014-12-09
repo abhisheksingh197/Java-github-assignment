@@ -236,7 +236,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 
 	@Override
-	public void updateFavoriteCollection(Long customerId, Long productId, Boolean isLiked) {
+	public void updateFavoritesCollection(Long customerId, Long productId, Boolean isLiked) {
 		StringBuilder jsonData = new StringBuilder(); 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);	
@@ -257,10 +257,12 @@ public class ShopifyServiceImpl implements ShopifyService {
 				
 				HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(), 
 					headers);			
-				@SuppressWarnings("unused")
+
 				CustomCollectionWrapper collectionWrapper = rest.postForObject(baseUri 
 						+ "custom_collections.json", entity,
-						CustomCollectionWrapper.class);		
+						CustomCollectionWrapper.class);
+				// Logger added to avoid "Dead Store to local variable" error 
+				LOGGER.trace("Collection Wrappper" + collectionWrapper);
 			} 
 			else {
 				jsonData.append("{\"custom_collection\": {")
