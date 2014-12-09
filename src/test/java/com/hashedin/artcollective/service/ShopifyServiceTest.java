@@ -128,7 +128,7 @@ public class ShopifyServiceTest extends BaseUnitTest {
 
 		mockShopifyServer
 			.expect(requestTo(shopifyBaseUrl
-					+ "custom_collections.json?title=customer_1234567_favorite"))
+					+ "custom_collections.json?title=customer_1234567_favorites"))
 			.andExpect(method(HttpMethod.GET))
 		.andRespond(withJson("get_customer_collection.json"));
 				
@@ -149,22 +149,21 @@ public class ShopifyServiceTest extends BaseUnitTest {
 		MockRestServiceServer mockShopifyServer = MockRestServiceServer.createServer(rest);
 
 		mockShopifyServer
-		.expect(requestTo(shopifyBaseUrl
-				+ "custom_collections.json?title=customer_1234567_favorite"))
-		.andExpect(method(HttpMethod.GET))
-		.andRespond(withJson("get_customer_collection.json"));
+			.expect(requestTo(shopifyBaseUrl
+					+ "custom_collections.json?title=customer_1234567_favorites"))
+			.andExpect(method(HttpMethod.GET))
+			.andRespond(withJson("get_customer_collection.json"));
 		
 		mockShopifyServer
-		.expect(requestTo(shopifyBaseUrl
-				+ "collects.json?collection_id=12345678"))
-		.andExpect(method(HttpMethod.GET))
-		.andRespond(withJson("collect_collection.json"));
+			.expect(requestTo(shopifyBaseUrl
+					+ "collects.json?collection_id=12345678"))
+			.andExpect(method(HttpMethod.GET))
+			.andRespond(withJson("collect_collection.json"));
 		
-	long customerId = 1234567;
-	Long productID = (long) 38273302;
-	Map<Long, Boolean> productIdList = service.getFavProductsMap(customerId);
-	
-	assertEquals(true, productIdList.get(productID));
-	
+		long customerId = 1234567;
+		Long productID = (long) 38273302;
+		Map<Long, Boolean> productIdList = service.getFavProductsMap(customerId);
+		
+		assertEquals(true, productIdList.get(productID));
 	}
 }

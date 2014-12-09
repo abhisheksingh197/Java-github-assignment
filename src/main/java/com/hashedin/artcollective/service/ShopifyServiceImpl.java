@@ -241,14 +241,14 @@ public class ShopifyServiceImpl implements ShopifyService {
 		
 		if (!isLiked) {				
 			CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
-					+ "custom_collections.json?title=customer_" + customerId + "_favorite", 
+					+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
 					CustomCollectionWrapper.class);
 			
 			List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
 			
 			if (collection.size() == 0) {		
 				jsonData.append("{\"custom_collection\": {")
-				  	.append("\"title\": \" customer_" + customerId + "_favorite\",")
+				  	.append("\"title\": \" customer_" + customerId + "_favorites\",")
 				    .append("\"collects\": [ {")			     
 				    .append("\"product_id\":" + productId + "}") 
 				    .append("] } }");
@@ -262,7 +262,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 			} 
 			else {
 				jsonData.append("{\"custom_collection\": {")
-				  	.append("\"id\": \" customer-" + collection.get(0).getId() + "\",")
+				  	.append("\"id\":" + collection.get(0).getId() + "\",")
 					.append("\"collects\": [ {")			     
 					.append("\"product_id\":" + productId + "}") 
 					.append("] } }");			
