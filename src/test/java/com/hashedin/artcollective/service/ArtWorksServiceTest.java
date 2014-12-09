@@ -15,11 +15,13 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
+import com.hashedin.artcollective.entity.ArtCollection;
 import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.Artist;
 import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.entity.SizeBucket;
+import com.hashedin.artcollective.repository.ArtCollectionsRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtistRepository;
@@ -68,6 +70,9 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	
 	@Autowired
 	private ArtistRepository artistRepository;
+	
+	@Autowired
+	private ArtCollectionsRepository artCollectionRepository;
 	
 	@Before
 	public void setup() {
@@ -357,5 +362,10 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		assertEquals(artistRepository.count(), 2);
 	}
 	
+	@Test
+	public void testForMultiWordCollectionName() {
+		ArtCollection collection = artCollectionRepository.findOne(678911L);
+		assertEquals(collection.getTitle(), "independence day special");
+	}
 
 }

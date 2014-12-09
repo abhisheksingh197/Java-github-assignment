@@ -60,7 +60,7 @@
                 <div class="container clearfix">
                     <div class="header-sec-one">
                         <div class="logo">
-                            <a href="index.html"> <img src="/assets/images/logo.png" alt="logo image" width="201" height="48" /> </a>
+                            <a href="${homePageURL}"> <img src="/assets/images/logo.png" alt="logo image" width="201" height="48" /> </a>
                         </div>
                         <nav>
                             <ul>

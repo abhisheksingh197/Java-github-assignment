@@ -217,6 +217,8 @@ public class ShopifyServiceImpl implements ShopifyService {
 			.append("\"").append(",")
 			.append("\"product_type\": \"")
 			.append("dynamic")
+			.append("\"published_at\": \"")
+			.append("")
 			.append("\"").append(",")
 			.append("\"variants\": [").append(variantData).append("]")
 			.append(",")

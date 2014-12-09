@@ -178,7 +178,7 @@ public class ProductsAPI {
 	}
 	
 	// Synchronize data from Shopify into internal Database and Tin Eye
-	@RequestMapping(value = "/admin/shopify/synchronize", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/shopify/synchronize", method = RequestMethod.GET)
 	public void synchronize(
 			@RequestParam(value = "type", required = true) String type,
 			@RequestParam(value = "mode", required = false) String mode) {

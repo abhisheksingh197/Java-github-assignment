@@ -88,20 +88,20 @@ public class TinEyeServiceImpl implements TinEyeService {
 		List<ArtWork> artWorks = new ArrayList<>();
 		MultiValueMap<String, String> params = getSearchPostParameters(criteria);
 		HttpHeaders headers = new HttpHeaders();
-		SearchResponse searchResponseObj = new SearchResponse();
+		TinEyeSearchResponse searchResponseObj = new TinEyeSearchResponse();
 		HttpEntity<?> entity = new HttpEntity<Object>(params, headers);
 		ResponseEntity<String> postResponse = rest.exchange(baseUri + "color_search/", 
 				HttpMethod.POST, entity, String.class);
 		try {
-			searchResponseObj = objectMapper.readValue(postResponse.getBody(), SearchResponse.class);
+			searchResponseObj = objectMapper.readValue(postResponse.getBody(), TinEyeSearchResponse.class);
 		} 
 		catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		LOGGER.debug(postResponse.getBody());
 		HashSet<Long> idHashSet = new HashSet<>();
-		List<ResponseResult> responseResult = searchResponseObj.getResult();
-		for (ResponseResult result : responseResult) {
+		List<TinEyeResponseResult> responseResult = searchResponseObj.getResult();
+		for (TinEyeResponseResult result : responseResult) {
 			TinEyeMetadata metadata = result.getMetadata();
 			Long artworkId = metadata.getArtworkId();
 			if (artworkId != null) {
@@ -149,20 +149,20 @@ public class TinEyeServiceImpl implements TinEyeService {
 		MultiValueMap<String, String> params = getImageExtractPostParameters(imageUrl);
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<?> entity = new HttpEntity<Object>(params, headers);
-		SearchResponse searchResponseObj = new SearchResponse();
+		TinEyeSearchResponse searchResponseObj = new TinEyeSearchResponse();
 		ResponseEntity<String> postResponse = 
 				rest.exchange(baseUri + "extract_image_colors/", 
 						HttpMethod.POST, entity, String.class);
 		try {
 			searchResponseObj = objectMapper.readValue(postResponse.getBody(), 
-					SearchResponse.class);
+					TinEyeSearchResponse.class);
 		} 
 		catch (IOException e1) {
-			e1.printStackTrace();
+			LOGGER.error("Cannot fetch colors for Image");
 		}
-		List<ResponseResult> responseResult = searchResponseObj.getResult();
+		List<TinEyeResponseResult> responseResult = searchResponseObj.getResult();
 		int i = 0;
-		for (ResponseResult result : responseResult) {		
+		for (TinEyeResponseResult result : responseResult) {		
 			if (i == 0) {
 				extractImageColors = extractImageColors.concat(result.getColor());
 				i++;
@@ -199,18 +199,18 @@ public class TinEyeServiceImpl implements TinEyeService {
 		 HttpHeaders headers = new HttpHeaders();
 		 HttpEntity<?> entity = new HttpEntity<Object>(params, headers);	
 		 String extractImageColors = "";
-		 SearchResponse searchResponseObj = new SearchResponse();
+		 TinEyeSearchResponse searchResponseObj = new TinEyeSearchResponse();
 		 ResponseEntity<String> postResponse = rest.postForEntity(
 				 baseUri + "extract_image_colors/", entity, String.class);
 		 try {
-			 searchResponseObj = objectMapper.readValue(postResponse.getBody(), SearchResponse.class);
+			 searchResponseObj = objectMapper.readValue(postResponse.getBody(), TinEyeSearchResponse.class);
 		 } 
 		 catch (IOException e1) {
 			 e1.printStackTrace();
 		 }
-		 List<ResponseResult> responseResult = searchResponseObj.getResult();
+		 List<TinEyeResponseResult> responseResult = searchResponseObj.getResult();
 		 int i = 0;
-		 for (ResponseResult result : responseResult) {		
+		 for (TinEyeResponseResult result : responseResult) {		
 			 if (i == 0) {
 				 extractImageColors = extractImageColors.concat(result.getColor());
 				 i++;
