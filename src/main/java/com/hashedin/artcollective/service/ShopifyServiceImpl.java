@@ -255,10 +255,11 @@ public class ShopifyServiceImpl implements ShopifyService {
 				
 				HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(), 
 					headers);			
-				@SuppressWarnings("unused")
+
 				CustomCollectionWrapper collectionWrapper = rest.postForObject(baseUri 
 						+ "custom_collections.json", entity,
-						CustomCollectionWrapper.class);		
+						CustomCollectionWrapper.class);
+				LOGGER.trace("Collection Wrappper" + collectionWrapper);
 			} 
 			else {
 				jsonData.append("{\"custom_collection\": {")
