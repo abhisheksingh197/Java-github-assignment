@@ -59,7 +59,7 @@ public class PreferenceService {
 		shopPreferences.put("subjects", tempSubjects);
 		shopPreferences.put("styles", tempStyles);
 		shopPreferences.put("mediums", Arrays.asList("canvas", "fine-art"));
-		shopPreferences.put("orientations", Arrays.asList("landscape", "potrait", "s"));
+		shopPreferences.put("orientations", Arrays.asList("landscape", "potrait", "square"));
 		return shopPreferences;
 	}
 	
