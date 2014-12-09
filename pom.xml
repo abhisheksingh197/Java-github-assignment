@@ -10,8 +10,8 @@
 	<properties>
 	    <java.version>1.7</java.version>
 	    <checkstyle.config.location>${basedir}/src/test/resources/checkstyle.xml</checkstyle.config.location>
-	    <coverage.instruction.min>0.7</coverage.instruction.min>
-	    <coverage.complexity.min>0.6</coverage.complexity.min>
+	    <coverage.instruction.min>0.5</coverage.instruction.min>
+	    <coverage.complexity.min>0.5</coverage.complexity.min>
 	</properties>
 	
      <parent>
