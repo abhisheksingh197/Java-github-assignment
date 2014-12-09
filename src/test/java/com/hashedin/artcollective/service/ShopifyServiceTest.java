@@ -130,18 +130,31 @@ public class ShopifyServiceTest extends BaseUnitTest {
 			.expect(requestTo(shopifyBaseUrl
 					+ "custom_collections.json?title=customer_1234567_favorites"))
 			.andExpect(method(HttpMethod.GET))
-		.andRespond(withJson("get_customer_collection.json"));
+			.andRespond(withJson("get_customer_collection.json"));
 				
 		mockShopifyServer
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections/12345678.json"))
-				.andExpect(method(HttpMethod.PUT))
-				.andRespond(withJson("get_customer_collection.json"));
+			.expect(requestTo(shopifyBaseUrl
+					+ "custom_collections/12345678.json"))
+			.andExpect(method(HttpMethod.PUT))
+			.andRespond(withJson("get_customer_collection.json"));
+
+		mockShopifyServer
+			.expect(requestTo(shopifyBaseUrl
+					+ "custom_collections.json?title=customer_1234567_favorites"))
+			.andExpect(method(HttpMethod.GET))
+			.andRespond(withJson("get_empty_customer_collection.json"));
+
+		mockShopifyServer
+			.expect(requestTo(shopifyBaseUrl
+					+ "custom_collections.json"))
+			.andExpect(method(HttpMethod.POST))
+			.andRespond(withJson("get_customer_collection.json"));
 
 		long customerId = 1234567;
 		long productId = 987654;
 
 		service.updateFavoritesCollection(customerId, productId, false);	
+		service.updateFavoritesCollection(customerId, productId, false);
 	}
 
 	@Test
