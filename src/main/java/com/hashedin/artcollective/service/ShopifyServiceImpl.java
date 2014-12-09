@@ -287,7 +287,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		Map<Long, Boolean> productMap = new HashMap<>();
 		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
-				+ "custom_collections.json?title=customer_" + customerId + "_favorite", 
+				+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
 				CustomCollectionWrapper.class);
 		
 		List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
