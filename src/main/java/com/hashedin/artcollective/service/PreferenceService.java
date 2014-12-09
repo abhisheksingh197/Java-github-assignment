@@ -36,7 +36,6 @@ public class PreferenceService {
 				userPreferences.put(collectionId, collectionId);
 			}
 		}
-		userPreferences.put("123", "345");
 		return userPreferences;
 	}
 

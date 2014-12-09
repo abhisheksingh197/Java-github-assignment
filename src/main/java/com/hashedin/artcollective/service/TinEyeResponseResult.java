@@ -9,6 +9,10 @@ public class TinEyeResponseResult {
 	private TinEyeMetadata metadata;
 	private String color;
 	private String name;
+	private String rank;
+	private String weight;
+	private String metafieldClass;
+	
 	public String getName() {
 		return name;
 	}
@@ -40,10 +44,6 @@ public class TinEyeResponseResult {
 	public void setMetafieldClass(String metafieldClass) {
 		this.metafieldClass = metafieldClass;
 	}
-	private String rank;
-	private String weight;
-	private String metafieldClass;
-	
 	public String getScore() {
 		return score;
 	}
