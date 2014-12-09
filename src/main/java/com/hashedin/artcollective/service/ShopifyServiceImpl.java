@@ -259,6 +259,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 				CustomCollectionWrapper collectionWrapper = rest.postForObject(baseUri 
 						+ "custom_collections.json", entity,
 						CustomCollectionWrapper.class);
+				//Logger added to avoid "Dead Store to local variable" error 
 				LOGGER.trace("Collection Wrappper" + collectionWrapper);
 			} 
 			else {
