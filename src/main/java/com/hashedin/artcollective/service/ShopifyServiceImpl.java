@@ -234,7 +234,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 
 	@Override
-	public void updateFavoriteCollection(Long customerId, Long productId, Boolean isLiked) {
+	public void updateFavoritesCollection(Long customerId, Long productId, Boolean isLiked) {
 		StringBuilder jsonData = new StringBuilder(); 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);	

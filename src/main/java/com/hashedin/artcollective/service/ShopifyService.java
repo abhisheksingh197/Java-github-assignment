@@ -35,7 +35,7 @@ public interface ShopifyService {
 	public CustomCollection createDynamicProduct(FrameVariant frameVariant,
 			ProductSize productSize, Double framePrice, String type);
 	
-	public void updateFavoriteCollection(Long customerId, Long productId, Boolean isLiked);
+	public void updateFavoritesCollection(Long customerId, Long productId, Boolean isLiked);
 
 	public Map<Long, Boolean> getFavProductsMap(Long customerId);
 }
