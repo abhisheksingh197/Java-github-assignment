@@ -71,4 +71,34 @@ public class PreferenceServiceTest extends BaseUnitTest{
 		
 	}
 	
+	@Test
+	public void testForCreatingMetafieldsForCustomer() {
+		
+		MockRestServiceServer mockArtWorksService = MockRestServiceServer
+				.createServer(rest);
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("customer_338135042_metafields.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("customer_338135042_metafields_style.json"));
+
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("customer_338135042_metafields_orientation.json"));
+		
+		CriteriaSearchResponse searchResponse = preferenceService
+				.getRecomendedArtworksForCustomer(338135042L, 40, 0);
+		assertEquals(searchResponse.getArtworks().size(), 2);
+		
+	}
+	
+	
 }

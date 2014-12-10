@@ -40,4 +40,7 @@ public interface ShopifyService {
 	public void updateFavoritesCollection(Long customerId, Long productId, Boolean isLiked);
 
 	public Map<Long, Boolean> getFavProductsMap(Long customerId);
+
+	public List<MetaField> createMetafieldsForCustomer(Long customerId, String type);
+
 }

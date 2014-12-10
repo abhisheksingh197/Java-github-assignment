@@ -1,0 +1,28 @@
+{
+    "metafields": [
+        {
+            "created_at": "2014-12-08T10:41:31-05:00",
+            "description": null,
+            "id": 1461978285,
+            "key": "preference_medium",
+            "namespace": "c_f",
+            "owner_id": 338135041,
+            "updated_at": "2014-12-08T10:41:31-05:00",
+            "value": "paper",
+            "value_type": "string",
+            "owner_resource": "customer"
+        },
+        {
+            "created_at": "2014-12-08T07:55:58-05:00",
+            "description": null,
+            "id": 1461710041,
+            "key": "preference_subject",
+            "namespace": "c_f",
+            "owner_id": 338135041,
+            "updated_at": "2014-12-08T10:15:29-05:00",
+            "value": "26109780",
+            "value_type": "string",
+            "owner_resource": "customer"
+        }
+    ]
+}
