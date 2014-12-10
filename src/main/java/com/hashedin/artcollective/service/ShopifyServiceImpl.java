@@ -2,6 +2,8 @@ package com.hashedin.artcollective.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -235,7 +237,8 @@ public class ShopifyServiceImpl implements ShopifyService {
 
 	@Override
 	public void updateFavoritesCollection(Long customerId, Long productId, Boolean isLiked) {
-		StringBuilder jsonData = new StringBuilder(); 
+		StringBuilder jsonData = new StringBuilder();
+		StringBuilder url = new StringBuilder();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);	
 		
@@ -272,14 +275,30 @@ public class ShopifyServiceImpl implements ShopifyService {
 				
 				HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(),
 					headers);			
-				rest.put(baseUri + "custom_collections/" + collection.get(0).getId() 
-					+ ".json", entity);	
+				url.append(baseUri).append("custom_collections/").append(collection.get(0).getId())
+					.append(".json");
+				try {
+					URI put = new URI(url.toString());
+					rest.put(put, entity);
+				} 
+				catch (URISyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} 
 		else {
-			rest.delete(baseUri + "collects/" + productId + ".json");
+			url.append(baseUri).append("collects/").append(productId).append(".json");			
+			try {
+				URI delete = new URI(url.toString());
+				rest.delete(delete);
+			} 
+			catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-	
+			
 		return;
 	}
 	
@@ -305,7 +324,10 @@ public class ShopifyServiceImpl implements ShopifyService {
 			for (Collect collect : collects) {
 				productMap.put(collect.getProductId(), true);
 			}
-		}	
+		}
+		else {
+			productMap = null;
+		}
 		
 		return productMap;
 	}
