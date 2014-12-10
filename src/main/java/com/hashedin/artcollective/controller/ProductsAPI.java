@@ -405,18 +405,20 @@ public class ProductsAPI {
 	// Wrap Artwork objects into a Map Helper Function
 	private Map<String, Object> wrapResponse(CriteriaSearchResponse searchResponse) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<ArtWork> artworks = searchResponse.getArtworks();
 		List<Object> artworksList = new ArrayList<>();
-		for (ArtWork art : artworks) {
-			Map<String, Object> artworkMap = new HashMap<String, Object>();
-			artworkMap.put("images", art.getImages());
-			artworkMap.put("priceBuckets", art.getPriceBuckets());
-			artworkMap.put("details", art);
-			artworkMap.put("artist", art.getArtist());
-			artworksList.add(artworkMap);
+		if (searchResponse != null) {
+			List<ArtWork> artworks = searchResponse.getArtworks();
+			for (ArtWork art : artworks) {
+				Map<String, Object> artworkMap = new HashMap<String, Object>();
+				artworkMap.put("images", art.getImages());
+				artworkMap.put("priceBuckets", art.getPriceBuckets());
+				artworkMap.put("details", art);
+				artworkMap.put("artist", art.getArtist());
+				artworksList.add(artworkMap);
+			}
+			map.put("searchCount", searchResponse.getTotalArtworkCount());
 		}
 		Object allArtworksCount = artWorkRepository.count();
-		map.put("searchCount", searchResponse.getTotalArtworkCount());
 		map.put("allArtworksCount", allArtworksCount);
 		map.put("artworks", artworksList);
 		return map;

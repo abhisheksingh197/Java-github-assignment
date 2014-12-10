@@ -36,6 +36,8 @@ public class ShopifyServiceImpl implements ShopifyService {
 		
 	private static final int MAX_PAGE_SIZE = 100;
 	
+	private static final String[] PREFERENCE_METAFIELDS = {"subject", "style", "medium", "orientation"};
+	
 	private final String baseUri;
 	private final RestOperations rest;
 	
@@ -338,6 +340,58 @@ public class ShopifyServiceImpl implements ShopifyService {
 		final String url = baseUri + type + "/" + typeId.toString() + "/metafields/" 
 				+ metafieldId.toString() + ".json";
 		rest.put(url, entity);
+	}
+	
+	@Override
+	public List<MetaField> createMetafieldsForCustomer(Long customerId, String type) {
+		StringBuilder metafieldData = new StringBuilder();
+		List<MetaField> metafields = getMetaFields("customers", customerId);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		String[] metafieldValues = {};
+		if (type.equalsIgnoreCase("preference")) {
+			metafieldValues = PREFERENCE_METAFIELDS;
+		}
+		for (String metafieldTitle : metafieldValues) {
+			String metafieldKey = type.concat("_").concat(metafieldTitle);
+			if (!metafieldsHasKey(metafieldKey, metafields)) {
+				metafieldData.append("{\"metafield\": {")
+				.append("\"namespace\": \"")
+				.append("c_f")
+				.append("\"").append(",")
+				.append("\"key\": \"")
+				.append(metafieldKey)
+				.append("\"").append(",")
+				.append("\"value\": \"")
+				.append("0")
+				.append("\"").append(",")
+				.append("\"value_type\": \"")
+				.append("string")
+				.append("\"")
+				.append("}}");
+				HttpEntity<String> entity = new HttpEntity<String>(metafieldData.toString(), headers);
+				try {
+					ArtWorkMetafields artworkMetafield = rest.postForObject(baseUri + "customers/" 
+						+ customerId + "/metafields.json", entity, ArtWorkMetafields.class);
+					metafields.add(artworkMetafield.getMetafield());
+					metafieldData.setLength(0);
+				}
+				catch (Exception e) {
+					return null;
+				}
+				
+			}
+		}
+		return metafields;
+	}
+
+	private boolean metafieldsHasKey(String metafieldKey, List<MetaField> metafields) {
+		for (MetaField metafield : metafields) {
+			if (metafield.getKey().equalsIgnoreCase(metafieldKey)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
