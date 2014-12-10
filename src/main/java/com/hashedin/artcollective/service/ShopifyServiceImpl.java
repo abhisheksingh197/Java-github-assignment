@@ -25,7 +25,6 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
-
 import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.utils.ProductSize;
@@ -242,13 +241,13 @@ public class ShopifyServiceImpl implements ShopifyService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);	
 		
-		if (!isLiked) {				
-			CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
-					+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
-					CustomCollectionWrapper.class);
-			
-			List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
-			
+		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
+				+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
+				CustomCollectionWrapper.class);
+		
+		List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
+		
+		if (!isLiked) {							
 			if (collection.size() == 0) {		
 				jsonData.append("{\"custom_collection\": {")
 				  	.append("\"title\": \" customer_").append(customerId).append("_favorites\",")
@@ -288,7 +287,8 @@ public class ShopifyServiceImpl implements ShopifyService {
 			}
 		} 
 		else {
-			url.append(baseUri).append("collects/").append(productId).append(".json");			
+			url.append(baseUri).append("collects/").append(productId).append("-")
+			   .append(collection.get(0).getId()).append(".json");			
 			try {
 				URI delete = new URI(url.toString());
 				rest.delete(delete);
@@ -308,6 +308,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		Map<Long, Boolean> productMap = new HashMap<>();
+	//	Long magicNumber = (long) 123456789;
 		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
 				+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
 				CustomCollectionWrapper.class);
@@ -325,6 +326,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 				productMap.put(collect.getProductId(), true);
 			}
 		}
+		
 		return productMap;
 	}
 	

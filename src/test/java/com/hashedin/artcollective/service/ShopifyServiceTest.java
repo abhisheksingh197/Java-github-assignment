@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
+
 import com.hashedin.artcollective.BaseUnitTest;
 
 public class ShopifyServiceTest extends BaseUnitTest {
@@ -152,16 +153,27 @@ public class ShopifyServiceTest extends BaseUnitTest {
 
 		mockShopifyServer
 			.expect(requestTo(shopifyBaseUrl
-					+ "collects/987654.json"))
+					+ "custom_collections.json?title=customer_1234567_favorites"))
+			.andExpect(method(HttpMethod.GET))
+			.andRespond(withJson("get_customer_collection.json"));
+
+		mockShopifyServer
+			.expect(requestTo(shopifyBaseUrl
+					+ "collects/987654-12345678.json"))
 			.andExpect(method(HttpMethod.DELETE))
 			.andRespond(withJson("get_customer_collection.json"));
-		
+
 		long customerId = 1234567;
 		long productId = 987654;
-
-		service.updateFavoritesCollection(customerId, productId, false);	
-		service.updateFavoritesCollection(customerId, productId, false);
-		service.updateFavoritesCollection(customerId, productId, true);
+			
+		try {	
+			service.updateFavoritesCollection(customerId, productId, false);	
+			service.updateFavoritesCollection(customerId, productId, false);
+			service.updateFavoritesCollection(customerId, productId, true);
+			assertEquals(1, 1);
+		} catch (Exception e) {
+			assertEquals(1, 0);;
+		};
 	}
 
 	@Test
@@ -193,6 +205,7 @@ public class ShopifyServiceTest extends BaseUnitTest {
 		assertEquals(true, productIdList.get(productID));
 
 		productIdList = service.getFavProductsMap(customerId);
+
 		assertEquals(null, productIdList.get(productID));
 	}
 }
