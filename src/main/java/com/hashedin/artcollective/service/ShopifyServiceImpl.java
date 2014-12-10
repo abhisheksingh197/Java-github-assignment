@@ -248,10 +248,10 @@ public class ShopifyServiceImpl implements ShopifyService {
 			
 			if (collection.size() == 0) {		
 				jsonData.append("{\"custom_collection\": {")
-				  	.append("\"title\": \" customer_" + customerId + "_favorites\",")
-				    .append("\"collects\": [ {")			     
-				    .append("\"product_id\":" + productId + "}") 
-				    .append("] } }");
+				  	.append("\"title\": \" customer_").append(customerId).append("_favorites\",")
+				    .append("\"collects\": [ {")    
+				    .append("\"product_id\":").append(productId)
+				    .append("} ] } }");
 				
 				HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(), 
 					headers);			
@@ -264,10 +264,11 @@ public class ShopifyServiceImpl implements ShopifyService {
 			} 
 			else {
 				jsonData.append("{\"custom_collection\": {")
-				  	.append("\"id\":" + collection.get(0).getId() + ",")
+				  	.append("\"id\":").append(collection.get(0).getId())
+				  	.append(",")
 					.append("\"collects\": [ {")			     
-					.append("\"product_id\":" + productId + "}") 
-					.append("] } }");			
+					.append("\"product_id\":").append(productId)  
+					.append("} ] } }");			
 				
 				HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(),
 					headers);			
