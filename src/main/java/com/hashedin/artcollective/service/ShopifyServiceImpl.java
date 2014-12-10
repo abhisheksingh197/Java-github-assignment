@@ -325,10 +325,6 @@ public class ShopifyServiceImpl implements ShopifyService {
 				productMap.put(collect.getProductId(), true);
 			}
 		}
-		else {
-			productMap = null;
-		}
-		
 		return productMap;
 	}
 	
