@@ -43,4 +43,7 @@ public interface ShopifyService {
 
 	public List<MetaField> createMetafieldsForCustomer(Long customerId, String type);
 
+	List<MetaField> getMetaFieldsByKeyType(String type, Long customerId,
+			String keyType);
+
 }

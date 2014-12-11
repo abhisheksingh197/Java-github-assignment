@@ -43,6 +43,7 @@ import com.hashedin.artcollective.service.ArtWorksService;
 import com.hashedin.artcollective.service.CriteriaSearchResponse;
 import com.hashedin.artcollective.service.CustomCollection;
 import com.hashedin.artcollective.service.DeductionsService;
+import com.hashedin.artcollective.service.FollowingService;
 import com.hashedin.artcollective.service.Frame;
 import com.hashedin.artcollective.service.FrameVariantService;
 import com.hashedin.artcollective.service.OrdersService;
@@ -105,6 +106,9 @@ public class ProductsAPI {
 	
 	@Autowired
 	private PreferenceService preferenceService;
+	
+	@Autowired
+	private FollowingService followingService;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
@@ -372,14 +376,36 @@ public class ProductsAPI {
 	}
 	
 	@RequestMapping(value = "/api/customer/preferences", method = RequestMethod.POST)
-	public void modifyCustomerPreferences(
+	public Boolean modifyCustomerPreferences(
 			@RequestParam(value = "customerId", required = true)Long customerId,
 			@RequestParam(value = "subjects", required = true)String[] subjects,
 			@RequestParam(value = "styles", required = true)String[] styles,
 			@RequestParam(value = "mediums", required = true)String[] mediums,
 			@RequestParam(value = "orientations", required = true)String[] orientations) {
-		preferenceService.updatePreferencesForUser(customerId, 
+		boolean hasModified = preferenceService.updatePreferencesForUser(customerId, 
 				subjects, styles, mediums, orientations);
+		return hasModified;
+	}
+	
+	@RequestMapping(value = "/api/customer/followings", method = RequestMethod.GET)
+	public Map<String, Object> getCustomerFollowings(
+			@RequestParam(value = "customerId", required = true)Long customerId) {
+		Map<String, Object> userFollowings = followingService.getFollowingsForUser(customerId);
+		Map<String, Object> followings = new HashMap<>();
+		followings.put("userFollowings", userFollowings);
+		return followings;
+	}
+	
+	@RequestMapping(value = "/api/customer/followings", method = RequestMethod.POST)
+	public Boolean modifyCustomerFollowings(
+			@RequestParam(value = "customerId", required = true)Long customerId,
+			@RequestParam(value = "subjects", required = true)String[] subjects,
+			@RequestParam(value = "styles", required = true)String[] styles,
+			@RequestParam(value = "collections", required = true)String[] collections,
+			@RequestParam(value = "artists", required = true)String[] artists) {
+		boolean hasModified = followingService.updateFollowingsForUser(customerId, 
+				subjects, styles, collections, artists);
+		return hasModified;
 	}
 	
 	@RequestMapping(value = "/api/customer/recomended", method = RequestMethod.GET)
