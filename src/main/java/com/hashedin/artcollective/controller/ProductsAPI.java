@@ -382,9 +382,8 @@ public class ProductsAPI {
 			@RequestParam(value = "styles", required = true)String[] styles,
 			@RequestParam(value = "mediums", required = true)String[] mediums,
 			@RequestParam(value = "orientations", required = true)String[] orientations) {
-		boolean hasModified = preferenceService.updatePreferencesForUser(customerId, 
+		return preferenceService.updatePreferencesForUser(customerId, 
 				subjects, styles, mediums, orientations);
-		return hasModified;
 	}
 	
 	@RequestMapping(value = "/api/customer/followings", method = RequestMethod.GET)
@@ -403,9 +402,8 @@ public class ProductsAPI {
 			@RequestParam(value = "styles", required = true)String[] styles,
 			@RequestParam(value = "collections", required = true)String[] collections,
 			@RequestParam(value = "artists", required = true)String[] artists) {
-		boolean hasModified = followingService.updateFollowingsForUser(customerId, 
+		return followingService.updateFollowingsForUser(customerId, 
 				subjects, styles, collections, artists);
-		return hasModified;
 	}
 	
 	@RequestMapping(value = "/api/customer/recomended", method = RequestMethod.GET)

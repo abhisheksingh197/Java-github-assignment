@@ -37,7 +37,7 @@ public class PreferenceServiceTest extends BaseUnitTest{
 	}
 	
 	@Test
-	public void testForFetchingPreferences() {
+	public void testForFetchingUserPreferences() {
 		
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
