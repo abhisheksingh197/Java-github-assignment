@@ -367,10 +367,10 @@ public class ProductsAPI {
 	public Map<String, Object> getCustomerPreferences(
 			@RequestParam(value = "customerId", required = true)Long customerId) {
 		Map<String, Object> shopPreferences = preferenceService.getPreferencesForShop();
-		Map<String, Object> userPreferences = preferenceService.getPreferencesForUser(customerId);
+		Map<String, Object> customerPreferences = preferenceService.getPreferencesForUser(customerId);
 		Map<String, Object> preferences = new HashMap<>();
 		preferences.put("shopPreferences", shopPreferences);
-		preferences.put("userPreferences", userPreferences);
+		preferences.put("customerPreferences", customerPreferences);
 		
 		return preferences;
 	}
@@ -389,9 +389,9 @@ public class ProductsAPI {
 	@RequestMapping(value = "/api/customer/followings", method = RequestMethod.GET)
 	public Map<String, Object> getCustomerFollowings(
 			@RequestParam(value = "customerId", required = true)Long customerId) {
-		Map<String, Object> userFollowings = followingService.getFollowingsForUser(customerId);
+		Map<String, Object> customerFollowings = followingService.getFollowingsForUser(customerId);
 		Map<String, Object> followings = new HashMap<>();
-		followings.put("userFollowings", userFollowings);
+		followings.put("customerFollowings", customerFollowings);
 		return followings;
 	}
 	

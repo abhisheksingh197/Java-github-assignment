@@ -34,7 +34,7 @@ public class FollowingService {
 	public Map<String, Object> getFollowingsForUser(Long customerId) {
 		Map<String, Object> userPreferences = new HashMap<String, Object>();
 		List<MetaField> metafields = shopifyService.getMetaFieldsByKeyType(
-				"customers", customerId, "following");
+				"customers", customerId, "followings");
 		for (MetaField metafield : metafields) {
 			String[] collectionIdsInMetafield = metafield.getValue().split(",");
 			for (String collectionId : collectionIdsInMetafield) {
@@ -47,7 +47,7 @@ public class FollowingService {
 	public Boolean updateFollowingsForUser(Long customerId, String[] subjects,
 			String[] styles, String[] collections, String[] artists) {
 		List<MetaField> metafields  = shopifyService.createMetafieldsForCustomer(
-				customerId, "following");
+				customerId, "followings");
 		if (metafields == null) {
 			return false;
 		}

@@ -372,10 +372,10 @@ public class ShopifyServiceImpl implements ShopifyService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		String[] metafieldValues = {};
-		if (type.equalsIgnoreCase("preference")) {
+		if (type.equalsIgnoreCase("preferences")) {
 			metafieldValues = PREFERENCE_METAFIELDS;
 		}
-		else if (type.equalsIgnoreCase("following")) {
+		else if (type.equalsIgnoreCase("followings")) {
 			metafieldValues = FOLLOWING_METAFIELDS;
 		}
 		for (String metafieldTitle : metafieldValues) {

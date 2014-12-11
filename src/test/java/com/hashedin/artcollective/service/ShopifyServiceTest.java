@@ -228,13 +228,13 @@ public class ShopifyServiceTest extends BaseUnitTest {
 				.andRespond(withJson("customer_338135042_metafields.json"));
 		
 		List<MetaField> preferenceMetafields = service.getMetaFieldsByKeyType(
-				"customers", 338135042L, "preference");
+				"customers", 338135042L, "preferences");
 		
 		List<MetaField> followingMetafields = service.getMetaFieldsByKeyType(
-				"customers", 338135042L, "following");
+				"customers", 338135042L, "followings");
 		assertEquals(preferenceMetafields.size(), 2);
-		assertEquals(preferenceMetafields.get(0).getKey().split("_")[0], "preference");
+		assertEquals(preferenceMetafields.get(0).getKey().split("_")[0], "preferences");
 		assertEquals(followingMetafields.size(), 2);
-		assertEquals(followingMetafields.get(0).getKey().split("_")[0], "following");
+		assertEquals(followingMetafields.get(0).getKey().split("_")[0], "followings");
 	}
 }
