@@ -1,6 +1,6 @@
 package com.hashedin.artcollective.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
@@ -17,10 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.utils.SynchronizeSetup;
 
-public class PreferenceServiceTest extends BaseUnitTest{
-	
-	@Autowired
-	private PreferenceService preferenceService;
+public class FollowingServiceTest extends BaseUnitTest{
 	
 	@Autowired
 	private RestTemplate rest;
@@ -31,13 +28,16 @@ public class PreferenceServiceTest extends BaseUnitTest{
 	@Autowired
 	private SynchronizeSetup synchronizeSetup;
 	
+	@Autowired
+	private FollowingService followingService;
+	
 	@Before
 	public void setup() {
 		synchronizeSetup.artworksSynchronizeSetup();
 	}
 	
 	@Test
-	public void testForFetchingUserPreferences() {
+	public void testForFetchingUserFollowings() {
 		
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
@@ -48,32 +48,12 @@ public class PreferenceServiceTest extends BaseUnitTest{
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("customer_338135041_metafields.json"));
 		
-		Map<String, Object> userPreferences = preferenceService.getPreferencesForUser(338135041L);
-		assertEquals(userPreferences.size(), 4);
-		Map<String, Object> shopPreferences = preferenceService.getPreferencesForShop();
-		assertEquals(shopPreferences.size(), 4);
+		Map<String, Object> userFollowings = followingService.getFollowingsForUser(338135041L);
+		assertEquals(userFollowings.size(), 4);
 	}
 	
 	@Test
-	public void testForFetchArtworksByPreferencesForCustomer() {
-		
-		MockRestServiceServer mockArtWorksService = MockRestServiceServer
-				.createServer(rest);
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "customers/338135041/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("customer_338135041_metafields.json"));
-		CriteriaSearchResponse searchResponse = preferenceService
-				.getRecomendedArtworksForCustomer(338135041L, 40, 0);
-		assertEquals(searchResponse.getArtworks().size(), 2);
-		
-	}
-	
-	@Test
-	public void testForCreatingMetafieldsForCustomer() {
-		
+	public void testForUpdatingUserFollowings() {
 		MockRestServiceServer mockArtWorksService = MockRestServiceServer
 				.createServer(rest);
 		mockArtWorksService
@@ -86,19 +66,42 @@ public class PreferenceServiceTest extends BaseUnitTest{
 				.expect(requestTo(shopifyBaseUrl
 						+ "customers/338135042/metafields.json"))
 				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("customer_338135042_metafields_style.json"));
+				.andRespond(withJson("customer_338135042_metafields_subject.json"));
 
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
 						+ "customers/338135042/metafields.json"))
 				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("customer_338135042_metafields_orientation.json"));
+				.andRespond(withJson("customer_338135042_metafields_artist.json"));
 		
-		CriteriaSearchResponse searchResponse = preferenceService
-				.getRecomendedArtworksForCustomer(338135042L, 40, 0);
-		assertEquals(searchResponse.getArtworks().size(), 2);
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields/14612341313.json"))
+				.andExpect(method(HttpMethod.PUT))
+				.andRespond(withJson("put.json"));
 		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields/143233.json"))
+				.andExpect(method(HttpMethod.PUT))
+				.andRespond(withJson("put.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields/953045731.json"))
+				.andExpect(method(HttpMethod.PUT))
+				.andRespond(withJson("put.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields/12332.json"))
+				.andExpect(method(HttpMethod.PUT))
+				.andRespond(withJson("put.json"));
+		
+		String[] emptyFollowings = {"0"};
+		boolean updated = followingService.updateFollowingsForUser(338135042L, emptyFollowings, 
+				emptyFollowings, emptyFollowings, emptyFollowings);
+		assertEquals(updated, true);
 	}
-	
 	
 }

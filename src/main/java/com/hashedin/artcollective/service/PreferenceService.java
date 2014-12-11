@@ -34,7 +34,8 @@ public class PreferenceService {
 
 	public Map<String, Object> getPreferencesForUser(Long id) {
 		Map<String, Object> userPreferences = new HashMap<String, Object>();
-		List<MetaField> metafields = shopifyService.getMetaFields("customers", id);
+		List<MetaField> metafields = shopifyService.getMetaFieldsByKeyType(
+				"customers", id, "preferences");
 		for (MetaField metafield : metafields) {
 			String[] collectionIdsInMetafield = metafield.getValue().split(",");
 			for (String collectionId : collectionIdsInMetafield) {
@@ -63,10 +64,13 @@ public class PreferenceService {
 		return shopPreferences;
 	}
 	
-	public void updatePreferencesForUser(Long customerId, String[] subjects, 
+	public Boolean updatePreferencesForUser(Long customerId, String[] subjects, 
 			String[] styles, String[] mediums, String[] orientations) {
 		List<MetaField> metafields  = shopifyService.createMetafieldsForCustomer(
-				customerId, "preference");
+				customerId, "preferences");
+		if (metafields == null) {
+			return false;
+		}
 		for (MetaField metafield : metafields) {
 			switch (metafield.getKey().split("_")[1]) {
 				case "subject" :
@@ -97,13 +101,14 @@ public class PreferenceService {
 					break;
 			}
 		}
+		return true;
 	}
 	
 	
 	public CriteriaSearchResponse getRecomendedArtworksForCustomer(Long customerId, 
 			int limit, int offset) {
 		List<MetaField> metafields  = shopifyService.createMetafieldsForCustomer(
-				customerId, "preference");
+				customerId, "preferences");
 		List<String> subjects = new ArrayList<>();
 		List<String> styles = new ArrayList<>();
 		String medium = "";

@@ -9,6 +9,7 @@ import com.hashedin.artcollective.service.ArtWorksServiceMockitoTest;
 import com.hashedin.artcollective.service.ArtWorksServiceTest;
 import com.hashedin.artcollective.service.ArtistPortfolioServiceTest;
 import com.hashedin.artcollective.service.DeductionServiceTest;
+import com.hashedin.artcollective.service.FollowingServiceTest;
 import com.hashedin.artcollective.service.FrameVariantServiceTest;
 import com.hashedin.artcollective.service.OrdersServiceTest;
 import com.hashedin.artcollective.service.PreferenceServiceTest;
@@ -32,7 +33,8 @@ import com.hashedin.artcollective.service.TransactionServiceTest;
 	ArtistPortfolioServiceTest.class,
 	TransactionServiceTest.class,
 	DeductionServiceTest.class,
-	PreferenceServiceTest.class
+	PreferenceServiceTest.class,
+	FollowingServiceTest.class
 })
 public class UnitTests {
 
