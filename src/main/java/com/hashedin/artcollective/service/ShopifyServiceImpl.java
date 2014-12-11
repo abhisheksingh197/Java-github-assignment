@@ -2,6 +2,8 @@ package com.hashedin.artcollective.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
-
 
 import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.Image;
@@ -241,23 +242,24 @@ public class ShopifyServiceImpl implements ShopifyService {
 
 	@Override
 	public void updateFavoritesCollection(Long customerId, Long productId, Boolean isLiked) {
-		StringBuilder jsonData = new StringBuilder(); 
+		StringBuilder jsonData = new StringBuilder();
+		StringBuilder url = new StringBuilder();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);	
 		
-		if (!isLiked) {				
-			CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
-					+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
-					CustomCollectionWrapper.class);
-			
-			List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
-			
+		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
+				+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
+				CustomCollectionWrapper.class);
+		
+		List<CustomCollection> collection = customerCustomCollectionWrapper.getCustomCollections();
+		
+		if (!isLiked) {							
 			if (collection.size() == 0) {		
 				jsonData.append("{\"custom_collection\": {")
-				  	.append("\"title\": \" customer_" + customerId + "_favorites\",")
-				    .append("\"collects\": [ {")			     
-				    .append("\"product_id\":" + productId + "}") 
-				    .append("] } }");
+				  	.append("\"title\": \" customer_").append(customerId).append("_favorites\",")
+				    .append("\"collects\": [ {")    
+				    .append("\"product_id\":").append(productId)
+				    .append("} ] } }");
 				
 				HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(), 
 					headers);			
@@ -270,21 +272,39 @@ public class ShopifyServiceImpl implements ShopifyService {
 			} 
 			else {
 				jsonData.append("{\"custom_collection\": {")
-				  	.append("\"id\":" + collection.get(0).getId() + ",")
+				  	.append("\"id\":").append(collection.get(0).getId())
+				  	.append(",")
 					.append("\"collects\": [ {")			     
-					.append("\"product_id\":" + productId + "}") 
-					.append("] } }");			
+					.append("\"product_id\":").append(productId)  
+					.append("} ] } }");			
 				
 				HttpEntity<String> entity = new HttpEntity<String>(jsonData.toString(),
 					headers);			
-				rest.put(baseUri + "custom_collections/" + collection.get(0).getId() 
-					+ ".json", entity);	
+				url.append(baseUri).append("custom_collections/").append(collection.get(0).getId())
+					.append(".json");
+				try {
+					URI put = new URI(url.toString());
+					rest.put(put, entity);
+				} 
+				catch (URISyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} 
 		else {
-			rest.delete(baseUri + "collects/" + productId + ".json");
+			url.append(baseUri).append("collects/").append(productId).append("-")
+			   .append(collection.get(0).getId()).append(".json");			
+			try {
+				URI delete = new URI(url.toString());
+				rest.delete(delete);
+			} 
+			catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-	
+			
 		return;
 	}
 	
@@ -294,6 +314,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		Map<Long, Boolean> productMap = new HashMap<>();
+	//	Long magicNumber = (long) 123456789;
 		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
 				+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
 				CustomCollectionWrapper.class);
@@ -310,7 +331,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 			for (Collect collect : collects) {
 				productMap.put(collect.getProductId(), true);
 			}
-		}	
+		}
 		
 		return productMap;
 	}
