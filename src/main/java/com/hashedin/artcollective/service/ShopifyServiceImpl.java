@@ -368,7 +368,7 @@ public class ShopifyServiceImpl implements ShopifyService {
 	@Override
 	public List<MetaField> createMetafieldsForCustomer(Long customerId, String type) {
 		StringBuilder metafieldData = new StringBuilder();
-		List<MetaField> metafields = getMetaFieldsByKeyType("customers", customerId, type);
+		List<MetaField> metafields = getMetaFieldsByKeyType("customers", customerId, type, null);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		String[] metafieldValues = {};
@@ -412,18 +412,21 @@ public class ShopifyServiceImpl implements ShopifyService {
 	}
 	
 	@Override
-	public List<MetaField> getMetaFieldsByKeyType(String type, Long customerId,
-			String keyType) {
-		List<MetaField> metafields = getMetaFields(type, customerId);
-		List<MetaField> responseMetafields = new ArrayList<>();
-		for (MetaField metafield : metafields) {
-			String metafieldKeyType =  metafield.getKey().split("_")[0];
-			if (metafieldKeyType.equalsIgnoreCase(keyType)) {
-				responseMetafields.add(metafield);
-			}
-		}
- 		return responseMetafields;
-	}
+	  public List<MetaField> getMetaFieldsByKeyType(String type, Long customerId,
+	      String keyType, String collectionType) {
+	    List<MetaField> metafields = getMetaFields(type, customerId);
+	    List<MetaField> responseMetafields = new ArrayList<>();
+	    for (MetaField metafield : metafields) {
+	      String[] metafieldKeys = metafield.getKey().split("_");
+	      String metafieldKeyType =  metafieldKeys[0];
+	      String metafieldCollectionType = metafieldKeys[1];
+	      if (metafieldKeyType.equalsIgnoreCase(keyType) && (collectionType != null 
+	          ? metafieldCollectionType.equalsIgnoreCase(collectionType) : true)) {
+	        responseMetafields.add(metafield);
+	      }
+	    }
+	    return responseMetafields;
+	  }
 
 	private boolean metafieldsHasKey(String metafieldKey, List<MetaField> metafields) {
 		for (MetaField metafield : metafields) {

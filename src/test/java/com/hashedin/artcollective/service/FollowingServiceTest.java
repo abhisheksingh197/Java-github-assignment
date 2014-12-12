@@ -104,4 +104,76 @@ public class FollowingServiceTest extends BaseUnitTest{
 		assertEquals(updated, true);
 	}
 	
+	@Test
+	public void testForIsCollectionFollowedByCustomer() {
+		MockRestServiceServer mockArtWorksService = MockRestServiceServer
+				.createServer(rest);
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135041/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("customer_338135041_metafields.json"));
+		
+		boolean isFollowed = followingService.isCollectionFollowedByCustomer(
+				338135041L, 26109780L, "subject");
+		assertEquals(isFollowed, true);
+	}
+	
+	@Test
+	public void testForUpdatingCustomerFollowingCollections() {
+		
+		MockRestServiceServer mockArtWorksService = MockRestServiceServer
+				.createServer(rest);
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135041/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("customer_338135041_metafields.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135041/metafields/14234.json"))
+				.andExpect(method(HttpMethod.PUT))
+				.andRespond(withJson("put.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("customer_338135042_metafields.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("customer_338135042_metafields.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("customer_338135042_metafields_subject.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("customer_338135042_metafields_artist.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields/953045731.json"))
+				.andExpect(method(HttpMethod.PUT))
+				.andRespond(withJson("put.json"));
+		
+		int removeResponse = followingService.toggleCollectionFollowedByCustomer(
+				338135041L, 26109780L, "subject");
+		
+		int addResponse = followingService.toggleCollectionFollowedByCustomer(
+				338135042L, 26109780L, "subject");
+		
+		assertEquals(removeResponse, 2);
+		assertEquals(addResponse, 1);
+	}
+	
 }
