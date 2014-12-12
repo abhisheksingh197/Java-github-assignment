@@ -408,6 +408,24 @@ public class ProductsAPI {
 				subjects, styles, collections, artists);
 	}
 	
+	@RequestMapping(value = "/api/customer/following/collection", method = RequestMethod.GET)
+	public Boolean getCustomerFollowingCollection(
+			@RequestParam(value = "customerId", required = true)Long customerId, 
+			@RequestParam(value = "collectionId", required = true)Long collectionId,
+			@RequestParam(value = "collectionType", required = true)String collectionType) {
+		
+		return followingService.isCollectionFollowedByCustomer(customerId, collectionId, collectionType);
+	};
+	
+	@RequestMapping(value = "/api/customer/following/collection", method = RequestMethod.POST)
+	public Integer updateCustomerFollowingCollection(
+			@RequestParam(value = "customerId", required = true)Long customerId, 
+			@RequestParam(value = "collectionId", required = true)Long collectionId,
+			@RequestParam(value = "collectionType", required = true)String collectionType) {
+		
+		return followingService.toggleCollectionFollowedByCustomer(customerId, collectionId, collectionType);
+	};
+	
 	@RequestMapping(value = "/api/customer/recomended", method = RequestMethod.GET)
 	public Map<String, Object> fetchArtworksRecomendedArtworks(
 			@RequestParam(value = "customerId", required = true)Long customerId,

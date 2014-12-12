@@ -35,7 +35,7 @@ public class PreferenceService {
 	public Map<String, Object> getPreferencesForUser(Long id) {
 		Map<String, Object> userPreferences = new HashMap<String, Object>();
 		List<MetaField> metafields = shopifyService.getMetaFieldsByKeyType(
-				"customers", id, "preferences");
+				"customers", id, "preferences", null);
 		for (MetaField metafield : metafields) {
 			String[] collectionIdsInMetafield = metafield.getValue().split(",");
 			for (String collectionId : collectionIdsInMetafield) {
