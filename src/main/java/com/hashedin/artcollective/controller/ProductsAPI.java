@@ -261,10 +261,12 @@ public class ProductsAPI {
 		Map<String, Object> wrapResponse = wrapResponse(searchResponse);
 		
 		if (customerId != null) { 
-			Object	productID = shopifyService.getFavProductsMap(customerId);
-			wrapResponse(searchResponse).put("favProductIdMap", productID);
-		}
-		
+			Map<Long, Boolean>	favouriteMap = shopifyService.getFavProductsMap(customerId);
+			if (favouriteMap.size() > 0) {
+				wrapResponse.put("favProductIdMap", favouriteMap);
+			}
+		} 
+			
 		return wrapResponse;
 	}
 	

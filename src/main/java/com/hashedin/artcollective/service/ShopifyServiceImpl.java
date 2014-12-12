@@ -314,7 +314,6 @@ public class ShopifyServiceImpl implements ShopifyService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		Map<Long, Boolean> productMap = new HashMap<>();
-	//	Long magicNumber = (long) 123456789;
 		CustomCollectionWrapper customerCustomCollectionWrapper = rest.getForObject(baseUri 
 				+ "custom_collections.json?title=customer_" + customerId + "_favorites", 
 				CustomCollectionWrapper.class);
