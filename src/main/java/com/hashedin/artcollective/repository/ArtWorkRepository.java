@@ -12,6 +12,8 @@ public interface ArtWorkRepository extends PagingAndSortingRepository<ArtWork, L
 JpaSpecificationExecutor<ArtWork> {
 
 	String CRITERIA_WHERE_CLAUSE = " where ( "
+			+ "art.deleted = false "
+			+ "AND "
 			+ "exists (   select 'x' from art_work_styles" 
 			+ "    where art_work_id = art.id and (styles_id in (:styleList) or -1 in (:styleList))) "
 			+ "OR (not exists "
@@ -37,6 +39,8 @@ JpaSpecificationExecutor<ArtWork> {
 			+ "and (art.id in (:idList) or -1 in (:idList)) ";
 	
 	String PREFERENCE_WHERE_CLAUSE = " where ( "
+			+ "art.deleted = false "
+			+ "AND "
 			+ "exists (   select 'x' from art_work_styles" 
 			+ "    where art_work_id = art.id and (styles_id in (:styleList) or -1 in (:styleList))) "
 			+ "OR (not exists "
@@ -89,7 +93,9 @@ JpaSpecificationExecutor<ArtWork> {
 			@Param("idList") List<Long> idList);
 	
 	@Query("SELECT art FROM ArtWork art WHERE "
-			+ "art.artist.id = :artistId")
+			+ "(art.deleted = false) "
+			+ "AND "
+			+ "(art.artist.id = :artistId)")
 	public List<ArtWork> getArtworksByArtist(@Param("artistId")Long artistId);
 
 	@Query(value = "select * from art_work art"

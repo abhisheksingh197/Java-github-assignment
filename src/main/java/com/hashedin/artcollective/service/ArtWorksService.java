@@ -147,6 +147,7 @@ public class ArtWorksService {
 					frameVariant.setFrameThickness(Double.parseDouble((variant.getOption2())));
 					frameVariant.setMountThickness(Double.parseDouble((variant.getOption3())));
 				}
+				frameVariant.setProductId(product.getId());
 				frameVariant.setUnitPrice(variant.getPrice());
 				frameVariant.setImgSrc(productImg.getImgSrc());
 				frameVariant.setFrameTitle(product.getTitle());
@@ -639,6 +640,22 @@ public class ArtWorksService {
 
 	private DateTime getLastRunTime() {
 		return syncLogRepository.getLastSynchronizeDate("artworks");
+	}
+
+	public void deleteProduct(Long productId) {
+		ArtWork art = artRepository.findOne(productId);
+		if (art != null) {
+			softDeleteArtwork(productId);
+		}
+		else {
+			frameRepository.softDeleteVariantsByProductId(productId);
+		}
+	}
+
+	private void softDeleteArtwork(Long productId) {
+		ArtWork artwork = artRepository.findOne(productId);
+		artwork.setDeleted(true);
+		artRepository.save(artwork);
 	}
 	
 }

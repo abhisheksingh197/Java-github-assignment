@@ -166,13 +166,28 @@ public class FollowingServiceTest extends BaseUnitTest{
 				.andExpect(method(HttpMethod.PUT))
 				.andRespond(withJson("put.json"));
 		
+		mockArtWorksService
+		.expect(requestTo(shopifyBaseUrl
+				+ "customers/338135042/metafields.json"))
+		.andExpect(method(HttpMethod.GET))
+		.andRespond(withJson("customer_338135041_metafields.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "customers/338135042/metafields/14234.json"))
+				.andExpect(method(HttpMethod.PUT))
+				.andRespond(withJson("put.json"));
+		
 		int removeResponse = followingService.toggleCollectionFollowedByCustomer(
-				338135041L, 26109780L, "subject");
+				338135041L, 26109780L, "subject", false);
 		
 		int addResponse = followingService.toggleCollectionFollowedByCustomer(
-				338135042L, 26109780L, "subject");
+				338135042L, 26109780L, "subject", true);
 		
-		assertEquals(removeResponse, 2);
+		addResponse = followingService.toggleCollectionFollowedByCustomer(
+				338135042L, 26109780L, "subject", true);
+		
+		assertEquals(removeResponse, 1);
 		assertEquals(addResponse, 1);
 	}
 	

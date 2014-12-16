@@ -18,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +37,7 @@ import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtworkVariantRepository;
+import com.hashedin.artcollective.repository.FulfilledOrderRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 import com.hashedin.artcollective.repository.SizeBucketRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
@@ -54,6 +56,7 @@ import com.hashedin.artcollective.service.Style;
 import com.hashedin.artcollective.service.Subject;
 import com.hashedin.artcollective.service.TinEyeService;
 import com.hashedin.artcollective.service.TransactionsService;
+import com.hashedin.artcollective.service.WebHookResponse;
 import com.hashedin.artcollective.utils.ProductSize;
 
 @RestController
@@ -109,6 +112,9 @@ public class ProductsAPI {
 	
 	@Autowired
 	private FollowingService followingService;
+	
+	@Autowired
+	private FulfilledOrderRepository fulfilledOrderRepository;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
@@ -213,6 +219,35 @@ public class ProductsAPI {
 		
 	}
 	
+	/*
+	 * Adding POST API requests for supporting WebHooks from Shopify that helps us
+	 * handle Auto-Synchronization, and Deletion of products on Shopify.  
+	 */
+	@RequestMapping(value = "/api/shopify/webhook", method = RequestMethod.POST)
+	public void shopifyWebHookhandling(
+			@RequestParam(value = "event", required = true) String event,
+			@RequestBody WebHookResponse webHookResponse) {
+		String productType = webHookResponse.getProductType() != null 
+				? webHookResponse.getProductType() : "orders";
+		Long productId = webHookResponse.getId();
+		if (event.equalsIgnoreCase("update") || event.equalsIgnoreCase("create")) {
+			LOGGER.info("Web Hook Update Started");
+			if (productType.equalsIgnoreCase("orders")) {
+				ordersService.synchronize(null);
+			}
+			else if (productType.equalsIgnoreCase("artworks") 
+					|| productType.equalsIgnoreCase("frames") 
+					|| productType.equalsIgnoreCase("canvas")) {
+				artworkService.synchronize(null);
+			}
+			LOGGER.info("Web Hook Update Completed");
+		}
+		else if (event.equalsIgnoreCase("delete")) {
+			LOGGER.info("Web Hook Delete Started");
+				artworkService.deleteProduct(productId);
+			LOGGER.info("Web Hook Delete Completed");
+		}
+	}
 	
 	// Search Artworks based on criteria
 	//CHECKSTYLE:OFF
@@ -421,9 +456,11 @@ public class ProductsAPI {
 	public Integer updateCustomerFollowingCollection(
 			@RequestParam(value = "customerId", required = true)Long customerId, 
 			@RequestParam(value = "collectionId", required = true)Long collectionId,
-			@RequestParam(value = "collectionType", required = true)String collectionType) {
+			@RequestParam(value = "collectionType", required = true)String collectionType,
+			@RequestParam(value = "setFollow", required = true)Boolean setfollow) {
 		
-		return followingService.toggleCollectionFollowedByCustomer(customerId, collectionId, collectionType);
+		return followingService.toggleCollectionFollowedByCustomer(customerId, 
+				collectionId, collectionType, setfollow);
 	};
 	
 	@RequestMapping(value = "/api/customer/recomended", method = RequestMethod.GET)

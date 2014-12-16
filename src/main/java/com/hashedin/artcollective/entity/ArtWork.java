@@ -67,6 +67,7 @@ public class ArtWork implements Serializable {
 	private double minPrice;
 	private double maxPrice;
 	private int variantCount;
+	private Boolean deleted = false;
 	
 	public ArtWork() {
 		this.isCanvasAvailable = false;
@@ -144,6 +145,14 @@ public class ArtWork implements Serializable {
 	public void setVariantCount(int variantCount) {
 		this.variantCount = variantCount;
 	}
+	public Boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
 	public Long getId() {
 		return id;
 	}
