@@ -134,7 +134,7 @@
 								<p>
 									Art Collective’s mission is to make Indian art accessible to anyone with an Internet connection.
 									<br />
-									We are dedicated to taking Indian art & Indian artists to people across the globe. Our growing collection
+									We are dedicated to taking Indian art &amp; Indian artists to people across the globe. Our growing collection
 									<br />
 									comprises 600+ artworks by 100+ renowned, young and upcoming Indian artists 
 								</p>
@@ -170,7 +170,7 @@
 								<p>
 									Art Collective’s mission is to make Indian art accessible to anyone with an Internet connection.
 									<br />
-									We are dedicated to taking Indian art & Indian artists to people across the globe. Our growing collection
+									We are dedicated to taking Indian art &amp; Indian artists to people across the globe. Our growing collection
 									<br />
 									comprises 600+ artworks by 100+ renowned, young and upcoming Indian artists 
 								</p>
@@ -206,7 +206,7 @@
 								<p>
 									Art Collective’s mission is to make Indian art accessible to anyone with an Internet connection.
 									<br />
-									We are dedicated to taking Indian art & Indian artists to people across the globe. Our growing collection
+									We are dedicated to taking Indian art &amp; Indian artists to people across the globe. Our growing collection
 									<br />
 									comprises 600+ artworks by 100+ renowned, young and upcoming Indian artists 
 								</p>
@@ -297,7 +297,7 @@ As a family, Amit and Meenu share a common goal – one to inspire Indians throu
 								</div>
 								<div class="signature-block">
 									
-									<h5>Meenu & Amit Jaipuria</h5>
+									<h5>Meenu &amp; Amit Jaipuria</h5>
 									
 								</div>
 							</div>
