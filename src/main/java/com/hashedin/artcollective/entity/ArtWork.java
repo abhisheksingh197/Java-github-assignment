@@ -67,7 +67,8 @@ public class ArtWork implements Serializable {
 	private double minPrice;
 	private double maxPrice;
 	private int variantCount;
-	private Boolean deleted = false;
+	@Column(name = "deleted", nullable = false, columnDefinition = "boolean default false")
+	private Boolean deleted;
 	
 	public ArtWork() {
 		this.isCanvasAvailable = false;

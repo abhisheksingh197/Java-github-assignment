@@ -1,5 +1,6 @@
 package com.hashedin.artcollective.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -17,7 +18,8 @@ public class FrameVariant {
 	private Double frameBreadth;
 	private Double unitPrice;
 	private String frameTitle;
-	private Boolean deleted = false;
+	@Column(name = "deleted", nullable = false, columnDefinition = "boolean default false")
+	private Boolean deleted;
 	
 	public Boolean isDeleted() {
 		return deleted;
