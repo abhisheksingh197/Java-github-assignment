@@ -151,6 +151,7 @@ public class ArtWorksService {
 				frameVariant.setUnitPrice(variant.getPrice());
 				frameVariant.setImgSrc(productImg.getImgSrc());
 				frameVariant.setFrameTitle(product.getTitle());
+				frameVariant.setDeleted(false);
 				frameVariants.add(frameVariant);
 			}
 			
@@ -311,6 +312,7 @@ public class ArtWorksService {
 			List<ArtworkVariant> artworkVariants = getArtworkVariants(artwork, p.getVariants());
 			artworkVariantRepository.save(artworkVariants);
 			artwork.setVariants(artworkVariants);
+			artwork.setDeleted(false);
 			Image image = resizeFeaturedImage(p, metafields, p.getImages(), p.getImage());
 			if (image != null) {
 				List<Image> images = p.getImages();

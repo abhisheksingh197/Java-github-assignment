@@ -122,14 +122,16 @@ public class FollowingService {
 			String[] collectionIdsInMetafield = metafield.getValue().split(",");
 			String id = collectionId.toString();
 			List<String> updatedValues = new ArrayList<>();
+			if (!metafield.getValue().contains(id) && setFollow) {
+				updatedValues.add(id);
+			}
 			for (String value : collectionIdsInMetafield) {
-				
-				if (!value.equalsIgnoreCase(id)) {
+				if (!value.equalsIgnoreCase(id) && !value.equalsIgnoreCase("0")) {
 					updatedValues.add(value);
 				}
-			}
-			if ((!metafield.getValue().contains(id)) && setFollow) {
-				updatedValues.add(id);
+				else if (setFollow && !value.equalsIgnoreCase("0")) {
+					updatedValues.add(value);
+				}
 			}
 			if (updatedValues.size() == 0) {
 				updatedValues.add("0");

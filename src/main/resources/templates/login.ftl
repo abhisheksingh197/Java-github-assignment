@@ -132,13 +132,11 @@
 							<div class="about-site">
 								<h2>Art Collective</h2>
 								<p>
-									Art Collective’s mission is to make all the world’s art accessible to anyone with an Internet connection.
+									Art Collective’s mission is to make Indian art accessible to anyone with an Internet connection.
 									<br />
-									We are an online platform for discovering, learning about, and collecting art. Our growing collection
+									We are dedicated to taking Indian art &amp; Indian artists to people across the globe. Our growing collection
 									<br />
-									comprises 140,000+ artworks by 25,000+ artists from leading art fairs, galleries, museums, and art
-									<br />
-									institutions. Artsy provides one of the largest collections of contemporary art available online.
+									comprises 600+ artworks by 100+ renowned, young and upcoming Indian artists 
 								</p>
 								<div class="quick-links clearfix">
 									<ul class="clearfix">
@@ -170,13 +168,11 @@
 							<div class="about-site">
 								<h2>Art Collective</h2>
 								<p>
-									Art Collective’s mission is to make all the world’s art accessible to anyone with an Internet connection.
+									Art Collective’s mission is to make Indian art accessible to anyone with an Internet connection.
 									<br />
-									We are an online platform for discovering, learning about, and collecting art. Our growing collection
+									We are dedicated to taking Indian art &amp; Indian artists to people across the globe. Our growing collection
 									<br />
-									comprises 140,000+ artworks by 25,000+ artists from leading art fairs, galleries, museums, and art
-									<br />
-									institutions. Artsy provides one of the largest collections of contemporary art available online.
+									comprises 600+ artworks by 100+ renowned, young and upcoming Indian artists 
 								</p>
 								<div class="quick-links clearfix">
 									<ul class="clearfix">
@@ -208,13 +204,11 @@
 							<div class="about-site">
 								<h2>Art Collective</h2>
 								<p>
-									Art Collective’s mission is to make all the world’s art accessible to anyone with an Internet connection.
+									Art Collective’s mission is to make Indian art accessible to anyone with an Internet connection.
 									<br />
-									We are an online platform for discovering, learning about, and collecting art. Our growing collection
+									We are dedicated to taking Indian art &amp; Indian artists to people across the globe. Our growing collection
 									<br />
-									comprises 140,000+ artworks by 25,000+ artists from leading art fairs, galleries, museums, and art
-									<br />
-									institutions. Artsy provides one of the largest collections of contemporary art available online.
+									comprises 600+ artworks by 100+ renowned, young and upcoming Indian artists 
 								</p>
 								<div class="quick-links clearfix">
 									<ul class="clearfix">
@@ -259,15 +253,11 @@
 									<li>
 										<a href="#">about</a>
 									</li>
-									<li>
-										<a href="#">customers</a>
-									</li>
+									
 									<li>
 										<a href="#">testimonials</a>
 									</li>
-									<li>
-										<a href="#">partners</a>
-									</li>
+									
 
 								</ul>
 							</nav>
@@ -287,58 +277,33 @@
 							<div class="page">
 								<h3>&nbsp;&nbsp;&nbsp;About Art Collectives&nbsp;&nbsp;&nbsp;</h3>
 								<p>
-									It is a long established fact that a reader will be distracted by the
-									readable content of a page when looking at its layout.
+									ArtCollective was started in 2014 to create a new art product for young aspirational Indians and businesses looking to elevate their homes and office spaces with Indian art. The company’s vision is to reach Indian art and art images to the masses through an affordable art platform and Giclee art prints.
 								</p>
 								<div class="site-content clearfix">
 								<div class="about-content">
 									<p>
-										Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
-										 it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially 
-										 unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-										  publishing software like Aldus PageMaker includingversions of Lorem Ipsum. experience with us.Lorem Ipsum has been the industry's standard dummy
-										   text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a</p>
+									The ArtCollective platform was conceptualized by Meenu and Amit Jaipuria; promoters with a rich background in Indian Art.
+
+Meenu Jaipuria founded the Mahua Art Gallery in 2002 with a vision to promote contemporary Indian art and culture. She also founded the Mahua Art Foundation to organize events to promote the awareness of India’s rich culture and heritage. Mahua Art Gallery is today one of the leading Indian art galleries in Bangalore and the Mahua Art Foundation has held over 60 events and hosted art luminaries such as Padmashree winner Dr. BN Goswamy. Meenu has been brought up surrounded by art in the family and she shares the vision of her father, Dr. HK Kejriwal, in finding new ways to reach Indian art and art awareness to the masses.
+
+Dr. Kejriwal, Meenu’s father is one of India’s leading art patrons and collectors. He is the co-founder and vice-president at Chitra Kala Parishad (CKP), Bangalore’s most prestigious art institute. He has gifted part of his personal collection to the 20,000 sqft HK Kejriwal museum that is housed at the CKP. His donations includes works of renowned artists such as Ramkinkar Baij, Rabindranath Tagore, Amrita Sher Gil, S H Raza, Jamini Roy, MF Hussain, among others. Dr. Kejriwal’s vision has always been to promote Indian art and make artworks accessible to the masses.</p>
 								</div>
 								<div class="about-content">
 									<p>
-										Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
-										 it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially 
-										 unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-										  publishing software like Aldus PageMaker includingversions of Lorem Ipsum. experience with us.Lorem Ipsum has been the industry's standard dummy
-										   text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a</p>
+										Amit Jaipuria is a 3rd generation art enthusiast and technology entrepreneur. Having launched multiple retail and IT startups over the last 15 years and authored critical patents related to social networking technologies, Amit uses IT and software products to develop innovative technologies that help people in their daily lives. Amit shares the family’s belief that great art should be accessible to all and believes that technology will be the next big medium that will transform the art industry.
+
+As a family, Amit and Meenu share a common goal – one to inspire Indians through the creations of Indian artists and artworks and make affordable and within reach of more Indians.</p>
 								</div>
 								</div>
 								<div class="signature-block">
-									<img src="/assets/images/signature.png" alt="CEO Sign" height="79" width="150" />
-									<h5>john doe</h5>
-									<h5>ceo</h5>
+									
+									<h5>Meenu &amp; Amit Jaipuria</h5>
+									
 								</div>
 							</div>
 						</section>
 					</div>
-					<div class="content-block">
-						<section class="featured-section customer-section">
-							<div class="page">
-								<h3>&nbsp;&nbsp;&nbsp;Customers&nbsp;&nbsp;&nbsp;</h3>
-								<div class="features">
-									<ul class="clearfix">
-										<li>
-											<a href="#"><img src="/assets/images/chican-logo.png" alt="Chican Logo" height="47" width="188" /></a>
-										</li>
-										<li>
-											<a href="#"><img src="/assets/images/nashville-logo.png" alt="Chican Logo" height="47" width="163" /></a>
-										</li>
-										<li>
-											<a href="#"><img src="/assets/images/magazine-logo.png" alt="Chican Logo" height="47" width="190" /></a>
-										</li>
-										<li>
-											<a href="#"><img src="/assets/images/darling-logo.png" alt="Chican Logo" height="47" width="143" /></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</section>
-					</div>
+					
 					<div class="content-block">
 						<section class="testimonial-section">
 							<div class="page clearfix">
@@ -346,50 +311,38 @@
 								<ul class="bxslider">
 									<li>
 										<div class="msg clearfix">
-											<img src="/assets/images/writer-img.png" alt="writer-image" class="pic" height="128" width="128"/>
+											
 											<div class="text-msg">
 												<span>“</span>
 												<blockquote cite="#">
-													Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ullamcorper nisi metus, a pellentesque nibh porta id. Vestibulum nulla mi, commodo sit amet massa at, viverra mollis nisi. Nulla et cursus turpis.
+													I have sold my painting's print through art collective without any problems and their services have always been very transparent.  I am very happy to work with ArtCollective, and with Mahua Gallery, they are the best platform for young artists to showcase their talent and reach out to more people.
 												</blockquote>
 											</div>
 										</div>
 									</li>
 									<li>
 										<div class="msg clearfix">
-											<img src="/assets/images/writer-img.png" alt="writer-image" class="pic" height="128" width="128"/>
+											
 											<div class="text-msg">
 												<span>“</span>
 												<blockquote cite="#">
-													Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ullamcorper nisi metus, a pellentesque nibh porta id. Vestibulum nulla mi, commodo sit amet massa at, viverra mollis nisi. Nulla et cursus turpis.
+													ArtCollective has been transparent in their dealings with the artists. They encourage to do better and even small bit of information is shared on time. Like they inform me when my prints are up online and whenever I earn a commission. Updates are shared timely as well. All the best to the team.
+												</blockquote>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="msg clearfix">
+											
+											<div class="text-msg">
+												<span>“</span>
+												<blockquote cite="#">
+													I am very excited and happy to be part of India's first affordable art platform. I have never received such attention and appreciation for my work. Being a young artist, it is very encouraging to see such people willing to help us out.
 												</blockquote>
 											</div>
 										</div>
 									</li>
 								</ul>
-							</div>
-						</section>
-					</div>
-					<div class="content-block last">
-						<section class="featured-section customer-section">
-							<div class="page">
-								<h3>&nbsp;&nbsp;&nbsp;Partners&nbsp;&nbsp;&nbsp;</h3>
-								<div class="features">
-									<ul class="clearfix">
-										<li>
-											<a href="#"><img src="/assets/images/chican-logo.png" alt="Chican Logo" height="47" width="188" /></a>
-										</li>
-										<li>
-											<a href="#"><img src="/assets/images/nashville-logo.png" alt="Chican Logo" height="47" width="163" /></a>
-										</li>
-										<li>
-											<a href="#"><img src="/assets/images/magazine-logo.png" alt="Chican Logo" height="47" width="190" /></a>
-										</li>
-										<li>
-											<a href="#"><img src="/assets/images/darling-logo.png" alt="Chican Logo" height="47" width="143" /></a>
-										</li>
-									</ul>
-								</div>
 							</div>
 						</section>
 					</div>
@@ -401,12 +354,9 @@
 							<nav class="footer-nav">
 								<ul>
 									<li>
-										<a href="#" title="privacy">PRIVACY POLICY</a>
+										© 2014 ArtCollective India Pvt. Ltd.
 									</li>
-									<li>|</li>
-									<li>
-										<a href="#" title="privacy">TERMS &amp; CONDITIONS</a>
-									</li>
+									
 								</ul>
 							</nav>
 						</div>
