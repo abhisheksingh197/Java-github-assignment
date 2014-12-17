@@ -117,6 +117,7 @@ public class ArtWorksServiceMockitoTest extends BaseUnitTest {
 			art.setSizeBuckets(sizeBuckets);
 			art.setMedium("canvas");
 			art.setOrientation("landscape");
+			art.setDeleted(false);
 			artworks.add(art);
 			idCount++;
 		}
