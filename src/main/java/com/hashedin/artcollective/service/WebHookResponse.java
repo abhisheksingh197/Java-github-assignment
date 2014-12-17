@@ -1,6 +1,7 @@
 package com.hashedin.artcollective.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WebHookResponse {
@@ -19,7 +20,7 @@ public class WebHookResponse {
 	public String getProductType() {
 		return productType;
 	}
-
+	@JsonSetter("product_type")
 	public void setProductType(String productType) {
 		this.productType = productType;
 	}
