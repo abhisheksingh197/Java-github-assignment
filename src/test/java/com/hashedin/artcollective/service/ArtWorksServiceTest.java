@@ -18,6 +18,7 @@ import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.ArtCollection;
 import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.Artist;
+import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.entity.SizeBucket;
@@ -25,6 +26,7 @@ import com.hashedin.artcollective.repository.ArtCollectionsRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
 import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtistRepository;
+import com.hashedin.artcollective.repository.FrameVariantRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
 import com.hashedin.artcollective.utils.SynchronizeSetup;
 
@@ -73,6 +75,9 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	
 	@Autowired
 	private ArtCollectionsRepository artCollectionRepository;
+	
+	@Autowired
+	private FrameVariantRepository frameVariantRepository;
 	
 	@Before
 	public void setup() {
@@ -130,9 +135,9 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		String[] colorsList = new String[2];
 		colorsList[0] = "FFFFFF";
 		List<String> priceBucketRangeList = new ArrayList<>();
-		priceBucketRangeList.add("1");
+		priceBucketRangeList.add("3");
 		List<String> sizeBucketRangeList = new ArrayList<>();
-		sizeBucketRangeList.add("1");
+		sizeBucketRangeList.add("3");
 		String medium = "paper";
 		String orientation = "landscape";
 		int offset = 0;
@@ -183,7 +188,13 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				sizeBucketRangeList,
 				limit,
 				offset);
-		assertEquals(searchResponse.getArtworks().size(), artRepository.count());
+		int totalArtsCount = 0;
+		for (ArtWork art : artRepository.findAll()) {
+			if (art.isDeleted() == false) {
+				totalArtsCount++;
+			}
+		}
+		assertEquals(searchResponse.getArtworks().size(), totalArtsCount);
 	}
 	
 	@Test
@@ -255,9 +266,9 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		String[] colorsList = new String[2];
 		colorsList[0] = "FFFFFF";
 		List<String> priceBucketRangeList = new ArrayList<>();
-		priceBucketRangeList.add("1");
+		priceBucketRangeList.add("3");
 		List<String> sizeBucketRangeList = new ArrayList<>();
-		sizeBucketRangeList.add("1");
+		sizeBucketRangeList.add("3");
 		String medium = "paper";
 		String orientation = "landscape";
 		int offset = 0;
@@ -274,7 +285,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				offset);
 		ArtWork firstArtWork = searchResponse.getArtworks().get(0);
 		long artID = firstArtWork.getId();
-		assertEquals(artID, 504096747);
+		assertEquals(artID, 505096747);
 	}
 
 	@Test 
@@ -311,7 +322,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 				limit,
 				offset);
 		long artID = searchResponse.getArtworks().get(0).getId();
-		assertEquals(artID, 504096747);
+		assertEquals(artID, 506096747);
 	}
 	
 	
@@ -366,6 +377,16 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	public void testForMultiWordCollectionName() {
 		ArtCollection collection = artCollectionRepository.findOne(678911L);
 		assertEquals(collection.getTitle(), "independence day special");
+	}
+	
+	@Test
+	public void testForProductDelete() {
+		long pid = 504096747;
+		List<ArtWork> artworks = (List<ArtWork>) artRepository.findAll();
+		assertEquals(artworks.get(0).isDeleted(), false);
+		pid = artworks.get(0).getId();
+		service.deleteProduct(pid);
+		assertEquals(artRepository.findOne(pid).isDeleted(), true);
 	}
 
 }

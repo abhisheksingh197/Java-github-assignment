@@ -9,6 +9,7 @@ public class FrameVariant {
 	@Id
 	private Long id;
 	private Long skuId;
+	private Long productId;
 	private String handle;
 	private Double mountThickness;
 	private Double frameThickness;
@@ -16,7 +17,14 @@ public class FrameVariant {
 	private Double frameBreadth;
 	private Double unitPrice;
 	private String frameTitle;
+	private Boolean deleted = false;
 	
+	public Boolean isDeleted() {
+		return deleted;
+	}
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
 	public String getFrameTitle() {
 		return frameTitle;
 	}
@@ -47,6 +55,12 @@ public class FrameVariant {
 	}
 	public void setSkuId(Long skuId) {
 		this.skuId = skuId;
+	}
+	public Long getProductId() {
+		return productId;
+	}
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 	public String getHandle() {
 		return handle;

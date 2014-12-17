@@ -47,7 +47,7 @@ public class FrameVariantService {
 			Long frameVariantId, String type) {
 		FrameVariant frameVariant = frameRepository.findOne(frameVariantId);
 		ArtworkVariant artworkVariant = artworkVariantRepository.findOne(productVariantId);
-		if (artworkVariant != null && frameVariant != null) {
+		if (artworkVariant != null && frameVariant != null && !frameVariant.isDeleted()) {
 			ProductSize productSize = new ProductSize(artworkVariant);
 			Double productPrice = 0.0;
 			if (type.equalsIgnoreCase("frames")) {
@@ -70,7 +70,7 @@ public class FrameVariantService {
 	public Double getCanvasPrice(Double productLength, Double productBreadth,
 			long frameVariantId) {
 		FrameVariant frameVariant = frameRepository.findOne(frameVariantId);
-		if (frameVariant != null) {
+		if (frameVariant != null && !frameVariant.isDeleted()) {
 			Long runningFeetForLength = Math.round((productLength / INCHES_PER_FEET) * 2) / 2;
 			Long runningFeetForBreadth = Math.round((productBreadth / INCHES_PER_FEET) * 2) / 2;
 			Double canvasCost = ((runningFeetForLength * 2) + (runningFeetForBreadth * 2)) 

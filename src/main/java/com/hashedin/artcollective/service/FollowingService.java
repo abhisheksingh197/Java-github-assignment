@@ -100,7 +100,7 @@ public class FollowingService {
 	}
 
 	public Integer toggleCollectionFollowedByCustomer(Long customerId,
-			Long collectionId, String collectionType) {
+			Long collectionId, String collectionType, Boolean setFollow) {
 		Integer response = 0;
 		List<MetaField> metafields = shopifyService.getMetaFieldsByKeyType(
 				"customers", customerId, "followings", collectionType);
@@ -128,12 +128,8 @@ public class FollowingService {
 					updatedValues.add(value);
 				}
 			}
-			if (!metafield.getValue().contains(id)) {
+			if ((!metafield.getValue().contains(id)) && setFollow) {
 				updatedValues.add(id);
-				response = 1;
-			}
-			else {
-				response = 2;
 			}
 			if (updatedValues.size() == 0) {
 				updatedValues.add("0");
@@ -142,6 +138,7 @@ public class FollowingService {
 			updatedValues.toArray(values);
 			shopifyService.updateMetafield("customers", String.valueOf(customerId), 
 						(String[]) values, metafield.getId());
+			response = 1;
 		}
 		return response;
 	}

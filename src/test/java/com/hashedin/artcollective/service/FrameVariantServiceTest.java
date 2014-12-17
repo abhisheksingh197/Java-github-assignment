@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.FrameVariant;
+import com.hashedin.artcollective.repository.FrameVariantRepository;
 import com.hashedin.artcollective.utils.SynchronizeSetup;
 
 public class FrameVariantServiceTest extends BaseUnitTest {
@@ -32,6 +33,9 @@ public class FrameVariantServiceTest extends BaseUnitTest {
 	
 	@Autowired
 	private SynchronizeSetup synchronizeSetup;
+	
+	@Autowired
+	private FrameVariantRepository frameVariantRepository;
 	
 	private static boolean isInitialized = false;
 	
@@ -67,6 +71,10 @@ public class FrameVariantServiceTest extends BaseUnitTest {
 		long canvasVariantId = 934449115L;
 		double canvasPrice = frameVariantService.getCanvasPrice(12.00, 16.00, canvasVariantId);
 		assertEquals(canvasPrice, 320.00, 0.1);
+		long pid = frameVariantRepository.findOne(canvasVariantId).getProductId();
+		artWorksService.deleteProduct(pid);
+		Object nullCanvasPrice = frameVariantService.getCanvasPrice(12.00, 16.00, canvasVariantId);
+		assertEquals(nullCanvasPrice, null);
 	}
 	
 	@Test
@@ -96,6 +104,23 @@ public class FrameVariantServiceTest extends BaseUnitTest {
 		assertEquals(frameProduct.getProductType(), "dynamic");
 		assertEquals(canvasProduct.getProductType(), "dynamic");
 		
+	}
+	
+	@Test
+	public void testForDeletingFrameProduct() {
+		List<FrameVariant> variants = (List<FrameVariant>) frameVariantRepository.findAll();
+		assertEquals(variants.get(0).isDeleted(), false);
+		long pid = variants.get(0).getProductId();
+		artWorksService.deleteProduct(pid);
+		assertEquals(frameVariantRepository.findOne(796611812L).isDeleted(), true);
+		List<Frame> tempFrames = new ArrayList<>();
+		List<FrameVariant> frameVariants = frameVariantService.getFrames(4.0, 3.0);
+		for (FrameVariant frameVariant : frameVariants) {
+			Frame frame = new Frame(frameVariant);
+			frame.setFramePrice(frameVariantService.getFramePrice(12.00, 16.00, frameVariant));
+			tempFrames.add(frame);
+		}
+		assertEquals(tempFrames.size(), 0);
 	}
 	
 }
