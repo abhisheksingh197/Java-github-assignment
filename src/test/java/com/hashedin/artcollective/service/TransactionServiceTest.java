@@ -42,7 +42,7 @@ public class TransactionServiceTest extends BaseUnitTest{
 		csvReader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("transactions.csv"));
 		errors.addAll(transactionService.saveTransactionsInBulk(csvReader));
 		assertEquals(errors.size(), 9);
-		assertEquals(transactionRepository.count(), 1);
+		assertEquals(transactionRepository.count(), 4);
 	}
 
 }
