@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +13,9 @@ import javax.persistence.PrePersist;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.hashedin.artcollective.repository.LeadRepositoryListener;
+
+@EntityListeners(value = {LeadRepositoryListener.class })
 @Entity
 public class Lead implements Serializable {
 
@@ -29,6 +33,13 @@ public class Lead implements Serializable {
 	private String message;
 	private String source;
 	
+	@Override
+	public String toString() {
+		return "Lead [id=" + id + ", createdAt=" + createdAt + ", name=" + name
+				+ ", email=" + email + ", phoneNumber=" + phoneNumber
+				+ ", message=" + message + ", source=" + source + "]";
+	}
+
 	@PrePersist
 	void preInsert() {
 	   createdAt = new DateTime();

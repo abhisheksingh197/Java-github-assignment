@@ -16,6 +16,7 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -73,8 +74,10 @@ public class EmailHelper implements InitializingBean {
 		
 	}
 	
-	public void sendEmailOnNewContact(Lead lead) {
-		sendEmail(toEmailOnNewLead,
+	public static void sendEmailOnNewContact(Lead lead) {
+		ApplicationContext context = ApplicationContextProvider.getApplicationContext();
+		EmailHelper emailHelper = context.getBean(EmailHelper.class);
+		emailHelper.sendEmail(emailHelper.toEmailOnNewLead,
 				String.format("%s : New Lead - %s", lead.getSource(), lead.getName()),
 				"email/newlead.ftl", Collections.singletonMap("lead", lead));
     }
