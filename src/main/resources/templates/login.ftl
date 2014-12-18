@@ -32,7 +32,7 @@
 							<input type="text" name="username" value="" />
 							<label>Password:</label>
 							<input type="password" name="password" value="" class="second"/>
-							<a class="forgot-password" href="/contact-admin">Forgot Password?</a>
+							<a class="forgot-password" href="javascript:void(0);">Forgot Password?</a>
 							<input type="submit" value="sign in" />
 						</form>
 					</div>
@@ -112,14 +112,15 @@
 						</a>
 					</div>
 				</div>
-				<div class="popup-reset">
+				<div class="popup-reset" onsubmit="return makeRequest(this);">
 					<i class="icon-close close-popup">&nbsp;</i>
 					<h3>reset password</h3>
-					<form>
+					<form id="resetForm">
 						<label>Email:</label>
-						<input type="text" name="email">
+						<input type="text" name="email" onchange="validateText();">
 						<input class="btn" type="submit" value="reset">
 					</form>
+					<p id="reset-message" class="message-error" data-valid="false"></p>
 				</div>
 								
 				</div>
@@ -375,5 +376,6 @@ As a family, Amit and Meenu share a common goal – one to inspire Indians throu
 		<script type="text/javascript" src="/assets/js/jquery.selectbox-0.2.js"></script>
 		<script type="text/javascript" src="/assets/js/jquery.bxslider.js"></script>
 		<script type="text/javascript" src="/assets/js/site.js"></script>
+		<script type="text/javascript" src="/assets/js/login.js"></script>
 	</body>
 </html>

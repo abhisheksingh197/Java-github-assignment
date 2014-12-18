@@ -2870,6 +2870,11 @@ ul.category-spl li {
 /*
  * 10.) Artist Landing
  */
+.message-error {
+	text-align: center;
+	color: red;
+	padding-top: 11px;
+}
 .about-site {
 	left: 166px;
 	position: absolute;
