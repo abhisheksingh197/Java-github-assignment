@@ -470,15 +470,15 @@ public class ProductsAPI {
 			@RequestParam(value = "offset", required = true) Integer offset) {
 		CriteriaSearchResponse searchResponse = preferenceService
 				.getRecomendedArtworksForCustomer(customerId, limit, offset);
+
 		Map<String, Object> wrapResponse = wrapResponse(searchResponse);
-		
 		if (customerId != null) { 
-			Map<Long, Boolean>	favouriteMap = shopifyService.getFavProductsMap(customerId);
+			Map<Long, Boolean> favouriteMap = shopifyService.getFavProductsMap(customerId);
 			if (favouriteMap.size() > 0) {
 				wrapResponse.put("favProductIdMap", favouriteMap);
 			}
 		} 
-		
+
 		return wrapResponse;
 	}
 	
