@@ -171,9 +171,9 @@
 								<p>
 									Art Collective’s mission is to make Indian art accessible to anyone with an Internet connection.
 									<br />
-									We are dedicated to taking Indian art &amp; Indian artists to people across the globe. Our growing collection
+									We are dedicated to taking Indian art &amp; Indian artists to people across the globe. 
 									<br />
-									comprises 600+ artworks by 100+ renowned, young and upcoming Indian artists 
+									Our growing collection comprises 600+ artworks by 100+ renowned, young and upcoming Indian artists 
 								</p>
 								<div class="quick-links clearfix">
 									<ul class="clearfix">
@@ -207,9 +207,9 @@
 								<p>
 									Art Collective’s mission is to make Indian art accessible to anyone with an Internet connection.
 									<br />
-									We are dedicated to taking Indian art &amp; Indian artists to people across the globe. Our growing collection
+									We are dedicated to taking Indian art &amp; Indian artists to people across the globe. 
 									<br />
-									comprises 600+ artworks by 100+ renowned, young and upcoming Indian artists 
+									Our growing collection comprises 600+ artworks by 100+ renowned, young and upcoming Indian artists 
 								</p>
 								<div class="quick-links clearfix">
 									<ul class="clearfix">
