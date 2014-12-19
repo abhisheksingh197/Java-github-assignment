@@ -276,7 +276,7 @@
 					<div class="content-block">
 						<section class="about-art-collective">
 							<div class="page">
-								<h3>&nbsp;&nbsp;&nbsp;About Art Collectives&nbsp;&nbsp;&nbsp;</h3>
+								<h3>&nbsp;&nbsp;&nbsp;About Art Collective&nbsp;&nbsp;&nbsp;</h3>
 								<p>
 									ArtCollective was started in 2014 to create a new art product for young aspirational Indians and businesses looking to elevate their homes and office spaces with Indian art. The company’s vision is to reach Indian art and art images to the masses through an affordable art platform and Giclee art prints.
 								</p>
@@ -293,7 +293,7 @@ Dr. Kejriwal, Meenu’s father is one of India’s leading art patrons and colle
 									<p>
 										Amit Jaipuria is a 3rd generation art enthusiast and technology entrepreneur. Having launched multiple retail and IT startups over the last 15 years and authored critical patents related to social networking technologies, Amit uses IT and software products to develop innovative technologies that help people in their daily lives. Amit shares the family’s belief that great art should be accessible to all and believes that technology will be the next big medium that will transform the art industry.
 
-As a family, Amit and Meenu share a common goal – one to inspire Indians through the creations of Indian artists and artworks and make affordable and within reach of more Indians.</p>
+As a family, Amit and Meenu share a common goal – one to inspire Indians through the creations of Indian artists and artworks and bring them within reach of more Indians.</p>
 								</div>
 								</div>
 								<div class="signature-block">
