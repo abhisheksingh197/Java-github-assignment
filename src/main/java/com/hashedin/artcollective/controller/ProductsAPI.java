@@ -15,10 +15,12 @@ import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +34,7 @@ import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.ArtworkVariant;
 import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.PriceBucket;
+import com.hashedin.artcollective.entity.ShopifyWebHook;
 import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.ArtStyleRepository;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
@@ -39,6 +42,7 @@ import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtworkVariantRepository;
 import com.hashedin.artcollective.repository.FulfilledOrderRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
+import com.hashedin.artcollective.repository.ShopifyWebHookRepository;
 import com.hashedin.artcollective.repository.SizeBucketRepository;
 import com.hashedin.artcollective.service.ArtWorksSearchService;
 import com.hashedin.artcollective.service.ArtWorksService;
@@ -115,6 +119,9 @@ public class ProductsAPI {
 	
 	@Autowired
 	private FulfilledOrderRepository fulfilledOrderRepository;
+	
+	@Autowired 
+	private ShopifyWebHookRepository shopifyWebHookRepository;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAPI.class);
 	
@@ -226,29 +233,47 @@ public class ProductsAPI {
 	@RequestMapping(value = "/api/shopify/webhook", method = RequestMethod.POST)
 	public void shopifyWebHookhandling(
 			@RequestParam(value = "event", required = true) String event,
-			@RequestBody WebHookResponse webHookResponse) {
+			@RequestBody WebHookResponse webHookResponse,
+			@RequestHeader(value = "X-Shopify-Hmac-Sha256") String webHookUniqueKey) {
+		if (webHookUniqueKey == null) {
+			return;
+		}
 		String productType = webHookResponse.getProductType() != null 
 				? webHookResponse.getProductType() : "orders";
 		Long productId = webHookResponse.getId();
-		if (event.equalsIgnoreCase("update") || event.equalsIgnoreCase("create")) {
-			LOGGER.info("Web Hook Update Started");
-			if (productType.equalsIgnoreCase("orders")) {
-				ordersService.synchronize(null);
+		if (!webHookExists(webHookUniqueKey, event, productType)) {
+			if (event.equalsIgnoreCase("update") || event.equalsIgnoreCase("create")) {
+				LOGGER.info("Web Hook Update Started");
+				if (productType.equalsIgnoreCase("orders")) {
+					ordersService.synchronize(null);
+				}
+				else if (productType.equalsIgnoreCase("artworks") 
+						|| productType.equalsIgnoreCase("frames") 
+						|| productType.equalsIgnoreCase("canvas")) {
+					artworkService.synchronize(null);
+				}
+				LOGGER.info("Web Hook Update Completed");
 			}
-			else if (productType.equalsIgnoreCase("artworks") 
-					|| productType.equalsIgnoreCase("frames") 
-					|| productType.equalsIgnoreCase("canvas")) {
-				artworkService.synchronize(null);
+			else if (event.equalsIgnoreCase("delete")) {
+				LOGGER.info("Web Hook Delete Started");
+					artworkService.deleteProduct(productId);
+				LOGGER.info("Web Hook Delete Completed");
 			}
-			LOGGER.info("Web Hook Update Completed");
 		}
-		else if (event.equalsIgnoreCase("delete")) {
-			LOGGER.info("Web Hook Delete Started");
-				artworkService.deleteProduct(productId);
-			LOGGER.info("Web Hook Delete Completed");
-		}
+		
 	}
 	
+	private boolean webHookExists(String webHookUniqueKey, String event, String productType) {
+		int webHookCount = shopifyWebHookRepository.getWebHookCountByUniqueKey(webHookUniqueKey);
+		if (webHookCount == 0) {
+			ShopifyWebHook webHook = new ShopifyWebHook(DateTime.now(), 
+					webHookUniqueKey, productType, event);
+			shopifyWebHookRepository.save(webHook);
+			return false;
+		}
+		return true;
+	}
+
 	// Search Artworks based on criteria
 	//CHECKSTYLE:OFF
 	@RequestMapping(value = "/api/artworks/search", method = RequestMethod.GET)
