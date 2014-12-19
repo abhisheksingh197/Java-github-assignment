@@ -9,7 +9,7 @@ import com.hashedin.artcollective.entity.ShopifyWebHook;
 public interface ShopifyWebHookRepository extends CrudRepository<ShopifyWebHook, Long> {
 
 	@Query("SELECT COUNT(*) FROM ShopifyWebHook webHook "
-			+ "WHERE webHook.requestUniqueId = :webHookUniqueKey")
-	int getWebHookCountByUniqueKey(@Param("webHookUniqueKey")String webHookUniqueKey);
+			+ "WHERE webHook.requestUniqueId = :requestUniqueId")
+	int getWebHookCountByUniqueKey(@Param("requestUniqueId")String requestUniqueId);
 
 }
