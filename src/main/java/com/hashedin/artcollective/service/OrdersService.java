@@ -3,8 +3,6 @@ package com.hashedin.artcollective.service;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +38,6 @@ public class OrdersService {
 	private ArtworkVariantRepository artworkVariantRepository;
 	
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(OrdersService.class);
 	
 	public List<Order> synchronize(String mode) {
 		

@@ -100,8 +100,8 @@ public class ArtWorksService {
 			DateTime syncStartTime = new DateTime();
 			List<ArtWork> arts = getArtWorksModifiedSince(lastRunTime);
 			if (arts.size() > 0) {
-				saveArtToInternalDatabase(arts);
 				saveArtToTinEye(arts);
+				saveArtToInternalDatabase(arts);
 			}
 			saveAddOnsModifiedSince(lastRunTime);
 			DateTime syncEndTime = new DateTime();
@@ -120,11 +120,11 @@ public class ArtWorksService {
 	public void saveAddOnsModifiedSince(DateTime lastRunTime) {
 		List<CustomCollection> addOnProducts = shopify.getAddOnProductsSinceLastModified(lastRunTime, "frames");
 		addOnProducts.addAll(shopify.getAddOnProductsSinceLastModified(lastRunTime, "canvas"));
+		List<FrameVariant> frameVariants = new ArrayList<>();
 		for (CustomCollection product : addOnProducts) {
-				List<FrameVariant> frameVariants = getFrameVariants(product);
-				frameRepository.save(frameVariants);	
+			frameVariants.addAll(getFrameVariants(product));
 		}
-		
+		frameRepository.save(frameVariants);
 	}
 	
 	private List<FrameVariant> getFrameVariants(CustomCollection product) {
@@ -162,8 +162,14 @@ public class ArtWorksService {
 
 	// Fetches Artworks from Shopify and saves as a saves a secondary to tineye.
 	private void saveArtToTinEye(List<ArtWork> arts) {
-			tineye.uploadArts(arts);
-			tineye.extractColors(arts);
+		List<ArtWork> nonExistingArts = new ArrayList<>();
+		for (ArtWork art : arts) {
+			if (artRepository.findOne(art.getId()) == null) {
+				nonExistingArts.add(art);
+			}
+		}
+		tineye.uploadArts(nonExistingArts);
+		tineye.extractColors(nonExistingArts);
 	}
 
 	// Saves the list of arts into the internal Database.
@@ -534,45 +540,23 @@ public class ArtWorksService {
 				new ByteArrayInputStream(artDetailsBos.toByteArray()), 
 					String.format("%s-artdetails.%s", p.getHandle(), format));
 		}
-		if (imageExistsWithPattern(images, "-artfinder")) {
-			Image image = new Image();
-			/*
-			 * TODO - Delete this block
-			 * Code was added to compute dimensions of existing images
-			 * After a few runs of synchronize, this block is pointless
-			 */
-			try {
-				image = getImageWithPattern(images, "-artfinder");
-				setImageDimensions(image);
-				return image;
-			} 
-			catch (Exception ioe) {
-				LOGGER.error(
-						"Error - setting image dimensions for Image id - "
-		 						+ image.getId(), ioe);
-			}
+		
+		if (!imageExistsWithPattern(images, "-artfinder")) {
+			BufferedImage resizedArtFinderImage = resizeImage(original, WIDTH_OF_ART_FINDER_IMAGE);
+			int resizedHeight = resizedArtFinderImage.getHeight();
+			int resizedWidth = resizedArtFinderImage.getWidth();
+			ByteArrayOutputStream artFinderBos = new ByteArrayOutputStream();
+			ImageIO.write(resizedArtFinderImage, format, artFinderBos);
 			
+			Image artFinderImage = shopify.uploadImage(p, 
+					new ByteArrayInputStream(artFinderBos.toByteArray()), 
+					String.format("%s-artfinder.%s", p.getHandle(), format));
+			artFinderImage.setHeight(resizedHeight);
+			artFinderImage.setWidth(resizedWidth);
+			return artFinderImage;
 		}
+		return null;
 		
-		
-		BufferedImage resizedArtFinderImage = resizeImage(original, WIDTH_OF_ART_FINDER_IMAGE);
-		int resizedHeight = resizedArtFinderImage.getHeight();
-		int resizedWidth = resizedArtFinderImage.getWidth();
-		ByteArrayOutputStream artFinderBos = new ByteArrayOutputStream();
-		ImageIO.write(resizedArtFinderImage, format, artFinderBos);
-		
-		Image artFinderImage = shopify.uploadImage(p, 
-				new ByteArrayInputStream(artFinderBos.toByteArray()), 
-				String.format("%s-artfinder.%s", p.getHandle(), format));
-		artFinderImage.setHeight(resizedHeight);
-		artFinderImage.setWidth(resizedWidth);
-		return artFinderImage;
-	}
-
-	private void setImageDimensions(final Image image) throws IOException {
-		BufferedImage original = ImageIO.read(new URL(image.getImgSrc()));
-		image.setWidth(original.getWidth());
-		image.setHeight(original.getHeight());
 	}
 
 	private Image getImageWithPattern(List<Image> images, String pattern) {

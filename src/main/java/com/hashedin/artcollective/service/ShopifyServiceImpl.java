@@ -287,8 +287,8 @@ public class ShopifyServiceImpl implements ShopifyService {
 					rest.put(put, entity);
 				} 
 				catch (URISyntaxException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOGGER.error("Error updating favorites for Customer: %d and Product: %d"
+							, customerId, productId);
 				}
 			}
 		} 
@@ -300,8 +300,8 @@ public class ShopifyServiceImpl implements ShopifyService {
 				rest.delete(delete);
 			} 
 			catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.error("Error updating favorites for Customer: %d and Product: %d"
+						, customerId, productId);
 			}
 		}
 			

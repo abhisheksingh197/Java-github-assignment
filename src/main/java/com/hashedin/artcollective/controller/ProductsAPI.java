@@ -138,6 +138,9 @@ public class ProductsAPI {
 	
 	}
 	
+	/*
+	 * API for uploading artist transactions as a Multipart CSV file.  
+	 */
 	@RequestMapping(value = "/api/upload/transactions", method = RequestMethod.POST)
     public List<String> transactionsCSVUpload(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
@@ -155,6 +158,9 @@ public class ProductsAPI {
         }
     }
 	
+	/*
+	 * API for uploading artist deductions as a Multipart CSV file.
+	 */
 	@RequestMapping(value = "/api/upload/deductions", method = RequestMethod.POST)
     public List<String> deductionsCSVUpload(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
@@ -173,25 +179,31 @@ public class ProductsAPI {
     }
 	
 	//Add Size Range Bucket
-		@RequestMapping(value = "/admin/sizeRange/add", method = RequestMethod.GET)
-		public void addSizeBucket(
-				@RequestParam(value = "id", required = true) Long id,
-				@RequestParam(value = "title", required = true) String title,
-				@RequestParam(value = "lowerValue", required = true) Double lowerRange,
-				@RequestParam(value = "upperValue", required = false) Double upperRange) {
-			SizeBucket sizeBucket = new SizeBucket(id, title, lowerRange, upperRange);
-			priceAndSizeBucketService.addSizeBucket(sizeBucket);
-			LOGGER.info("Price Bucket: " + sizeBucket.getTitle() + " Successfully Added");
-		
-		}
+	@RequestMapping(value = "/admin/sizeRange/add", method = RequestMethod.GET)
+	public void addSizeBucket(
+			@RequestParam(value = "id", required = true) Long id,
+			@RequestParam(value = "title", required = true) String title,
+			@RequestParam(value = "lowerValue", required = true) Double lowerRange,
+			@RequestParam(value = "upperValue", required = false) Double upperRange) {
+		SizeBucket sizeBucket = new SizeBucket(id, title, lowerRange, upperRange);
+		priceAndSizeBucketService.addSizeBucket(sizeBucket);
+		LOGGER.info("Price Bucket: " + sizeBucket.getTitle() + " Successfully Added");
 	
+	}
 	
+
+	/*
+	 * Fetching Price Bucket Ranges
+	 */
 	@RequestMapping(value = "/admin/priceRange/getall", method = RequestMethod.GET)
 	public List<PriceBucket> getAllPriceBuckets() {
 		
 		return (List<PriceBucket>) priceBucketRepository.findAll();
 	}
 	
+	/*
+	 * Fetching Size Bucket Ranges
+	 */
 	@RequestMapping(value = "/admin/sizeRange/getall", method = RequestMethod.GET)
 	public List<SizeBucket> getAllSizeBuckets() {
 		
@@ -263,6 +275,11 @@ public class ProductsAPI {
 		
 	}
 	
+	/*
+	 * Helper method to check if a requesting WebHook is already processed. Returns false
+	 * if it does not exist and creates a new WebHook entry into the DB by 
+	 * Shopify unique WebHook id else returns true.    
+	 */
 	private boolean webHookExists(String webHookUniqueKey, String event, String productType) {
 		int webHookCount = shopifyWebHookRepository.getWebHookCountByUniqueKey(webHookUniqueKey);
 		if (webHookCount == 0) {
@@ -357,6 +374,11 @@ public class ProductsAPI {
 		return map;
 	}
 	
+	/*
+	 * Returns Frames that match the specified length, breadth, mount thickness 
+	 * and frame thickness. Used at Art Details page for fetching matching frames for an 
+	 * artwork variant
+	 */
 	@RequestMapping(value = "/api/frames", method = RequestMethod.GET)
 	public List<Frame> getFrames(
 			@RequestParam(value = "frameLength", required = true) Double frameLength,
@@ -374,6 +396,11 @@ public class ProductsAPI {
 		return tempFrames;
 	}
 	
+	/*
+	 * Returns Canvas price for a particular artwork variant.
+	 * Fetches unit price (per foot) for canvas from the canvas product as
+	 * canvas variant id
+	 */
 	@RequestMapping(value = "/api/canvas/price", method = RequestMethod.GET)
 	public Double getCanvasPrice(
 			@RequestParam(value = "productVariantId", required = true)Long productVariantId,
@@ -388,6 +415,10 @@ public class ProductsAPI {
 		
 	}
 	
+	/*
+	 * API used for uploading an image as a Multipart File and then return colors 
+	 * extracted out of it from TinEye.
+	 */
 	@RequestMapping(value = "/api/uploadImage", headers = "content-type=multipart/*", method = RequestMethod.POST)
 	@ResponseBody String extractColorsFromImage(@RequestParam("file") MultipartFile file) throws IOException {
 		File tempFile = File.createTempFile("uploadedfile", null);
@@ -396,6 +427,10 @@ public class ProductsAPI {
 		return colors;
     }
 	
+	/*
+	 * API used for uploading an image as File Base 64 Data(String) and then return colors 
+	 * extracted out of it from TinEye.
+	 */
 	@RequestMapping(value = "/api/uploadFileBase64", method = RequestMethod.POST)
 	@ResponseBody String extractColorsFromBase64Image(@RequestParam("fileBase64") String fileBase64)
 			throws IOException {
@@ -414,6 +449,11 @@ public class ProductsAPI {
 		return colors;
     }
 	
+	/*
+	 * API that accepts artwork variant id, type variant id, and type(Canvas/Frame)
+	 * and then creates a new product on Shopify store as type dynamic and having 
+	 * property hidden. 
+	 */
 	@RequestMapping(value = "/api/createProduct", method = RequestMethod.GET)
 	public CustomCollection createDynamicProduct(
 			@RequestParam(value = "productVariantId", required = true)Long productVariantId,
@@ -425,6 +465,10 @@ public class ProductsAPI {
 		
 	}
 	
+	/*
+	 * API that returns all preferences for the shop, and the preferences that 
+	 * a particular customer has checked.
+	 */
 	@RequestMapping(value = "/api/customer/preferences", method = RequestMethod.GET)
 	public Map<String, Object> getCustomerPreferences(
 			@RequestParam(value = "customerId", required = true)Long customerId) {
@@ -437,6 +481,10 @@ public class ProductsAPI {
 		return preferences;
 	}
 	
+	/*
+	 * API accepts preferences for a particular customer and updates on the 
+	 * corresponding metafields using Shopify API's
+	 */
 	@RequestMapping(value = "/api/customer/preferences", method = RequestMethod.POST)
 	public Boolean modifyCustomerPreferences(
 			@RequestParam(value = "customerId", required = true)Long customerId,
@@ -448,6 +496,9 @@ public class ProductsAPI {
 				subjects, styles, mediums, orientations);
 	}
 	
+	/*
+	 * API that returns a Map of Collection/Artist Id's that a customer is following
+	 */
 	@RequestMapping(value = "/api/customer/followings", method = RequestMethod.GET)
 	public Map<String, Object> getCustomerFollowings(
 			@RequestParam(value = "customerId", required = true)Long customerId) {
@@ -457,6 +508,10 @@ public class ProductsAPI {
 		return followings;
 	}
 	
+	/*
+	 * API that accepts followings data and updates the followings of a particular
+	 * customer
+	 */
 	@RequestMapping(value = "/api/customer/followings", method = RequestMethod.POST)
 	public Boolean modifyCustomerFollowings(
 			@RequestParam(value = "customerId", required = true)Long customerId,
@@ -468,6 +523,10 @@ public class ProductsAPI {
 				subjects, styles, collections, artists);
 	}
 	
+	/*
+	 * API that accepts a Customer Id, Collection Type and a Collection Id and returns true if that 
+	 * collection is followed by the customer else returns false
+	 */
 	@RequestMapping(value = "/api/customer/following/collection", method = RequestMethod.GET)
 	public Boolean getCustomerFollowingCollection(
 			@RequestParam(value = "customerId", required = true)Long customerId, 
@@ -477,6 +536,11 @@ public class ProductsAPI {
 		return followingService.isCollectionFollowedByCustomer(customerId, collectionId, collectionType);
 	};
 	
+	/*
+	 * API that accepts a Customer Id, Collection Type, Collection Id, and a Set Follow parameter.
+	 * The Collection is added to the Customers' followings if the Set Follow parameter is true, 
+	 * else the collection is removed from the customers' followings 
+	 */
 	@RequestMapping(value = "/api/customer/following/collection", method = RequestMethod.POST)
 	public Integer updateCustomerFollowingCollection(
 			@RequestParam(value = "customerId", required = true)Long customerId, 
@@ -488,6 +552,10 @@ public class ProductsAPI {
 				collectionId, collectionType, setfollow);
 	};
 	
+	/*
+	 * Get Recommended artworks for a particular customer paged by limit and offset and 
+	 * offset specified 
+	 */
 	@RequestMapping(value = "/api/customer/recomended", method = RequestMethod.GET)
 	public Map<String, Object> fetchArtworksRecomendedArtworks(
 			@RequestParam(value = "customerId", required = true)Long customerId,
@@ -507,6 +575,10 @@ public class ProductsAPI {
 		return wrapResponse;
 	}
 	
+	/*
+	 * API that accepts a Customer Id and a Artwork Id. Updates the Favorites of the 
+	 * customer based on the isLiked boolean value 
+	 */
 	@RequestMapping(value = "/api/customer/favorites", method = RequestMethod.POST)
 	public void customerCustomCollection(
 			@RequestParam(value = "customerId", required = true)Long customerId, 

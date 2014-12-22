@@ -12,8 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hashedin.artcollective.entity.Artist;
@@ -48,6 +46,9 @@ public final class WebApplicationController {
 	@Autowired
 	private PreferenceService preferenceService;
 	
+	/*
+	 * Controller that renders the Access Denied page for unauthorized users
+	 */
 	@RequestMapping("/access-denied")
 	public ModelAndView accessDenied() {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -57,6 +58,9 @@ public final class WebApplicationController {
 		return new ModelAndView("access-denied", model);
 	}
 	
+	/*
+	 * Default routing to the Artist Dashboard
+	 */
 	@RequestMapping("/")
 	public ModelAndView artistDashboard(Pageable page) {
 		if (page == null || page.getPageSize() != pageLimit) {
@@ -69,6 +73,9 @@ public final class WebApplicationController {
 		return model;
 	}
 	
+	/*
+	 * Controller that allows a manager to upload deductions
+	 */
 	@RequestMapping("/manage/upload/deductions")
 	public ModelAndView uploadDeductionsAsCSV() {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -78,6 +85,9 @@ public final class WebApplicationController {
 		return new ModelAndView("deductions-upload", model);
 	}
 	
+	/*
+	 * Controller that allows a manager to upload transactions
+	 */
 	@RequestMapping("/manage/upload/transactions")
 	public ModelAndView uploadTransactionsAsCSV() {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -87,6 +97,9 @@ public final class WebApplicationController {
 		return new ModelAndView("transactions-upload", model);
 	}
 	
+	/*
+	 * Controller used to render the leads generated
+	 */
 	@RequestMapping("/manage/leads")
 	public ModelAndView displayLeads(Pageable page) {
 		if (page == null || page.getPageSize() != pageLimit) {
@@ -98,18 +111,9 @@ public final class WebApplicationController {
 		return new ModelAndView("leads", model);
 	}
 	
-	@RequestMapping(value = "/preferences", method = RequestMethod.GET)
-	public ModelAndView displayPreferences(
-			@RequestParam(value = "id", required = true) Long id) {
-		Map<String, Object> model = new HashMap<>();
-		Map<String, Object> userPreferences = preferenceService.getPreferencesForUser(id);
-		Map<String, Object> shopPreferences = preferenceService.getPreferencesForShop();
-		model.put("homePageURL", homePageURL);
-		model.put("shopPreferences", shopPreferences);
-		model.put("userPreferences", userPreferences);
-		return new ModelAndView("user-preferences", model);
-	}
-
+	/*
+	 * Helper Method that provides data to the artist dashboard model 
+	 */
 	private ModelAndView getPortfolio(Long artistId, Pageable page) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		Artist artist = artistRepository.findOne(artistId);

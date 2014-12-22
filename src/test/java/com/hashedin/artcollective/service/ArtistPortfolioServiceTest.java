@@ -13,12 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.Artist;
 import com.hashedin.artcollective.entity.Deduction;
-import com.hashedin.artcollective.entity.OrderLineItem;
 import com.hashedin.artcollective.entity.Transaction;
 import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.DeductionRepository;
