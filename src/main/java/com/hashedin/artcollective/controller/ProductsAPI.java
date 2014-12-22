@@ -335,16 +335,18 @@ public class ProductsAPI {
 				sizeBucketRangeList,
 				limit,
 				offset);
-		Map<String, Object> wrapResponse = wrapResponse(searchResponse);
 		
-		if (customerId != null) { 
-			Map<Long, Boolean>	favouriteMap = shopifyService.getFavProductsMap(customerId);
-			if (favouriteMap.size() > 0) {
-				wrapResponse.put("favProductIdMap", favouriteMap);
-			}
-		} 
-			
-		return wrapResponse;
+		return wrapResponse(searchResponse);
+	}
+	
+	/*
+	 * Get artwork Id map for artworks in customer favorite collection.  
+	 */
+	@RequestMapping(value = "/api/customer/favoriteArtworks", method = RequestMethod.GET)
+	public Map<Long, Boolean> fetchArtworksRecomendedArtworks(
+			@RequestParam(value = "customerId", required = true)Long customerId) {
+		
+		return shopifyService.getFavProductsMap(customerId);
 	}
 	
 	// Search Tin Eye based on color Criteria
@@ -563,16 +565,8 @@ public class ProductsAPI {
 			@RequestParam(value = "offset", required = true) Integer offset) {
 		CriteriaSearchResponse searchResponse = preferenceService
 				.getRecomendedArtworksForCustomer(customerId, limit, offset);
-
-		Map<String, Object> wrapResponse = wrapResponse(searchResponse);
-		if (customerId != null) { 
-			Map<Long, Boolean> favouriteMap = shopifyService.getFavProductsMap(customerId);
-			if (favouriteMap.size() > 0) {
-				wrapResponse.put("favProductIdMap", favouriteMap);
-			}
-		} 
-
-		return wrapResponse;
+           
+		return wrapResponse(searchResponse);
 	}
 	
 	/*
