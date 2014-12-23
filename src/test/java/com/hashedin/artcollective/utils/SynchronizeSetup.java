@@ -4,7 +4,6 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -278,40 +277,40 @@ public class SynchronizeSetup extends BaseUnitTest {
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("tineye_add_response.json"));
 		
-		
-		 mockArtWorksService
-			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
-			.andExpect(method(HttpMethod.POST))
-			.andRespond(withJson("tin_eye_color_extract_response.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/504096747/metafields.json"))
+		if (artRepository.count() == 0) {
+			mockArtWorksService
+					.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
+					.andExpect(method(HttpMethod.POST))
+					.andRespond(withJson("tin_eye_color_extract_response.json"));
+			
+			mockArtWorksService
+					.expect(requestTo(shopifyBaseUrl
+							+ "products/504096747/metafields.json"))
+					.andExpect(method(HttpMethod.POST))
+					.andRespond(withJson("color_extract_metafield.json"));
+			
+			mockArtWorksService
+				.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
 				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("color_extract_metafield.json"));
-		
-		mockArtWorksService
-			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
-			.andExpect(method(HttpMethod.POST))
-			.andRespond(withJson("tin_eye_color_extract_response.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/505096747/metafields.json"))
+				.andRespond(withJson("tin_eye_color_extract_response.json"));
+			
+			mockArtWorksService
+					.expect(requestTo(shopifyBaseUrl
+							+ "products/505096747/metafields.json"))
+					.andExpect(method(HttpMethod.POST))
+					.andRespond(withJson("color_extract_metafield.json"));
+			
+			mockArtWorksService
+				.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
 				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("color_extract_metafield.json"));
-		
-		mockArtWorksService
-			.expect(requestTo(tinEyeBaseUrl + "extract_image_colors/"))
-			.andExpect(method(HttpMethod.POST))
-			.andRespond(withJson("tin_eye_color_extract_response.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/506096747/metafields.json"))
-				.andExpect(method(HttpMethod.POST))
-				.andRespond(withJson("color_extract_metafield.json"));
-		
+				.andRespond(withJson("tin_eye_color_extract_response.json"));
+			
+			mockArtWorksService
+					.expect(requestTo(shopifyBaseUrl
+							+ "products/506096747/metafields.json"))
+					.andExpect(method(HttpMethod.POST))
+					.andRespond(withJson("color_extract_metafield.json"));
+		}
 		
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=frames"))
 				.andExpect(method(HttpMethod.GET))

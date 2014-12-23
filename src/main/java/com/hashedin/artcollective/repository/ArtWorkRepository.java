@@ -56,10 +56,6 @@ JpaSpecificationExecutor<ArtWork> {
 			+ "OR (art.medium = :medium or :medium is null )"
 			+ "OR (art.orientation = :orientation or :orientation is null )";
 	
-	@Query("SELECT art FROM ArtWork art WHERE "
-		+ "LOWER(art.artist.firstName) = LOWER(:firstName)")
-	public List<ArtWork> findByArtist(@Param("firstName")String firstName);
-	
 	//Writing a native SQL query for performance reasons. An exists sub query is a lot faster than join.
 	@Query(value = "select * from art_work art"
 			+ CRITERIA_WHERE_CLAUSE

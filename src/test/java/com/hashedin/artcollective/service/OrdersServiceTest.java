@@ -3,11 +3,8 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,9 +13,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
-import com.hashedin.artcollective.entity.FulfilledOrder;
 import com.hashedin.artcollective.entity.OrderLineItem;
-import com.hashedin.artcollective.entity.SynchronizeLog;
 import com.hashedin.artcollective.repository.FulfilledOrderRepository;
 import com.hashedin.artcollective.repository.OrderLineItemRepository;
 import com.hashedin.artcollective.repository.SynchronizeLogRepository;

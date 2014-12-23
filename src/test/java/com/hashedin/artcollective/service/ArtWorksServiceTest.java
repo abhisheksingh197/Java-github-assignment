@@ -18,7 +18,6 @@ import com.hashedin.artcollective.BaseUnitTest;
 import com.hashedin.artcollective.entity.ArtCollection;
 import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.Artist;
-import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.entity.SizeBucket;
@@ -109,12 +108,6 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		assertEquals(artist.getPassword(), "sunil.sarkar@123");
 		assertEquals(artist.getImgSrc(), "https://cdn.shopify.com/s/files/1/0608/8161/collections/Bharti_Prajapati.png?v=1411264259");
 		
-	}
-	
-	@Test
-	public void testForSearchByArtist() {
-		List<ArtWork> artWorkList = searchService.findArtworksByArtist("Amit");
-		assertEquals(artWorkList.size(), 1);
 	}
 	
 	@Test
@@ -239,7 +232,7 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	
 	@Test
 	public void testForResizeImageWidthandHeight() {
-		ArtWork art = artRepository.findOne(504096747L);
+		ArtWork art = artRepository.findOne(505096747L);
 		List<Image> images = art.getImages();
 		for (Image image : images) {
 			if (image.getImgSrc().contains("-artfinder")) {

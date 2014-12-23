@@ -24,6 +24,9 @@ JpaSpecificationExecutor<FrameVariant> {
 	public List<FrameVariant> findVariants(@Param("mountThickness")Double mountThickness, 
 			@Param("frameThickness")Double frameThickness);
 	
+	/*
+	 * Updating an entity, hence using Transactional and Modifying Annotations
+	 */
 	@Transactional
 	@Modifying
 	@Query("Update FrameVariant frameVariant set frameVariant.deleted = true "
