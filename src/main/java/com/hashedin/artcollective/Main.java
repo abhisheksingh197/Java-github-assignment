@@ -175,8 +175,9 @@ public class Main extends WebMvcConfigurerAdapter implements CachingConfigurer {
 		return new AuthenticationSecurity(userDetailsService);
 	}
 	
-	/*
+	/**
 	 * Includes Configuration for Caching on Search Results
+	 * @return
 	 */
     @Bean(destroyMethod = "shutdown")
     public net.sf.ehcache.CacheManager ehCacheManager() {
