@@ -12,6 +12,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
 import com.hashedin.artcollective.BaseUnitTest;
+import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.PriceBucket;
 import com.hashedin.artcollective.entity.SizeBucket;
 import com.hashedin.artcollective.repository.ArtSubjectRepository;
@@ -87,9 +88,9 @@ public class SynchronizeSetup extends BaseUnitTest {
 		}
 
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products/count.json?product_type=artworks"
-		.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))))
-		.andExpect(method(HttpMethod.GET))
-		.andRespond(shopifyArtworksCount(7));
+				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(shopifyArtworksCount(7));
 		
 		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks"
 				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))
@@ -211,12 +212,23 @@ public class SynchronizeSetup extends BaseUnitTest {
 						+ "variants/79643453611812/metafields.json"))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(withJson("variant_metafields.json"));
-		
-		mockArtWorksService
+		ArtWork existingArtwork = artRepository.findOne(504096747L);
+		if (existingArtwork != null) {
+			long existingImageId = existingArtwork.getFeaturedImageId();
+			if (existingImageId != 8086634539747L) {
+				mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
-						+ "products/504096747/images.json"))
-				.andExpect(method(HttpMethod.POST))
+						+ "products/504096747/images/1001473899.json"))
+				.andExpect(method(HttpMethod.DELETE))
 				.andRespond(withJson("image_upload_response_504096747.json"));
+		
+				mockArtWorksService
+						.expect(requestTo(shopifyBaseUrl
+								+ "products/504096747/images/1001473899.json"))
+						.andExpect(method(HttpMethod.DELETE))
+						.andRespond(withJson("image_upload_response_504096747.json"));
+			}
+		}
 		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
@@ -321,32 +333,6 @@ public class SynchronizeSetup extends BaseUnitTest {
 				.andRespond(withJson("canvas.json"));
 		
 		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks"
-				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))
-				.concat("&limit=100&page=1")))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("artworksupdate.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "custom_collections.json?product_id=343096747"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("collections_343096747.json"));
-
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
-						+ "products/343096747/metafields.json"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("metafields_343096747.json"));
-		
-		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=frames"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("frames.json"));
-		
-		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=canvas"))
-				.andExpect(method(HttpMethod.GET))
-				.andRespond(withJson("canvas.json"));
 		
 		
 		PriceBucket priceBucketObj1 = new PriceBucket(1L,"low",2500.00,5000.00);

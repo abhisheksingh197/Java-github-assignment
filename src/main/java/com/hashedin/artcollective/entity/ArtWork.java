@@ -51,6 +51,9 @@ public class ArtWork implements Serializable {
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Artist artist;
+	
+	private Long featuredImageId;
+	
 	private String title;
 	private String medium;
 	private String orientation;
@@ -197,6 +200,14 @@ public class ArtWork implements Serializable {
 	public void setArtist(Artist artist) {
 		this.artist = artist;
 	}
+	public Long getFeaturedImageId() {
+		return featuredImageId;
+	}
+
+	public void setFeaturedImageId(Long featuredImageId) {
+		this.featuredImageId = featuredImageId;
+	}
+
 	public List<Image> getImages() {
 		return images;
 	}

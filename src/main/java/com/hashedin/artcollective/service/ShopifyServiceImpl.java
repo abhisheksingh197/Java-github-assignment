@@ -25,6 +25,7 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
+import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.utils.ProductSize;
@@ -435,5 +436,15 @@ public class ShopifyServiceImpl implements ShopifyService {
         }
         return false;
     }
+
+	@Override
+	public void removeArtFinderImageFromShopify(ArtWork existingArtWork) {
+		List<Image> images = existingArtWork.getImages();
+		for (Image image : images) {
+	        final String url = baseUri + "products/" + existingArtWork.getId() + "/images/"
+	        		+ image.getId() + ".json";
+	        rest.delete(url);
+		}
+	}
 
 }

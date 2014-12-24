@@ -6,6 +6,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import com.hashedin.artcollective.repository.ArtWorkRepository;
 import com.hashedin.artcollective.repository.ArtistRepository;
 import com.hashedin.artcollective.repository.FrameVariantRepository;
 import com.hashedin.artcollective.repository.PriceBucketRepository;
+import com.hashedin.artcollective.repository.SynchronizeLogRepository;
 import com.hashedin.artcollective.utils.SynchronizeSetup;
 
 
@@ -78,6 +80,9 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	@Autowired
 	private FrameVariantRepository frameVariantRepository;
 	
+	@Autowired
+	private SynchronizeLogRepository syncLogRepository;
+	
 	@Before
 	public void setup() {
 		if(isInitialized) {
@@ -89,10 +94,102 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 	}
 	@Test
 	public void testThatArtWorksWereUpdated() {
+		MockRestServiceServer mockArtWorksService = MockRestServiceServer
+				.createServer(rest);
+		String queryString = "";
+		String lastUpdatedAt = "";
+		DateTime lastModified = syncLogRepository.getLastSynchronizeDate("artworks");
+		if (lastModified != null) {
+			queryString = "&updated_at_min=";
+			lastUpdatedAt = lastModified.toString();
+		}
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products/count.json?product_type=artworks"
+				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(shopifyArtworksCount(7));
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=artworks"
+				.concat(queryString).concat(lastUpdatedAt.replace("+", "%2B"))
+				.concat("&limit=100&page=1")))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("artworksupdate.json"));
+
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "custom_collections.json?product_id=504096747"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("collections_504096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/504096747/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("metafields_504096747.json"));
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "variants/79643453611812/metafields.json"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("variant_metafields.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/504096747/images/80834534669747.json"))
+				.andExpect(method(HttpMethod.DELETE))
+				.andRespond(withJson("put.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/504096747/images/818663453459750.json"))
+				.andExpect(method(HttpMethod.DELETE))
+				.andRespond(withJson("put.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/504096747/images/81866345345350.json"))
+				.andExpect(method(HttpMethod.DELETE))
+				.andRespond(withJson("put.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/504096747/images/809747.json"))
+				.andExpect(method(HttpMethod.DELETE))
+				.andRespond(withJson("put.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/504096747/images.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("image_upload_response_504096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(shopifyBaseUrl
+						+ "products/504096747/images.json"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("image_upload_response_504096747.json"));
+		
+		mockArtWorksService
+				.expect(requestTo(tinEyeBaseUrl + "add"))
+				.andExpect(method(HttpMethod.POST))
+				.andRespond(withJson("tineye_add_response.json"));
+		
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=frames"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("frames.json"));
+		
+		mockArtWorksService.expect(requestTo(shopifyBaseUrl + "products.json?product_type=canvas"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(withJson("canvas.json"));
+		service.synchronize(null);
 		List<ArtWork> artList = (List<ArtWork>) artRepository.findAll();
-		ArtWork artwork = artList.get(0);
-		assertEquals(artwork.getTitle(), "India Gate");
+		ArtWork artwork = artRepository.findOne(504096747L);
+		assertEquals(artwork.getTitle(), "Changed Title");
+		long featuredImageId = artwork.getFeaturedImageId();
+		assertEquals(featuredImageId, 809747);
 		assertEquals(artList.size(),3);
+		artwork.setFeaturedImageId(8086634539747L);
+		artRepository.save(artwork);
 	}
 	
 	@Test

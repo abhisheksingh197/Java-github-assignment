@@ -9,6 +9,7 @@ import java.util.Map;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
+import com.hashedin.artcollective.entity.ArtWork;
 import com.hashedin.artcollective.entity.FrameVariant;
 import com.hashedin.artcollective.entity.Image;
 import com.hashedin.artcollective.utils.ProductSize;
@@ -45,5 +46,7 @@ public interface ShopifyService {
 
 	List<MetaField> getMetaFieldsByKeyType(String type, Long customerId,
 			String keyType, String collectionType);
+
+	public void removeArtFinderImageFromShopify(ArtWork existingArtWork);
 
 }

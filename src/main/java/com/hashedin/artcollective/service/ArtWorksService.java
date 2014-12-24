@@ -321,17 +321,20 @@ public class ArtWorksService {
             List<ArtworkVariant> artworkVariants = getArtworkVariants(artwork, p.getVariants());
             artworkVariantRepository.save(artworkVariants);
             artwork.setVariants(artworkVariants);
+            artwork.setFeaturedImageId(p.getImage().getId());
             artwork.setDeleted(false);
             Image image = resizeFeaturedImage(p, metafields, p.getImages(), p.getImage());
+            List<Image> imagesToBeSaved = p.getImages();
             if (image != null) {
-                List<Image> images = p.getImages();
-                /* Old image is removed and the same image with Dimensions is added */
-                images.remove(image);
-                images.add(image);
-                p.setImages(images);
+                imagesToBeSaved = new ArrayList<>();
+                /* If there is a change in image we remove other images 
+                 * and only keep the new set of images
+                 */
+                imagesToBeSaved.add(image);
+                imagesToBeSaved.add(p.getImage());
             }
-            imageRepository.save(p.getImages());
-            artwork.setImages(p.getImages());
+            imageRepository.save(imagesToBeSaved);
+            artwork.setImages(imagesToBeSaved);
             return artwork;
         }
         
@@ -524,7 +527,18 @@ public class ArtWorksService {
      */
     private Image maybeResizeImage(CustomCollection p, List<MetaField> metafields,
             List<Image> images, Image featuredImage) throws IOException {
-        
+        ArtWork existingArtWork = artRepository.findOne(p.getId());
+        if (existingArtWork != null) {
+        	Long previousFeaturedImageId = existingArtWork.getFeaturedImageId();
+        	if (previousFeaturedImageId != null 
+        			&& previousFeaturedImageId != featuredImage.getId()) {
+        		shopify.removeArtFinderImageFromShopify(existingArtWork);
+        		/* Emptying the Image list so that it creates new 
+				* -artfinder and -artdetails images
+				*/
+            	images = new ArrayList<>(); 
+        	}
+        }
         String format = determineFormat(featuredImage);
         BufferedImage original;
         try {
