@@ -47,6 +47,6 @@ public interface ShopifyService {
 	List<MetaField> getMetaFieldsByKeyType(String type, Long customerId,
 			String keyType, String collectionType);
 
-	public void removeArtFinderImageFromShopify(ArtWork existingArtWork);
+	public void removeArtFinderImageFromShopify(ArtWork existingArtWork, Image featuredImage);
 
 }

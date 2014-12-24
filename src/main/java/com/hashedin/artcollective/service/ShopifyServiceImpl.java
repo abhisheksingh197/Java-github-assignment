@@ -438,12 +438,14 @@ public class ShopifyServiceImpl implements ShopifyService {
     }
 
 	@Override
-	public void removeArtFinderImageFromShopify(ArtWork existingArtWork) {
+	public void removeArtFinderImageFromShopify(ArtWork existingArtWork, Image featuredImage) {
 		List<Image> images = existingArtWork.getImages();
 		for (Image image : images) {
-	        final String url = baseUri + "products/" + existingArtWork.getId() + "/images/"
-	        		+ image.getId() + ".json";
-	        rest.delete(url);
+			if (image.getId() != featuredImage.getId()) {
+				final String url = baseUri + "products/" + existingArtWork.getId() + "/images/"
+		        		+ image.getId() + ".json";
+		        rest.delete(url);
+			}
 		}
 	}
 

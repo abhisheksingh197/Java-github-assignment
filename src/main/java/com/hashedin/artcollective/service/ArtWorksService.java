@@ -532,7 +532,7 @@ public class ArtWorksService {
         	Long previousFeaturedImageId = existingArtWork.getFeaturedImageId();
         	if (previousFeaturedImageId != null 
         			&& previousFeaturedImageId != featuredImage.getId()) {
-        		shopify.removeArtFinderImageFromShopify(existingArtWork);
+        		shopify.removeArtFinderImageFromShopify(existingArtWork, featuredImage);
         		/* Emptying the Image list so that it creates new 
 				* -artfinder and -artdetails images
 				*/

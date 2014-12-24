@@ -152,12 +152,6 @@ public class ArtWorksServiceTest extends BaseUnitTest {
 		
 		mockArtWorksService
 				.expect(requestTo(shopifyBaseUrl
-						+ "products/504096747/images/809747.json"))
-				.andExpect(method(HttpMethod.DELETE))
-				.andRespond(withJson("put.json"));
-		
-		mockArtWorksService
-				.expect(requestTo(shopifyBaseUrl
 						+ "products/504096747/images.json"))
 				.andExpect(method(HttpMethod.POST))
 				.andRespond(withJson("image_upload_response_504096747.json"));
