@@ -14,16 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 public final class WebApplicationController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WebApplicationController.class); 
 	
-	@RequestMapping("/")
-	public ModelAndView index() {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("time", new Date());
-		model.put("message", "Hello Sender!");
-		
-		LOGGER.info("Saying Hello to Sender");
-		return new ModelAndView("index", model);
-	}
-	
 	@RequestMapping("/secure/dashboard")
 	public ModelAndView dashboard() {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -33,12 +23,11 @@ public final class WebApplicationController {
 		return new ModelAndView("index", model);
 	}
 	
-	@RequestMapping("/dashboard")
+	@RequestMapping("/admin/dashboard")
 	public ModelAndView dashboarddsad() {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("time", new Date());
-		model.put("message", "Hello Authenticated Sender!");
-		
-		return new ModelAndView("dashboard", model);
+		model.put("message", "Hello Sender!");
+		return new ModelAndView("index", model);
 	}
 }

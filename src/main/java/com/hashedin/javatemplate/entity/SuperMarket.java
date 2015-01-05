@@ -27,28 +27,8 @@ public class SuperMarket {
 	private String name;
 	private String city;
 	private String webAddress;
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
-	public String getWebAddress() {
-		return webAddress;
-	}
-	public void setWebAddress(String webAddress) {
-		this.webAddress = webAddress;
-	}
+
 }

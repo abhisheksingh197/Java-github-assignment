@@ -38,7 +38,7 @@ import com.jayway.restassured.RestAssured;
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class BaseIntegrationTest {
-
+	//CHECKSTYLE:OFF
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseIntegrationTest.class);
 	
 	private static final String baseURI = "http://localhost";
@@ -95,7 +95,7 @@ public class BaseIntegrationTest {
 	private String getSessionId(ResponseEntity<?> response) {
 		Pattern sessionIDRegex = Pattern.compile(".*JSESSIONID=(\\w+).*");
 		List<String> cookies = response.getHeaders().get("Set-Cookie");
-		for(String cookie : cookies) {
+		for (String cookie : cookies) {
 			Matcher matcher = sessionIDRegex.matcher(cookie);
 			if(matcher.find()) {
 				return matcher.group(1);
@@ -126,7 +126,7 @@ public class BaseIntegrationTest {
 		}
 	}
 }
-
+//CHECKSTYLE:ON
 
 class Printer extends BaseMatcher<Object> {
 

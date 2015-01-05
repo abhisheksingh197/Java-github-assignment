@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.hashedin.javatemplate.BaseUnitTest;
 import com.hashedin.javatemplate.entity.SuperMarket;
 
-public class SuperMarketServiceTest extends BaseUnitTest{
+public class SuperMarketServiceTest extends BaseUnitTest {
 	
 	@Autowired
 	private SuperMarketService superMarketService;
