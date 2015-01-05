@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.hashedin.artcollective.BaseUnitTest;
+import com.hashedin.javatemplate.BaseUnitTest;
 
 @ContextConfiguration(classes = TaskQueueTest.class)
 public class TaskQueueTest extends BaseUnitTest {
