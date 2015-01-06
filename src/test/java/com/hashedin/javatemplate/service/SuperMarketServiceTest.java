@@ -17,7 +17,7 @@ public class SuperMarketServiceTest extends BaseUnitTest {
 	
 	@Test
 	public void testForCreatingNewSuperMarket() {
-		SuperMarket superMarketObject = new SuperMarket("Food World", "Bangalore", "www.foodworld.com");
+		SuperMarket superMarketObject = new SuperMarket("Food World", "Bangalore", "www.foodworld.com", 99 ,99 );
 		superMarketService.createNewSuperMarket(superMarketObject);
 		long superMarketsCount = superMarketService.getTotalCount();
 		assertEquals(1, superMarketsCount);
@@ -25,5 +25,9 @@ public class SuperMarketServiceTest extends BaseUnitTest {
 		assertEquals(superMarketsCount, superMarkets.size());
 		SuperMarket superMarket = superMarkets.get((int) (superMarketsCount - 1));
 		assertEquals("Food World", superMarket.getName());
+		assertEquals(99, superMarket.getNoOfOutlets());
+		assertEquals(99, superMarket.getNoOfProducts());
+
+	
 	}
 }

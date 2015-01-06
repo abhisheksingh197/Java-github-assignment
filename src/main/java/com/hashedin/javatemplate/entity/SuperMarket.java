@@ -11,15 +11,17 @@ public class SuperMarket {
 	@Override
 	public String toString() {
 		return "SuperMarket [id=" + id + ", name=" + name + ", city=" + city
-				+ ", webAddress=" + webAddress + "]";
+				+ ", webAddress=" + webAddress + ", noOfProducts=" + noOfProducts + ", noOfOutlets=" + noOfOutlets +    "]";
 	}
 	public SuperMarket() {
 		
 	}
-	public SuperMarket(String name, String city, String webAddress) {
+	public SuperMarket(String name, String city, String webAddress, int noOfProducts, int noOfOutlets) {
 		this.name = name;
 		this.city = city;
 		this.webAddress = webAddress;
+		this.noOfProducts = 999;
+		this.noOfOutlets = 99; 
 	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,8 +29,11 @@ public class SuperMarket {
 	private String name;
 	private String city;
 	private String webAddress;
-	public String getName() {
-		return name;
-	}
+	private int noOfProducts;
+	private int noOfOutlets;
+	public String getName(){ return name; }
+	public int getNoOfOutlets() { return noOfOutlets;}
+	public int getNoOfProducts() { return noOfProducts;}
+	
 
 }
