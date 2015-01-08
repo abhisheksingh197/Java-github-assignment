@@ -54,6 +54,7 @@ class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		http.headers().disable();
 		
 		http.authorizeRequests()
+			.antMatchers("/secure/products.json").permitAll()
 			.antMatchers("/secure/**").hasRole("SUPERADMIN")
 			.antMatchers("/admin/**").permitAll()
 			.anyRequest().fullyAuthenticated();

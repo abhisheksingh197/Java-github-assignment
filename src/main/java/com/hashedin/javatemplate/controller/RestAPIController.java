@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hashedin.javatemplate.entity.SuperMarket;
+import com.hashedin.javatemplate.service.CustomCollection;
 import com.hashedin.javatemplate.service.SuperMarketService;
 
 @RestController
@@ -51,5 +52,10 @@ public class RestAPIController {
     @RequestMapping(value = "/secure/supermarkets.json", method = RequestMethod.GET)
     public List<SuperMarket> getAllSuperMarketsss() {
         return superMarketService.fetchAllSuperMarkets();
+    }
+    
+    @RequestMapping(value = "/secure/products.json", method = RequestMethod.GET)
+    public List<CustomCollection> getAllProducts() {
+    	return superMarketService.getAllProductsModifiedSince(null);
     }
 }
