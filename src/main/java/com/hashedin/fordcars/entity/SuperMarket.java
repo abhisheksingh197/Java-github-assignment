@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate.entity;
+package com.hashedin.fordcars.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

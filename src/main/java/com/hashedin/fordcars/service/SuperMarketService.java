@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate.service;
+package com.hashedin.fordcars.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.hashedin.javatemplate.entity.SuperMarket;
-import com.hashedin.javatemplate.repository.SuperMarketRepository;
+import com.hashedin.fordcars.entity.SuperMarket;
+import com.hashedin.fordcars.repository.SuperMarketRepository;
 
 @Service
 public class SuperMarketService {

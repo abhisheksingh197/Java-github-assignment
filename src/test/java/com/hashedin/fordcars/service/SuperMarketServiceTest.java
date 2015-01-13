@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate.service;
+package com.hashedin.fordcars.service;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,8 +7,9 @@ import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.hashedin.javatemplate.BaseUnitTest;
-import com.hashedin.javatemplate.entity.SuperMarket;
+import com.hashedin.fordcars.BaseUnitTest;
+import com.hashedin.fordcars.entity.SuperMarket;
+import com.hashedin.fordcars.service.SuperMarketService;
 
 public class SuperMarketServiceTest extends BaseUnitTest {
 	
@@ -26,7 +27,7 @@ public class SuperMarketServiceTest extends BaseUnitTest {
 		SuperMarket superMarket = superMarkets.get((int) (superMarketsCount - 1));
 		assertEquals("Food World", superMarket.getName());
 		assertEquals(99, superMarket.getNoOfOutlets());
-		assertEquals(99, superMarket.getNoOfProducts());
+		assertEquals(999, superMarket.getNoOfProducts());
 
 	
 	}

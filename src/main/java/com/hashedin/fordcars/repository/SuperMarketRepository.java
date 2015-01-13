@@ -1,8 +1,8 @@
-package com.hashedin.javatemplate.repository;
+package com.hashedin.fordcars.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.hashedin.javatemplate.entity.SuperMarket;
+import com.hashedin.fordcars.entity.SuperMarket;
 
 public interface SuperMarketRepository extends CrudRepository<SuperMarket, Long> {
 	

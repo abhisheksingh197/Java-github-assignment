@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate;
+package com.hashedin.fordcars;
 
 import java.util.Collections;
 import java.util.Enumeration;

@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate;
+package com.hashedin.fordcars;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;

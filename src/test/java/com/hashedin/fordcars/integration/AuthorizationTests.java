@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate.integration;
+package com.hashedin.fordcars.integration;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.not;
 
 import org.junit.Test;
 
-import com.hashedin.javatemplate.BaseIntegrationTest;
+import com.hashedin.fordcars.BaseIntegrationTest;
 
 public class AuthorizationTests extends BaseIntegrationTest {
 	

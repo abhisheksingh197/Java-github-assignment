@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate.controller;
+package com.hashedin.fordcars.controller;
 
 import java.util.Date;
 import java.util.HashMap;

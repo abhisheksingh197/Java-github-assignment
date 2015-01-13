@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate;
+package com.hashedin.fordcars;
 
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;

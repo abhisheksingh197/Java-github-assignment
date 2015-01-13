@@ -1,10 +1,10 @@
-package com.hashedin.javatemplate.integration;
+package com.hashedin.fordcars.integration;
 
 import static com.jayway.restassured.RestAssured.given;
 
 import org.junit.Test;
 
-import com.hashedin.javatemplate.BaseIntegrationTest;
+import com.hashedin.fordcars.BaseIntegrationTest;
 import com.jayway.restassured.http.ContentType;
 
 public class DebugModeTests extends BaseIntegrationTest {

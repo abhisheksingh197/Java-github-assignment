@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate;
+package com.hashedin.fordcars;
 
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.client.response.DefaultResponseCreator;
+
+import com.hashedin.fordcars.Main;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Main.class)

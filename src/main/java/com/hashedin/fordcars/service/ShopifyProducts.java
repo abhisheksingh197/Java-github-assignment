@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate.service;
+package com.hashedin.fordcars.service;
 
 import java.util.List;
 

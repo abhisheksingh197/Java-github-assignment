@@ -1,4 +1,4 @@
-package com.hashedin.javatemplate;
+package com.hashedin.fordcars;
 
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
@@ -30,6 +30,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.hashedin.fordcars.Main;
 import com.jayway.restassured.RestAssured;
 
 @RunWith(SpringJUnit4ClassRunner.class)
