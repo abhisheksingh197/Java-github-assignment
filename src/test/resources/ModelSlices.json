@@ -1,0 +1,64 @@
+{
+   "Response":{
+      "ttl":"14400",
+      "status":"OK",
+      "Model":[
+         {
+            "Pricing":{
+               "High":{
+                  "BaseXPlan":"30615",
+                  "BaseAZPlan":"29362",
+                  "BaseMSRP":"32323"
+               },
+               "Low":{
+                  "BaseXPlan":"29028",
+                  "BaseAZPlan":"27822",
+                  "BaseMSRP":"30570"
+               },
+               "PlanApplicability":{
+                  "SPX":"false",
+                  "AZ":"false",
+                  "FNX":"false",
+                  "PRX":"false"
+               }
+            },
+            "VehicleLineCode":"F4511",
+            "Year":"2011",
+            "VehicleType":"hybrid",
+            "Version":{
+
+            },
+            "ModelName":"Escape Hybrid",
+            "Make":"Ford"
+         },
+         {
+            "Pricing":{
+               "High":{
+                  "BaseXPlan":"33142",
+                  "BaseAZPlan":"31698",
+                  "BaseMSRP":"35085"
+               },
+               "Low":{
+                  "BaseXPlan":"27885",
+                  "BaseAZPlan":"26673",
+                  "BaseMSRP":"29455"
+               },
+               "PlanApplicability":{
+                  "SPX":"true",
+                  "AZ":"true",
+                  "FNX":"true",
+                  "PRX":"true"
+               }
+            },
+            "VehicleLineCode":"F2913",
+            "Year":"2013",
+            "VehicleType":"truck",
+            "Version":{
+
+            },
+            "ModelName":"Econoline Wagon",
+            "Make":"Ford"
+         }
+      ]
+   }
+}

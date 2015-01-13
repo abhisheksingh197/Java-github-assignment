@@ -1,7 +1,6 @@
 package com.hashedin.fordcars.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +10,12 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ModelService {
 
-	private final String MODELS_URL = "http://servicesdev.forddirect.fordvehicles.com/products/ModelSlices.json";
+	static final String MODELS_URL = "http://services.forddirect.fordvehicles.com/products/ModelSlices.json";
 	
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	List<ModelEntity> getAllModels() {
+	public List<ModelEntity> getAllModels() {
 		ModelResponse response = restTemplate.getForObject(MODELS_URL, ModelResponse.class);
 		List<Model> models = response.getResponse().getModels();
 		
@@ -28,8 +27,11 @@ public class ModelService {
 			entity.setYear(model.getYear());
 			entity.setVehicleType(model.getVehicleType());
 			
+			entity.setHighPrice(model.getPricing().getHigh().getBaseMSRP());
+			entity.setLowPrice(model.getPricing().getLow().getBaseMSRP());
 			entities.add(entity);
 		}
 		return entities;
 	}
+
 }

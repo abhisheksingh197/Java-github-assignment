@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ModelResponse {
+class ModelResponse {
 	private Response response;
 
 	public Response getResponse() {
@@ -40,12 +40,15 @@ class Response {
 	}
 }
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true) 
 class Model {
 	private String make;
 	private String modelName;
 	private String vehicleType;
 	private int year;
+	
+	private Pricing pricing;
+	
 	public String getMake() {
 		return make;
 	}
@@ -75,6 +78,48 @@ class Model {
 	public void setYear(int year) {
 		this.year = year;
 	}
+	public Pricing getPricing() {
+		return pricing;
+	}
 	
+	@JsonSetter("Pricing")
+	public void setPricing(Pricing pricing) {
+		this.pricing = pricing;
+	}
+}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+class Pricing {
+	private PriceObject high;
+	private PriceObject low;
+	public PriceObject getHigh() {
+		return high;
+	}
+	@JsonSetter("High")
+	public void setHigh(PriceObject high) {
+		this.high = high;
+	}
+	public PriceObject getLow() {
+		return low;
+	}
+	@JsonSetter("Low")
+	public void setLow(PriceObject low) {
+		this.low = low;
+	}
+	
+}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+class PriceObject {
+	private int baseMSRP;
+
+	public int getBaseMSRP() {
+		return baseMSRP;
+	}
+
+	@JsonSetter("BaseMSRP")
+	public void setBaseMSRP(int baseMSRP) {
+		this.baseMSRP = baseMSRP;
+	}
 	
 }
